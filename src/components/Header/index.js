@@ -140,41 +140,33 @@ const Index = () => {
                   justifyContent: "flex-end",
                 }}
               >
-                <IconButton color={"black"} component={Link} to={"/chat"}>
-                  <Badge
-                    // overlap={"circular"}
-                    badgeContent={5}
-                    color="black"
-                  >
+                <Badge overlap={"circular"} badgeContent={5} color="black">
+                  <IconButton color={"black"} component={Link} to={"/chat"}>
                     <MdChatBubbleOutline />
-                  </Badge>
-                </IconButton>
-                <IconButton
-                  color={"black"}
-                  component={Link}
-                  to={"/notification"}
-                >
-                  <Badge
-                    // overlap={"circular"}
-                    badgeContent={5}
-                    color="black"
+                  </IconButton>
+                </Badge>
+                <Badge overlap={"circular"} badgeContent={5} color="black">
+                  <IconButton
+                    color={"black"}
+                    component={Link}
+                    to={"/notification"}
                   >
                     <RiNotification2Line />
-                  </Badge>
-                </IconButton>
-                <IconButton color={"black"} onClick={cartCntxt.handleOpen}>
-                  <Badge
-                    // overlap={"circular"}
-                    badgeContent={cartCntxt.total}
-                    color="black"
-                  >
+                  </IconButton>
+                </Badge>
+                <Badge
+                  overlap={"circular"}
+                  badgeContent={cartCntxt.total}
+                  color="black"
+                >
+                  <IconButton color={"black"} onClick={cartCntxt.handleOpen}>
                     <AiOutlineShopping
                       style={{
                         fontSize: "1.2em",
                       }}
                     />
-                  </Badge>
-                </IconButton>
+                  </IconButton>
+                </Badge>
                 {authCntxt.isVerified ? (
                   <IconButton color={"black"} component={Link} to={"/user"}>
                     {authCntxt.userInfo ? (
@@ -225,11 +217,32 @@ const Index = () => {
               }}
             >
               <span>
-                <Button startIcon={<BiMenuAltLeft />} onClick={handleCatDrawer}>
+                <Button
+                  size={"large"}
+                  startIcon={<BiMenuAltLeft />}
+                  onClick={handleCatDrawer}
+                  sx={{
+                    fontWeight: 600,
+                  }}
+                >
                   CATEGORIES
                 </Button>
-                <Button>Deal of the day</Button>
-                <Button>Gadget madness</Button>
+                <Button
+                  size={"large"}
+                  sx={{
+                    fontWeight: 600,
+                  }}
+                >
+                  Deal of the day
+                </Button>
+                <Button
+                  size={"large"}
+                  sx={{
+                    fontWeight: 600,
+                  }}
+                >
+                  Gadget madness
+                </Button>
               </span>
               <span>
                 {/* <InstallationButton />
