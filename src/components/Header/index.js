@@ -26,6 +26,7 @@ import {
   Popover,
   Stack,
   Badge,
+  Typography,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -38,7 +39,7 @@ import { MdCall, MdClose, MdShoppingCart } from "react-icons/md";
 import { HiOutlineMail } from "react-icons/hi";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { BiMenuAltLeft } from "react-icons/bi";
-import { BsSearch } from "react-icons/bs";
+import { BsBagPlus, BsChatLeft, BsSearch } from "react-icons/bs";
 import { AiOutlineUser, AiOutlineShoppingCart } from "react-icons/ai";
 import { TbListDetails, TbListSearch } from "react-icons/tb";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
@@ -86,83 +87,6 @@ const Index = () => {
           }}
           elevation={3}
         >
-          <Toolbar
-            disableGutters
-            sx={{
-              bgcolor: "#ffffff",
-              height: "fit-content",
-              minHeight: "20px !important",
-            }}
-          >
-            <Container
-              maxWidth="lg"
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                "& span": {
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  columnGap: 0.5,
-                },
-              }}
-            >
-              <span>
-                <Button
-                  size={"small"}
-                  sx={{
-                    py: 0,
-                    textTransform: "unset",
-                    "&:hover": { background: "transparent" },
-                  }}
-                  startIcon={
-                    <MdCall
-                      style={{
-                        fontSize: "0.9rem",
-                      }}
-                    />
-                  }
-                  disableRipple
-                  component={"a"}
-                  href={"tel:+8801878044347"}
-                >
-                  01878044347
-                </Button>
-                <Button
-                  size={"small"}
-                  sx={{
-                    py: 0,
-                    textTransform: "unset",
-                    "&:hover": { background: "transparent" },
-                  }}
-                  startIcon={
-                    <HiOutlineMail
-                      style={{
-                        fontSize: "0.9rem",
-                      }}
-                    />
-                  }
-                  disableRipple
-                  component={"a"}
-                  href={"mailto:pndservice18@gmail.com"}
-                  target={"_blank"}
-                >
-                  pndservice18@gmail.com
-                </Button>
-              </span>
-              <span>
-                <InstallationButton />
-                <Button
-                  size={"small"}
-                  sx={{ py: 0, "&:hover": { background: "transparent" } }}
-                  disableRipple
-                >
-                  বাংলা
-                </Button>
-              </span>
-            </Container>
-          </Toolbar>
           <Toolbar disableGutters>
             <Container
               maxWidth="lg"
@@ -181,24 +105,26 @@ const Index = () => {
                 },
               }}
             >
-              <span
-                style={{
-                  justifyContent: "flex-start",
-                }}
-              >
-                <IconButton color={"black"} onClick={handleCatDrawer}>
-                  <BiMenuAltLeft />
-                </IconButton>
-                <SearchProduct />
-              </span>
-              <span style={{ justifyContent: "center" }}>
+              <span style={{ justifyContent: "flex-start" }}>
                 <Avatar
                   src={pndIcon}
-                  sx={{ width: "60px", height: "60px", borderRadius: 0 }}
-                  alt="pnd"
+                  sx={{
+                    width: "120px",
+                    height: "60px",
+                    borderRadius: 0,
+                  }}
+                  alt="rayos"
                   component={Link}
                   to={"/"}
                 />
+              </span>
+              <span
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <SearchProduct />
               </span>
               <span
                 style={{
@@ -210,7 +136,7 @@ const Index = () => {
                   component={Link}
                   to={"/notification"}
                 >
-                  <IoMdNotificationsOutline />
+                  <BsChatLeft />
                 </IconButton>
                 <IconButton color={"black"} onClick={cartCntxt.handleOpen}>
                   <Badge
@@ -218,7 +144,7 @@ const Index = () => {
                     badgeContent={cartCntxt.total}
                     color="black"
                   >
-                    <AiOutlineShoppingCart />
+                    <BsBagPlus />
                   </Badge>
                 </IconButton>
                 {authCntxt.isVerified ? (
@@ -248,10 +174,60 @@ const Index = () => {
               </span>
             </Container>
           </Toolbar>
+          <Toolbar
+            disableGutters
+            sx={{
+              bgcolor: "#ffffff",
+              height: "fit-content",
+              minHeight: "50px !important",
+            }}
+          >
+            <Container
+              maxWidth="lg"
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                "& span": {
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  columnGap: 0.5,
+                },
+              }}
+            >
+              <span>
+                <Button
+                  size="small"
+                  variant="text"
+                  startIcon={<BiMenuAltLeft />}
+                  onClick={handleCatDrawer}
+                >
+                  CATEGORIES
+                </Button>
+                <Button size="small" variant="text">
+                  Deal of the day
+                </Button>
+                <Button size="small" variant="text">
+                  Gadget madness
+                </Button>
+              </span>
+              <span>
+                {/* <InstallationButton />
+                <Button
+                  size={"small"}
+                  sx={{ py: 0, "&:hover": { background: "transparent" } }}
+                  disableRipple
+                >
+                  বাংলা
+                </Button> */}
+              </span>
+            </Container>
+          </Toolbar>
         </AppBar>
         <Box
           sx={{
-            height: "90px",
+            height: "120px",
           }}
         />
       </Hidden>
@@ -306,6 +282,9 @@ export const SearchProduct = () => {
   let navigate = useNavigate();
   return (
     <form
+      style={{
+        minWidth: "180%",
+      }}
       onSubmit={(e) => {
         e.preventDefault();
         const data = new FormData(e.target);
@@ -320,11 +299,13 @@ export const SearchProduct = () => {
           bgcolor: "#ffffff88",
           px: 1,
           borderRadius: "100px",
+
           // boxShadow: "inset 0 0 3px #000000",
           "& svg": {
             color: "primary.main",
           },
         }}
+        fullWidth
         placeholder={"Search..."}
         name={"search"}
       />
@@ -444,7 +425,6 @@ export const SearchHeader = ({ search, sx }) => {
     </form>
   );
 };
-
 
 const CategoryItemButton = ({ category, ...others }) => {
   const theme = useTheme();

@@ -25,8 +25,9 @@ import {
 
 // icons
 import { HiLocationMarker, HiOutlineMail } from "react-icons/hi";
+import { GrFacebookOption, GrLocation } from "react-icons/gr";
 import { MdCall, MdClose } from "react-icons/md";
-import { FiFacebook } from "react-icons/fi";
+import { ImGooglePlus } from "react-icons/im";
 import {
   RiDashboardLine,
   RiMessengerLine,
@@ -34,16 +35,21 @@ import {
   RiYoutubeLine,
 } from "react-icons/ri";
 import { BiMenuAltRight } from "react-icons/bi";
-import { AiOutlineUser } from "react-icons/ai";
+import { AiFillInstagram, AiOutlineUser } from "react-icons/ai";
 
 // assets
 import pndIcon from "../../assets/pnd-favicon.svg";
 import { Link } from "react-router-dom";
 import { IoMdNotificationsOutline } from "react-icons/io";
-import { BsYoutube } from "react-icons/bs";
-import { FaUserCircle } from "react-icons/fa";
+import { BsTwitter, BsYoutube } from "react-icons/bs";
+import {
+  FaFacebookMessenger,
+  FaLinkedinIn,
+  FaUserCircle,
+} from "react-icons/fa";
 import { authContext } from "../../context/authProvider";
 import { authRootURL } from "../../service/instance";
+import { IoCallOutline } from "react-icons/io5";
 
 const Index = () => {
   const [catDrawerState, setCatDrawerState] = React.useState(false);
@@ -83,8 +89,11 @@ const Index = () => {
                   </Typography>
                   <Typography>About Us</Typography>
                   <Typography>Delivery Information</Typography>
+                  <Typography>Careery</Typography>
                   <Typography>Privacy Policy</Typography>
-                  <Typography>Terms </Typography>
+                  <Typography>Terms & Conditions</Typography>
+                  <Typography>FAQs</Typography>
+                  <Typography>Return Policy</Typography>
                 </Stack>
               </Grid>
               <Grid item xs={4}>
@@ -97,7 +106,7 @@ const Index = () => {
                     width: "fit-content",
                     mx: "auto",
                     color: "primary.main",
-                    textAlign: "center",
+                    textAlign: "left",
                   }}
                 >
                   <Typography
@@ -109,7 +118,7 @@ const Index = () => {
                     Customer Service
                   </Typography>
                   <Typography>Contact Us</Typography>
-                  <Typography>Return Policy</Typography>
+                  <Typography>Return</Typography>
                   <Typography>Order History</Typography>
                 </Stack>
               </Grid>
@@ -147,15 +156,12 @@ const Index = () => {
                       }}
                       color={"primary"}
                     >
-                      <HiLocationMarker />
+                      <GrLocation />
                     </IconButton>
                     <Typography>
-                      2nd floor, House-3, Road-4,
-                      <br /> Porbal Housing,
-                      <br /> Opposite of
-                      <br />
-                      Suchona Community Center,
-                      <br /> Ring Road, 1207 Dhaka.
+                      Street: 2474 Gorby Lane
+                      <br /> City: Hattiesburg
+                      <br /> State/province/area: Mississippi
                     </Typography>
                   </Stack>
                   <Stack
@@ -173,7 +179,7 @@ const Index = () => {
                     >
                       <HiOutlineMail />
                     </IconButton>
-                    <Typography>pndservice18@gmail.com</Typography>
+                    <Typography>support@rayosbd.com</Typography>
                   </Stack>
                   <Stack
                     direction={"row"}
@@ -188,7 +194,7 @@ const Index = () => {
                       }}
                       color={"primary"}
                     >
-                      <MdCall />
+                      <IoCallOutline />
                     </IconButton>
                     <Typography>01878044347</Typography>
                   </Stack>
@@ -212,30 +218,36 @@ const Index = () => {
                   <IconButton
                     color={"primary"}
                     component={"a"}
-                    href={"https://www.facebook.com/panddservice"}
+                    href={"https://www.facebook.com/"}
                     target={"_blank"}
                   >
-                    <FiFacebook />
+                    <GrFacebookOption />
                   </IconButton>
                   <IconButton
                     color={"primary"}
                     component={"a"}
-                    href={"https://m.me/panddservice"}
+                    href={"https://twitter.com/"}
                     target={"_blank"}
                   >
-                    <RiMessengerLine />
+                    <BsTwitter />
                   </IconButton>
                   <IconButton
                     color={"primary"}
                     component={"a"}
-                    href={
-                      "https://api.whatsapp.com/message/JWOAB3GMTTJIB1?autoload=1&app_absent=0"
-                    }
+                    href={"https://www.instagram.com/?hl=en"}
                     target={"_blank"}
                   >
-                    <RiWhatsappLine />
+                    <AiFillInstagram />
                   </IconButton>
                   <IconButton
+                    color={"primary"}
+                    component={"a"}
+                    href={"https://www.linkedin.com/feed/"}
+                    target={"_blank"}
+                  >
+                    <FaLinkedinIn />
+                  </IconButton>
+                  {/* <IconButton
                     color={"primary"}
                     component={"a"}
                     href={
@@ -243,8 +255,8 @@ const Index = () => {
                     }
                     target={"_blank"}
                   >
-                    <RiYoutubeLine />
-                  </IconButton>
+                    <ImGooglePlus />
+                  </IconButton> */}
                 </Stack>
                 <Typography
                   variant={"subtitle2"}
@@ -260,8 +272,9 @@ const Index = () => {
                     },
                   }}
                 >
-                  Copyright &copy; 2022 p&d. All Rights Reserved. | Design by
-                  <a
+                  Copyright © 2021 RayosBD. All Rights Reserved. | Design by
+                  Deviate.
+                  {/* <a
                     href={"https://brogrammerslab.com/"}
                     target={"_blank"}
                     rel={"noreferrer"}
@@ -269,7 +282,7 @@ const Index = () => {
                     {" "}
                     Brogrammerslab
                   </a>
-                  .
+                  . */}
                 </Typography>
               </Grid>
             </Grid>

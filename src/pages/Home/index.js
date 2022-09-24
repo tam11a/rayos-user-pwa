@@ -1,13 +1,4 @@
-import {
-  Box,
-  Button,
-  Divider,
-  Hidden,
-  ListItemText,
-  Skeleton,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Divider, Skeleton, Stack, Typography } from "@mui/material";
 import React from "react";
 import { BsYoutube } from "react-icons/bs";
 import { useGetHomeImg } from "../../query/home-img";
@@ -39,7 +30,7 @@ const Index = () => {
   return (
     <>
       {/* Home Images */}
-      {homeImgList ? (
+      {false ? (
         <ImageSlider homeImgList={homeImgList} />
       ) : (
         <Skeleton
@@ -67,7 +58,6 @@ const Index = () => {
       ) : (
         <></>
       )}
-
 
       {/* Three Cards Section */}
       {homeImgList ? (
