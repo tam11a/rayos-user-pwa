@@ -241,10 +241,6 @@ const Index = () => {
             </Button>
           </Stack>
         </Grid>
-        <Box sx={{ my: 1, maxWidth: "99vw", mx: "auto", px: 1, mt: 2 }}>
-          <Divider />
-          <ALlProductLayout perCat={demoData} />
-        </Box>
       </Grid>
     </Container>
   ) : (
