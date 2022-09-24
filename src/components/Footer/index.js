@@ -99,7 +99,7 @@ const Index = () => {
               <Grid item xs={4}>
                 <Stack
                   direction={"column"}
-                  alignItems={"left"}
+                  alignItems={"center"}
                   sx={{
                     rowGap: 2,
                     mt: 1,
@@ -272,17 +272,12 @@ const Index = () => {
                     },
                   }}
                 >
-                  Copyright © 2021 RayosBD. All Rights Reserved. | Design by
-                  Deviate.
-                  {/* <a
-                    href={"https://brogrammerslab.com/"}
-                    target={"_blank"}
-                    rel={"noreferrer"}
-                  >
+                  Copyright © 2022 RayosBD. All Rights Reserved. | Design by
+                  <a href={"#"} target={"_blank"} rel={"noreferrer"}>
                     {" "}
-                    Brogrammerslab
+                    Deviate
                   </a>
-                  . */}
+                  .
                 </Typography>
               </Grid>
             </Grid>

@@ -35,12 +35,21 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import pndIcon from "../../assets/pnd-icon.svg";
 
 // Icons
-import { MdCall, MdClose, MdShoppingCart } from "react-icons/md";
+import {
+  MdCall,
+  MdChatBubbleOutline,
+  MdClose,
+  MdShoppingCart,
+} from "react-icons/md";
 import { HiOutlineMail } from "react-icons/hi";
-import { IoMdNotificationsOutline } from "react-icons/io";
+import { RiNotification2Line } from "react-icons/ri";
 import { BiMenuAltLeft } from "react-icons/bi";
 import { BsBagPlus, BsChatLeft, BsSearch } from "react-icons/bs";
-import { AiOutlineUser, AiOutlineShoppingCart } from "react-icons/ai";
+import {
+  AiOutlineUser,
+  AiOutlineShoppingCart,
+  AiOutlineShopping,
+} from "react-icons/ai";
 import { TbListDetails, TbListSearch } from "react-icons/tb";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import InstallationButton from "./InstallationButton";
@@ -94,9 +103,10 @@ const Index = () => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
-                "& > span": {
-                  flex: 1,
-                },
+                columnGap: 2,
+                // "& > span": {
+                //   flex: 1,
+                // },
                 "& span": {
                   display: "flex",
                   alignItems: "center",
@@ -118,25 +128,39 @@ const Index = () => {
                   to={"/"}
                 />
               </span>
-              <span
+              <SearchProduct
                 style={{
-                  display: "flex",
-                  justifyContent: "center",
+                  minWidth: "unset",
+                  flex: 1,
                 }}
-              >
-                <SearchProduct />
-              </span>
+              />
+
               <span
                 style={{
                   justifyContent: "flex-end",
                 }}
               >
+                <IconButton color={"black"} component={Link} to={"/chat"}>
+                  <Badge
+                    // overlap={"circular"}
+                    badgeContent={5}
+                    color="black"
+                  >
+                    <MdChatBubbleOutline />
+                  </Badge>
+                </IconButton>
                 <IconButton
                   color={"black"}
                   component={Link}
                   to={"/notification"}
                 >
-                  <BsChatLeft />
+                  <Badge
+                    // overlap={"circular"}
+                    badgeContent={5}
+                    color="black"
+                  >
+                    <RiNotification2Line />
+                  </Badge>
                 </IconButton>
                 <IconButton color={"black"} onClick={cartCntxt.handleOpen}>
                   <Badge
@@ -144,7 +168,11 @@ const Index = () => {
                     badgeContent={cartCntxt.total}
                     color="black"
                   >
-                    <BsBagPlus />
+                    <AiOutlineShopping
+                      style={{
+                        fontSize: "1.2em",
+                      }}
+                    />
                   </Badge>
                 </IconButton>
                 {authCntxt.isVerified ? (
@@ -197,20 +225,11 @@ const Index = () => {
               }}
             >
               <span>
-                <Button
-                  size="small"
-                  variant="text"
-                  startIcon={<BiMenuAltLeft />}
-                  onClick={handleCatDrawer}
-                >
+                <Button startIcon={<BiMenuAltLeft />} onClick={handleCatDrawer}>
                   CATEGORIES
                 </Button>
-                <Button size="small" variant="text">
-                  Deal of the day
-                </Button>
-                <Button size="small" variant="text">
-                  Gadget madness
-                </Button>
+                <Button>Deal of the day</Button>
+                <Button>Gadget madness</Button>
               </span>
               <span>
                 {/* <InstallationButton />
@@ -278,32 +297,35 @@ const Index = () => {
   );
 };
 
-export const SearchProduct = () => {
+export const SearchProduct = ({ inputStyle, ...others }) => {
   let navigate = useNavigate();
   return (
     <form
       style={{
         minWidth: "180%",
+        ...others.style,
       }}
       onSubmit={(e) => {
         e.preventDefault();
         const data = new FormData(e.target);
         if (data.get("search")) navigate(`/search?q=${data.get("search")}`);
       }}
+      {...others}
     >
       <InputBase
         startAdornment={
-          <BsSearch style={{ marginRight: "10px", fontSize: "1.2rem" }} />
+          <BsSearch style={{ marginRight: "10px", fontSize: "1.3rem" }} />
         }
         sx={{
           bgcolor: "#ffffff88",
-          px: 1,
+          px: 1.5,
           borderRadius: "100px",
-
+          fontSize: "1.2rem",
           // boxShadow: "inset 0 0 3px #000000",
           "& svg": {
             color: "primary.main",
           },
+          ...inputStyle,
         }}
         fullWidth
         placeholder={"Search..."}

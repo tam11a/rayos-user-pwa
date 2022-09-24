@@ -8,6 +8,7 @@
     "@emotion/react": "11.9.3",
     "@emotion/styled": "11.9.3",
     "@hookform/resolvers": "^2.9.7",
+    "@iconify/react": "4.0.0",
     "@mui/material": "5.8.7",
     "@mui/x-data-grid": "5.15.2",
     "@mui/x-data-grid-generator": "5.15.2",
