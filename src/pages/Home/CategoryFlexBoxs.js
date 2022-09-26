@@ -1,10 +1,18 @@
-import { Avatar, Paper, Skeleton, Stack, Typography } from "@mui/material";
+import {
+  Avatar,
+  Button,
+  Paper,
+  Skeleton,
+  Stack,
+  Typography,
+} from "@mui/material";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { categoryContext } from "../../context/categoryProvider";
-import { rootURL } from "../../service/instance";
+import { baseURL, rootURL } from "../../service/instance";
 
 const CategoryFlexBoxs = () => {
+  const navigate = useNavigate();
   const { categoryList, isLoading, isError } =
     React.useContext(categoryContext);
 
@@ -75,15 +83,16 @@ const CategoryFlexBoxs = () => {
                   rowGap: 1,
                   textDecoration: "none",
                 }}
-                component={Link}
-                to={"/search?category=" + category.id}
+                component={Button}
+                // to={"/search?category=" + category.id}
+                onClick={() => navigate("/search?category=" + category.id)}
               >
                 <Avatar
-                  alt={category.title_en}
-                  src={rootURL + category.photo}
+                  alt={category.titleEn}
+                  src={baseURL + "/attachments/" + category.icon}
                   sx={{
                     borderRadius: 0,
-                    p: 0.7,
+                    p: 1,
                     width: "100%",
                     height: "100%",
                     maxWidth: {
@@ -104,7 +113,7 @@ const CategoryFlexBoxs = () => {
                     lineHeight: "1rem",
                   }}
                 >
-                  {category.title_en}
+                  {category.titleEn}
                 </Typography>
               </Paper>
             ))}

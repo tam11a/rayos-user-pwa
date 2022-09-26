@@ -1,7 +1,7 @@
 import axios from "axios";
 
-export const rootURL = "https://backend.pndservicebd.com/";
-export const baseURL = rootURL + "api/backend/";
+export const rootURL = "http://199.192.20.135:4001/";
+export const baseURL = rootURL + "api";
 
 export const authRootURL = "https://oauth.pndservicebd.com/";
 export const authURL = authRootURL + "api/auth/";

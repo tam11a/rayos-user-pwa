@@ -3,7 +3,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { authContext } from "../../context/authProvider";
-import { rootURL } from "../../service/instance";
+import { baseURL, rootURL } from "../../service/instance";
 import ProductDialog from "./ProductDialog";
 import ProductView from "../../pages/ProductView";
 
@@ -26,10 +26,10 @@ const Index = ({ product }) => {
         }}
         component={Button}
         elevation={3}
-        onClick={() => navigate(`/product/${product.id}`)}
+        onClick={() => navigate(`/product/${product._id}`)}
       >
         <Avatar
-          src={rootURL + product.photo}
+          src={baseURL + "/attachments/" + product.image}
           alt={product.title_en}
           sx={{
             height: "85%",
@@ -58,9 +58,9 @@ const Index = ({ product }) => {
             }}
             noWrap={true}
           >
-            {product.title_en}
+            {product.titleEn}
           </Typography>
-          {authCntxt.isVerified ? (
+          {/* {authCntxt.isVerified ? (
             <Typography
               variant="caption"
               sx={{
@@ -73,9 +73,19 @@ const Index = ({ product }) => {
             </Typography>
           ) : (
             <></>
-          )}
+          )} */}
+          <Typography
+            variant="caption"
+            sx={{
+              position: "relative",
+              maxWidth: "100%",
+            }}
+            noWrap={true}
+          >
+            {product.sellPrice || 0} TK
+          </Typography>
         </Box>
-        {!product.quantity ? (
+        {false ? (
           <Box
             sx={{
               position: "absolute",

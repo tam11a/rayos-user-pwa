@@ -1,7 +1,7 @@
 import React from "react";
 
 // Instance
-import { authRootURL, rootURL } from "../../service/instance";
+import { authRootURL, baseURL } from "../../service/instance";
 
 // Context
 import { categoryContext } from "../../context/categoryProvider";
@@ -397,7 +397,7 @@ export const CategoryDrawer = ({ open, handleClose }) => {
           </IconButton>
         </ListItem>
         {categoryList?.map((category) => (
-          <React.Fragment key={category.id}>
+          <React.Fragment key={category._id}>
             <CategoryItemButton category={category} onClick={handleClose} />
           </React.Fragment>
         ))}
@@ -487,78 +487,85 @@ const CategoryItemButton = ({ category, ...others }) => {
         aria-haspopup="true"
         onMouseEnter={handlePopoverOpen}
         onMouseLeave={handleClose}
-        component={phoneView ? "div" : Link}
-        to={!phoneView ? "/search?category=" + category.id : undefined}
-        onClick={phoneView ? () => {} : others.onClick}
+        component={category.subcategories.length && phoneView ? "div" : Link}
+        to={
+          !(category.subcategories.length && phoneView)
+            ? "/search?category=" + category.id
+            : undefined
+        }
+        onClick={
+          category.subcategories.length && phoneView ? () => {} : others.onClick
+        }
       >
         <ListItemIcon>
           <Avatar
-            alt={category.title_en}
-            src={rootURL + category.photo}
+            alt={category.titleEn}
+            src={baseURL + "/attachments/" + category.icon}
             sx={{
               borderRadius: 0,
               p: 0.7,
             }}
           />
         </ListItemIcon>
-        <ListItemText primary={category.title_en} />
+        <ListItemText primary={category.titleEn} />
       </ListItemButton>
-      <Popover
-        id="mouse-over-popover"
-        sx={{
-          pointerEvents: "none",
-          ml: 0.5,
-        }}
-        open={poperOpen}
-        anchorEl={anchorEl}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "left",
-        }}
-        onClose={handlePopoverClose}
-        disableRestoreFocus
-        // PaperProps={{
-        //   minWidth: "250px",
-        // }}
-        onMouseEnter={handleOpen}
-        onMouseLeave={handleClose}
-      >
-        <List
+      {category.subcategories.length && phoneView ? (
+        <Popover
+          id="mouse-over-popover"
           sx={{
-            minWidth: "250px",
-            pointerEvents: "auto",
+            pointerEvents: "none",
+            ml: 0.5,
           }}
-          disablePadding
-          // onMouseEnter={() => handlePopoverOpen(lastOpen)}
-          // onMouseLeave={handlePopoverClose}
+          open={poperOpen}
+          anchorEl={anchorEl}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "left",
+          }}
+          onClose={handlePopoverClose}
+          disableRestoreFocus
+          // PaperProps={{
+          //   minWidth: "250px",
+          // }}
+          onMouseEnter={handleOpen}
+          onMouseLeave={handleClose}
         >
-          <Hidden mdUp>
-            <ListItem>
-              <ListItemText
-                primary={category.title_en}
-                secondary={"Show All Subcategories"}
-              />
-              <IconButton
+          <List
+            sx={{
+              minWidth: "250px",
+              pointerEvents: "auto",
+            }}
+            disablePadding
+            // onMouseEnter={() => handlePopoverOpen(lastOpen)}
+            // onMouseLeave={handlePopoverClose}
+          >
+            <Hidden mdUp>
+              <ListItem>
+                <ListItemText
+                  primary={category.title_en}
+                  secondary={"Show All Subcategories"}
+                />
+                <IconButton
+                  component={Link}
+                  to={"/search?category=" + category.id}
+                  {...others}
+                >
+                  <TbListSearch />
+                </IconButton>
+              </ListItem>
+            </Hidden>
+            {category.subcategories?.map((subcategory) => (
+              <ListItemButton
+                key={subcategory._id}
                 component={Link}
-                to={"/search?category=" + category.id}
+                to={"/search?subcategory=" + subcategory._id}
                 {...others}
               >
-                <TbListSearch />
-              </IconButton>
-            </ListItem>
-          </Hidden>
-          {category.subcategories?.map((subcategory) => (
-            <ListItemButton
-              key={subcategory.id}
-              component={Link}
-              to={"/search?subcategory=" + subcategory.id}
-              {...others}
-            >
-              {/* <ListItemIcon>
+                {/* <ListItemIcon>
                 <Avatar
                   alt={category.title_en}
                   src={rootURL + category.photo}
@@ -568,11 +575,14 @@ const CategoryItemButton = ({ category, ...others }) => {
                   }}
                 />
               </ListItemIcon> */}
-              <ListItemText primary={subcategory.title_en} />
-            </ListItemButton>
-          ))}
-        </List>
-      </Popover>
+                <ListItemText primary={subcategory.titleEn} />
+              </ListItemButton>
+            ))}
+          </List>
+        </Popover>
+      ) : (
+        <></>
+      )}
     </>
   );
 };

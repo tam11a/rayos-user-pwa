@@ -13,9 +13,11 @@ const Index = ({ children }) => {
   // Set Category List to State
   React.useEffect(() => {
     if (isLoading || isError) return;
-    if (!categoryData.data.status) return;
-    setCategoryList(categoryData.data.value);
+    if (!categoryData.status) return;
+    setCategoryList(categoryData.data.data);
   }, [isLoading]);
+
+  console.log(categoryList);
 
   return (
     <categoryContext.Provider

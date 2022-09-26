@@ -389,6 +389,20 @@ export const ALlProductLayout = () => {
         <SearchSkeleton />
       ) : (
         <>
+          <Typography
+            variant="h5"
+            sx={{
+              fontWeight: "bold",
+              color: "primary.main",
+              mb: 1,
+              // pl: 1,
+              pb: 1,
+            }}
+          >
+            Products
+          </Typography>
+          <Divider />
+
           {productList?.map((perCat) => (
             <React.Fragment key={perCat.id}>
               {perCat.products.length ? (
@@ -407,7 +421,7 @@ export const ALlProductLayout = () => {
                         textTransform: "capitalize",
                       }}
                     >
-                      {perCat.title_en}
+                      {perCat.titleEn}
                     </Typography>
                     <Button
                       variant={"contained"}
@@ -431,11 +445,11 @@ export const ALlProductLayout = () => {
                   >
                     {perCat?.subcategories?.map((perSubCat) => (
                       <Chip
-                        label={perSubCat.title_en}
-                        key={perSubCat.id}
+                        label={perSubCat.titleEn}
+                        key={perSubCat._id}
                         clickable
                         component={Link}
-                        to={`/search?subcategory=${perSubCat.id}`}
+                        to={`/search?subcategory=${perSubCat._id}`}
                       />
                     ))}
                   </Stack>

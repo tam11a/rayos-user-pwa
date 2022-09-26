@@ -46,7 +46,7 @@ export const useGetSubCategoryListByCategory = (id) => {
 };
 
 const getCatScreenList = () => {
-  return instance.get("category/get-all-category-info-with-prod-sub");
+  return instance.get("feed");
 };
 
 export const useGetCatScreenList = () => {

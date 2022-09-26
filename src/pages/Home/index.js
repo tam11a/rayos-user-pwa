@@ -60,7 +60,7 @@ const Index = () => {
       )}
 
       {/* Three Cards Section */}
-      {homeImgList ? (
+      {/* {homeImgList ? (
         // <OfferImages homeImgList={homeImgList} />
         <></>
       ) : (
@@ -104,26 +104,13 @@ const Index = () => {
             }}
           />
         </Stack>
-      )}
+      )} */}
 
       {/* Category List */}
       <CategoryFlexBoxs />
 
       {/* All Products Layout */}
-      <Typography
-        variant="h5"
-        sx={{
-          fontWeight: "bold",
-          color: "primary.main",
-          mb: 1,
-          pl: 1,
-          pb: 1,
-        }}
-      >
-        Products
-      </Typography>
       <Box sx={{ my: 1, maxWidth: "99vw", mx: "auto", px: 1, mt: 2 }}>
-        <Divider />
         <ALlProductLayout />
       </Box>
     </>
