@@ -10,6 +10,7 @@ import {
   Hidden,
   IconButton,
   Paper,
+  Skeleton,
   Stack,
   Tooltip,
   Typography,
@@ -19,20 +20,22 @@ import { authContext } from "../../context/authProvider";
 
 import notFound from "../../assets/undraw_mobile_login_re_9ntv.svg";
 import { authRootURL } from "../../service/instance";
-import { IoWalletSharp } from "react-icons/io5";
-import { GiReceiveMoney } from "react-icons/gi";
-import { MdLogout, MdNotificationsActive } from "react-icons/md";
-import { AiOutlineShop } from "react-icons/ai";
+import { Icon } from "@iconify/react";
 import { FaPhoneAlt } from "react-icons/fa";
 import { FiEdit2 } from "react-icons/fi";
-import CInput from "../../components/Sign/CInput";
-import CPassword from "../../components/Sign/CPassword";
 import { useForm } from "react-hook-form";
 import { useUpdateUserPassword, useUpdateUserProfile } from "../../query/sign";
 import { objToFormData } from "../../utilities/json-form";
 import { responseHandler } from "../../utilities/response-handler";
 import snackContext from "../../context/snackProvider";
-import { Link } from "react-router-dom";
+import { ALlProductLayout } from "../Search/SearchResults";
+
+const demoData = [
+  {
+    id: "126",
+    title_en: "wishlist",
+  },
+];
 
 const Index = () => {
   const authCntxt = React.useContext(authContext);
@@ -229,210 +232,14 @@ const Index = () => {
               </Hidden>
               <span>{authCntxt.userInfo?.phone}</span>
             </Typography>
-            <Stack
-              direction={"row"}
-              sx={{
-                my: 1,
-              }}
-              rowGap={1}
-              columnGap={3}
-              flexWrap={"wrap"}
+            <Button
+              variant="contained"
+              startIcon={<Icon icon="wpf:password1" />}
+              sx={{ borderRadius: 28, my: 1, px: 3 }}
             >
-              <Stack direction={"column"} alignItems={"center"}>
-                <Tooltip title={"Wallet"}>
-                  <IconButton color={"black"} component={Link} to={"wallet"}>
-                    <IoWalletSharp />
-                  </IconButton>
-                </Tooltip>
-                <Typography variant="caption">Wallet</Typography>
-              </Stack>
-              <Stack direction={"column"} alignItems={"center"}>
-                <Tooltip title={"Order"}>
-                  <IconButton color={"black"} component={Link} to={"order"}>
-                    <AiOutlineShop />
-                  </IconButton>
-                </Tooltip>
-                <Typography variant="caption">Orders</Typography>
-              </Stack>
-              <Stack direction={"column"} alignItems={"center"}>
-                <Tooltip title={"Notification"}>
-                  <IconButton color={"black"}>
-                    <MdNotificationsActive />
-                  </IconButton>
-                </Tooltip>
-                <Typography variant="caption">Notification</Typography>
-              </Stack>
-              <Stack direction={"column"} alignItems={"center"}>
-                <Tooltip title={"Logout"}>
-                  <IconButton color={"error"} onClick={authCntxt.logout}>
-                    <MdLogout />
-                  </IconButton>
-                </Tooltip>
-                <Typography variant="caption">Logout</Typography>
-              </Stack>
-            </Stack>
+              update password
+            </Button>
           </Stack>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <form onSubmit={handleSubmit(updateHandler)}>
-            <Paper
-              // elevation={0}
-              sx={{
-                p: {
-                  xs: 1,
-                  md: 2,
-                },
-                boxShadow: {
-                  xs: 0,
-                  md: 10,
-                },
-              }}
-              component={Stack}
-              direction={"column"}
-              rowGap={1}
-            >
-              <Hidden mdDown>
-                <Typography
-                  variant={"h5"}
-                  sx={{
-                    p: 1,
-                  }}
-                >
-                  ACCOUNT SETTINGS
-                </Typography>
-                <Divider />
-              </Hidden>
-              <Typography variant="button">Name *</Typography>
-              <CInput
-                placeholder="Full Name"
-                fullWidth
-                {...register("full_name")}
-              />
-              <Typography variant="button">Company Name *</Typography>
-              <CInput
-                placeholder="Company Name"
-                fullWidth
-                {...register("company_name")}
-              />
-              <Typography variant="button">Company Link</Typography>
-              <CInput
-                placeholder="Company Link"
-                fullWidth
-                {...register("company_link")}
-              />
-              <Typography variant="button">Phone *</Typography>
-              <CInput
-                placeholder="Phone Number"
-                readOnly
-                disabled
-                fullWidth
-                {...register("phone")}
-              />
-              <Typography variant="button">Address *</Typography>
-              <CInput
-                placeholder="Address"
-                fullWidth
-                {...register("address")}
-              />
-              <Typography variant="button">Additional Info</Typography>
-              <CInput
-                placeholder="Bank Account"
-                startAdornment={<Box sx={{ mr: 1 }}>CC:</Box>}
-                fullWidth
-                {...register("cc")}
-              />
-              <CInput
-                placeholder="BKash Number"
-                startAdornment={<Box sx={{ mr: 1 }}>BKash:</Box>}
-                fullWidth
-                inputProps={{
-                  type: "tel",
-                }}
-                {...register("bkash")}
-              />
-              <Button variant="contained" color={"black"} type={"submit"}>
-                Update
-              </Button>
-            </Paper>
-          </form>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <form onSubmit={handlePasswordSubmit(updatePasword)}>
-            <Paper
-              // elevation={0}
-              sx={{
-                p: {
-                  xs: 1,
-                  md: 2,
-                },
-                boxShadow: {
-                  xs: 0,
-                  md: 10,
-                },
-              }}
-              component={Stack}
-              direction={"column"}
-              rowGap={1}
-            >
-              <Hidden mdDown>
-                <Typography
-                  variant={"h5"}
-                  sx={{
-                    p: 1,
-                  }}
-                >
-                  UPDATE SECURITY
-                </Typography>
-                <Divider />
-              </Hidden>
-              <Hidden smUp>
-                <Divider
-                  sx={{
-                    mb: 3,
-                  }}
-                />
-              </Hidden>
-              <Typography variant="button">Current Password *</Typography>
-              <CPassword
-                placeholder="Current Password"
-                {...registerPassword("current_password")}
-                fullWidth
-              />
-              <Typography variant="button">New Password *</Typography>
-              <CPassword
-                placeholder="New Password"
-                {...registerPassword("new_password")}
-                fullWidth
-              />
-              <Typography variant="button">Confirm New Password *</Typography>
-              <CPassword
-                placeholder="Confirm New Password"
-                {...registerPassword("confirm_password")}
-                fullWidth
-              />
-              {passError && <Alert severity="error">{passError}</Alert>}
-              <Button variant="contained" type={"submit"} color={"black"}>
-                Update password
-              </Button>
-            </Paper>
-          </form>
-          <Divider
-            sx={{
-              my: 1,
-              mt: 3,
-            }}
-          />
-          <Button
-            onClick={authCntxt.logout}
-            variant={"contained"}
-            color={"error"}
-            sx={{
-              mt: 2,
-            }}
-            fullWidth
-          >
-            Logout
-          </Button>
         </Grid>
       </Grid>
     </Container>

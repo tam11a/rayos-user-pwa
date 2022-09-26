@@ -15,6 +15,7 @@ import PNDOrderAddress from "../pages/PNDOrderAddress";
 import PNDOrderCheckout from "../pages/PNDOrderCheckout";
 import Order from "../pages/User/Order";
 import Wallet from "../pages/User/Wallet";
+import ProductView from "../pages/ProductView";
 
 const AppRoute = () => {
   const location = useLocation();
@@ -67,6 +68,7 @@ const AppRoute = () => {
           </Route>
           <Route path="bi" element={<>Brothers Importing Order</>} />
         </Route>
+        <Route path="product/:productId" element={<ProductView />} />
         <Route path="*" element={<Navigate to={"/"} />} />
       </Routes>
     </>

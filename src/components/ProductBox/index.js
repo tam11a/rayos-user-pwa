@@ -1,13 +1,17 @@
 import { Avatar, Box, Button, Paper, Typography } from "@mui/material";
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { authContext } from "../../context/authProvider";
 import { rootURL } from "../../service/instance";
 import ProductDialog from "./ProductDialog";
+import ProductView from "../../pages/ProductView";
 
 const Index = ({ product }) => {
   const authCntxt = React.useContext(authContext);
   const [open, setOpen] = React.useState(false);
   const handleClose = () => setOpen(!open);
+  const navigate = useNavigate();
 
   return (
     <>
@@ -18,10 +22,11 @@ const Index = ({ product }) => {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
+          textDecoration: "none",
         }}
         component={Button}
         elevation={3}
-        onClick={handleClose}
+        onClick={() => navigate(`/product/${product.id}`)}
       >
         <Avatar
           src={rootURL + product.photo}
