@@ -37,15 +37,15 @@ const Index = ({ children }) => {
     // }
   };
 
-  React.useEffect(() => {
-    // console.log(Notification.permission);
-    if (Notification.permission !== "granted") {
-      askPermission();
-      setPermission(false);
-    } else {
-      setPermission(true);
-    }
-  }, []);
+  // React.useEffect(() => {
+  //   // console.log(Notification.permission);
+  //   if (Notification.permission !== "granted") {
+  //     askPermission();
+  //     setPermission(false);
+  //   } else {
+  //     setPermission(true);
+  //   }
+  // }, []);
 
   return (
     <notificationContext.Provider

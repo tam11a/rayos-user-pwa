@@ -39,6 +39,8 @@
     "workbox-streams": "^6.5.3"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test",
@@ -63,6 +65,7 @@
     ]
   },
   "devDependencies": {
-    "@iconify/react": "^4.0.0"
+    "@iconify/react": "^4.0.0",
+    "gh-pages": "^4.0.0"
   }
 }
