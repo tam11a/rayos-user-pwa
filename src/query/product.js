@@ -2,7 +2,7 @@ import { useQuery } from "react-query";
 import instance from "../service/instance";
 
 const getProductByID = (id) => {
-  return instance.get(`product/get-product-info/${id}`);
+  return instance.get(`product/${id}`);
 };
 
 export const useGetProductByID = (id) => {
@@ -11,7 +11,6 @@ export const useGetProductByID = (id) => {
     retry: 1,
   });
 };
-
 
 const getAllProduct = () => {
   return instance.get(`product/get-all-product-info`);
@@ -36,5 +35,3 @@ const allProdCat = () => {
 export const useGetAllProdCat = () => {
   return useQuery(["all-prod-cat"], () => allProdCat(), {});
 };
-
-
