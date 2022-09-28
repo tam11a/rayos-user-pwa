@@ -404,7 +404,7 @@ export const ALlProductLayout = () => {
           <Divider />
 
           {productList?.map((perCat, index) => (
-            <React.Fragment key={perCat.id}>
+            <React.Fragment key={perCat._id}>
               {perCat.products.length ? (
                 <>
                   <Stack
@@ -467,7 +467,7 @@ export const ALlProductLayout = () => {
                   >
                     {perCat?.products?.map((product) => (
                       <Grid
-                        key={product.id}
+                        key={product._id}
                         item
                         xs={5.9}
                         sm={3.85}

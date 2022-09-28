@@ -9,7 +9,7 @@ import { Pagination, Autoplay } from "swiper";
 import "swiper/css";
 import "swiper/css/pagination";
 
-import { rootURL } from "../../service/instance";
+import { getAttachment, rootURL } from "../../service/instance";
 import { Box } from "@mui/material";
 
 const ImageSlider = ({ homeImgList }) => {
@@ -24,7 +24,7 @@ const ImageSlider = ({ homeImgList }) => {
         },
         "& .swiper-pagination-bullet": {
           bgcolor: "white.main",
-          border: "1px solid #aaa",
+          // border: "1px solid #aaa",
         },
       }}
     >
@@ -40,45 +40,21 @@ const ImageSlider = ({ homeImgList }) => {
         spaceBetween={10}
         modules={[Autoplay, Pagination]}
       >
-        <SwiperSlide>
-          <Box
-            sx={{
-              "& img": {
-                width: "100%",
-                borderRadius: "4px",
-              },
-            }}
-          >
-            <img src={rootURL + homeImgList.first_banner} alt={"home_splash"} />
-          </Box>
-        </SwiperSlide>
-        <SwiperSlide>
-          <Box
-            sx={{
-              "& img": {
-                width: "100%",
-                borderRadius: "4px",
-              },
-            }}
-          >
-            <img
-              src={rootURL + homeImgList.second_banner}
-              alt={"home_splash"}
-            />
-          </Box>
-        </SwiperSlide>
-        <SwiperSlide>
-          <Box
-            sx={{
-              "& img": {
-                width: "100%",
-                borderRadius: "4px",
-              },
-            }}
-          >
-            <img src={rootURL + homeImgList.third_banner} alt={"home_splash"} />
-          </Box>
-        </SwiperSlide>
+        {homeImgList?.map((feedImg) => (
+          <SwiperSlide key={feedImg._id}>
+            <Box
+              sx={{
+                px: 0.5,
+                "& img": {
+                  width: "100%",
+                  borderRadius: "4px",
+                },
+              }}
+            >
+              <img src={getAttachment(feedImg.image)} alt={"home_splash"} />
+            </Box>
+          </SwiperSlide>
+        ))}
       </Swiper>
     </Box>
   );

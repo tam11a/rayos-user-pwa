@@ -14,12 +14,12 @@ const Index = () => {
     isLoading: homeImgLoading,
     isError: homeImgError,
   } = useGetHomeImg();
-  const [homeImgList, setHomeImgList] = React.useState();
+  const [homeImgList, setHomeImgList] = React.useState([]);
 
   React.useEffect(() => {
     if (homeImgLoading || homeImgError) return;
-    if (!homeImgData.data.status) return;
-    setHomeImgList(homeImgData.data.value[0]);
+    if (!homeImgData?.data?.success) return;
+    setHomeImgList(homeImgData?.data?.data || []);
   }, [homeImgLoading]);
 
   const [notice, setNotice] = React
@@ -30,7 +30,7 @@ const Index = () => {
   return (
     <>
       {/* Home Images */}
-      {false ? (
+      {!(homeImgLoading || homeImgError) ? (
         <ImageSlider homeImgList={homeImgList} />
       ) : (
         <Skeleton
