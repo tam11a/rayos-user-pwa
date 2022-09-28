@@ -48,5 +48,8 @@ export const updateAuthInstance = () => {
   );
 };
 
+export const getAttachment = (attachmentId) => {
+  return baseURL + "/attachments/" + attachmentId;
+};
 
 export default instance;
