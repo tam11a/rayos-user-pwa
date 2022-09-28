@@ -29,6 +29,8 @@ import { getAttachment } from "../../service/instance";
 import { AiFillHeart } from "react-icons/ai";
 import { AiOutlineShareAlt } from "react-icons/ai";
 import { MdShare } from "react-icons/md";
+import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
+import { Icon } from "@iconify/react";
 
 const Index = () => {
   const { productId } = useParams();
@@ -47,7 +49,7 @@ const Index = () => {
     setProduct(productInfo?.data?.data);
   }, [isLoading]);
 
-  console.log(getAttachment(pickedPhoto));
+  // console.log(getAttachment(pickedPhoto));
 
   React.useEffect(() => {
     setImgList(
@@ -151,7 +153,6 @@ const Index = () => {
             </Swiper>
           </Box>
         </Grid>
-
         <Grid item xs={12} sm={6.5}>
           <Stack direction="row" justifyContent={"space-between"}>
             <Box>
@@ -172,7 +173,16 @@ const Index = () => {
                   size="small"
                   readOnly
                 />
-                <Typography variant="subtitle1">14 ratings</Typography>
+                <Typography
+                  variant="subtitle1"
+                  sx={{
+                    mt: 1,
+                    fontWeight: "600",
+                    color: "primary.main",
+                  }}
+                >
+                  14 ratings
+                </Typography>
               </Stack>
             </Box>
             <Stack direction="row" spacing={0.5} alignItems={"center"}>
@@ -188,11 +198,21 @@ const Index = () => {
               </Box>
             </Stack>
           </Stack>
-          <Divider />
+          <Divider
+            sx={{
+              my: 1.5,
+            }}
+          />
+
           {/* <br /> */}
-          {authContext.isVerified ? (
+
+          <Stack
+            direction="row"
+            alignItems={"center"}
+            justifyContent={"space-between"}
+          >
             <Typography
-              variant={"h4"}
+              variant={"h3"}
               sx={{
                 mt: 1,
                 fontWeight: "700",
@@ -201,9 +221,20 @@ const Index = () => {
             >
               {product.sellPrice} ৳
             </Typography>
-          ) : (
-            <></>
-          )}
+            <Stack direction="row" spacing={0.5} alignItems={"center"}>
+              <Box>
+                <IconButton sx={{ color: "#018037" }}>
+                  <LocalPhoneRoundedIcon />
+                </IconButton>
+              </Box>
+              <Box>
+                <IconButton sx={{ color: "#5766CC" }}>
+                  <Icon icon="jam:messages-f" />
+                </IconButton>
+              </Box>
+            </Stack>
+          </Stack>
+
           <Stack
             direction={"row"}
             sx={{
@@ -225,6 +256,8 @@ const Index = () => {
               </>
             )}
           </Stack>
+        </Grid>
+        <Grid item xs={12} sm={6.5}>
           <Typography
             variant={"h6"}
             sx={{
@@ -233,74 +266,9 @@ const Index = () => {
           >
             Overview:
           </Typography>
-          <Typography variant={"normal"}>{product.description_en}</Typography>
+          <Typography variant={"normal"}>{product.descriptionEn}</Typography>
           <br />
           <br />
-          {/* {Object.keys().length ? (
-            <>
-              <TableContainer
-                sx={{
-                  maxHeight: {
-                    sm: "350px",
-                  },
-                  width: "100%",
-                }}
-              >
-                <Table
-                  sx={{
-                    "& tr:last-child td, & tr:last-child th": {
-                      border: "none",
-                    },
-                  }}
-                >
-                  <TableHead
-                    sx={{
-                      bgcolor: "#00000011",
-                    }}
-                  >
-                    <TableRow>
-                      <TableCell align="center">Color</TableCell>
-                      <TableCell align="center" colSpan={2}>
-                        Quantity
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {Object.keys()?.map((color) => (
-                      <React.Fragment key={product.id + color}>
-                        <TableRow>
-                          <TableCell align="center">{color}</TableCell>
-                          <TableCell
-                            align="right"
-                            sx={{
-                              fontWeight: "800",
-                            }}
-                          >
-                            {colors[color]}
-                          </TableCell>
-                          <TableCell align="center">
-                            <AddProductButton
-                              max={parseInt(colors[color])}
-                              disabled={!colors[color]}
-                              onChange={(newValue) => {
-                                setPickedColors({
-                                  ...pickedColors,
-                                  [color]: newValue,
-                                });
-                              }}
-                            />
-                          </TableCell>
-                        </TableRow>
-                      </React.Fragment>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-              <></>
-            </>
-          ) : (
-            <></>
-          )} */}
         </Grid>
       </Grid>
     </Container>
