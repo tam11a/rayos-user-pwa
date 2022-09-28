@@ -150,8 +150,8 @@ const CategoryProduct = ({ id }) => {
 
   React.useEffect(() => {
     if (isLoading) return;
-    setInfo(data ? data?.data.value : {});
-    setProductList(data ? data?.data.value.products : []);
+    setInfo(data ? data?.data?.data : {});
+    setProductList(data ? data?.data?.data?.products : []);
     if (isError)
       if (error.response.status === 400)
         createSnack(error?.response.data.msg, "error");
@@ -161,7 +161,7 @@ const CategoryProduct = ({ id }) => {
   const { data: sublistData } = useGetSubCategoryListByCategory(id);
   React.useEffect(() => {
     if (!sublistData) return;
-    setSuggestionList(sublistData?.data?.value);
+    setSuggestionList(sublistData?.data?.data);
   }, [sublistData]);
 
   return (
@@ -175,14 +175,14 @@ const CategoryProduct = ({ id }) => {
         {isLoading ? (
           <Skeleton width={"120px"} />
         ) : (
-          "Category : " + (info?.title_en || "Not Found")
+          "Category : " + (info?.titleEn || "Not Found")
         )}
       </Typography>
       <Typography variant={"caption"}>
         {isLoading ? (
           <Skeleton width={"220px"} />
         ) : (
-          `${productList?.length} Results Found`
+          `${productList?.length || 0} Results Found`
         )}
       </Typography>
       {suggestionList?.length ? (
@@ -201,11 +201,11 @@ const CategoryProduct = ({ id }) => {
             {/* <Typography variant="button">Subcategories: </Typography> */}
             {suggestionList?.map((suggestion) => (
               <Chip
-                label={suggestion.title_en}
-                key={suggestion.id}
+                label={suggestion.titleEn}
+                key={suggestion._id}
                 clickable
                 component={Link}
-                to={`/search?subcategory=${suggestion.id}`}
+                to={`/search?subcategory=${suggestion._id}`}
               />
             ))}
           </Stack>
@@ -281,8 +281,8 @@ const SubcategoryProduct = ({ id }) => {
 
   React.useEffect(() => {
     if (isLoading) return;
-    setInfo(data ? data?.data.value : {});
-    setProductList(data ? data?.data.value.products : []);
+    setInfo(data ? data?.data?.data : {});
+    setProductList(data ? data?.data?.data?.products : []);
     if (isError)
       if (error.response.status === 400)
         createSnack(error?.response.data.msg, "error");
@@ -300,14 +300,14 @@ const SubcategoryProduct = ({ id }) => {
         {isLoading ? (
           <Skeleton width={"120px"} />
         ) : (
-          "Subcategory : " + (info?.title_en || "Not Found")
+          "Subcategory : " + (info?.titleEn || "Not Found")
         )}
       </Typography>
       <Typography variant={"caption"}>
         {isLoading ? (
           <Skeleton width={"220px"} />
         ) : (
-          `${productList?.length} Results Found`
+          `${productList?.length || 0} Results Found`
         )}
       </Typography>
 
@@ -403,7 +403,7 @@ export const ALlProductLayout = () => {
           </Typography>
           <Divider />
 
-          {productList?.map((perCat) => (
+          {productList?.map((perCat, index) => (
             <React.Fragment key={perCat.id}>
               {perCat.products.length ? (
                 <>
@@ -484,7 +484,7 @@ export const ALlProductLayout = () => {
                       </Grid>
                     ))}
                   </Grid>
-                  <Divider />
+                  {!(index !== productList.length - 1) && <Divider />}
                 </>
               ) : (
                 <></>

@@ -17,8 +17,6 @@ const Index = ({ children }) => {
     setCategoryList(categoryData.data.data);
   }, [isLoading]);
 
-  console.log(categoryList);
-
   return (
     <categoryContext.Provider
       value={{

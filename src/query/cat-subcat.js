@@ -2,7 +2,7 @@ import { useQuery } from "react-query";
 import instance from "../service/instance";
 
 const getCategory = () => {
-  return instance.get(`category/get-all-category-info`);
+  return instance.get(`category`);
 };
 
 export const useGetCategory = () => {
@@ -10,7 +10,7 @@ export const useGetCategory = () => {
 };
 
 const getSubCategory = () => {
-  return instance.get(`subcategory/get-all-subcategory-info`);
+  return instance.get(`subcategory`);
 };
 
 export const useGetSubcategory = () => {
@@ -18,7 +18,7 @@ export const useGetSubcategory = () => {
 };
 
 const getCategoryInfo = (id) => {
-  return instance.get(`category/get-category-info/${id}`);
+  return instance.get(`category/${id}`);
 };
 
 export const useGetCategoryInfo = (id) => {
@@ -26,7 +26,7 @@ export const useGetCategoryInfo = (id) => {
 };
 
 const getSubCategoryInfo = (id) => {
-  return instance.get(`subcategory/get-subcategory-info/${id}`);
+  return instance.get(`subcategory/${id}`);
 };
 
 export const useGetSubCategoryInfo = (id) => {
@@ -34,7 +34,7 @@ export const useGetSubCategoryInfo = (id) => {
 };
 
 const getSubCategoryListByCategory = (id) => {
-  return instance.get(`subcategory/get-subcategory-info-by-category/${id}`);
+  return instance.get(`category/${id}/subcategories`);
 };
 
 export const useGetSubCategoryListByCategory = (id) => {
@@ -50,5 +50,5 @@ const getCatScreenList = () => {
 };
 
 export const useGetCatScreenList = () => {
-  return useQuery("get-cat-prods", getCatScreenList, {});
+  return useQuery("get-feed", getCatScreenList, {});
 };

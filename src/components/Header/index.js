@@ -110,7 +110,7 @@ const Index = () => {
                 "& span": {
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "space-between",
+                  // justifyContent: "space-between", // removed because badge alignment got effected for this
                   columnGap: 0.5,
                 },
               }}

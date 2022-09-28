@@ -275,7 +275,7 @@ const Index = () => {
                   Copyright © 2022 RayosBD. All Rights Reserved. | Design by
                   <a href={"#"} target={"_blank"} rel={"noreferrer"}>
                     {" "}
-                    Deviate
+                    Team Deviate
                   </a>
                   .
                 </Typography>
