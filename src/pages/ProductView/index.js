@@ -8,6 +8,7 @@ import {
   Divider,
   Grid,
   IconButton,
+  Paper,
   Rating,
   Stack,
   Table,
@@ -16,6 +17,8 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  ToggleButton,
+  ToggleButtonGroup,
   Typography,
 } from "@mui/material";
 import { useParams } from "react-router-dom";
@@ -26,7 +29,11 @@ import { useGetProductByID } from "../../query/product";
 import { rootURL } from "../../service/instance";
 import { getAttachment } from "../../service/instance";
 
-import { AiFillHeart } from "react-icons/ai";
+import {
+  AiFillHeart,
+  AiFillMinusSquare,
+  AiFillPlusSquare,
+} from "react-icons/ai";
 import { AiOutlineShareAlt } from "react-icons/ai";
 import { MdShare } from "react-icons/md";
 import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
@@ -39,10 +46,15 @@ const Index = () => {
     isLoading,
     isError,
   } = useGetProductByID(productId);
+
   const [product, setProduct] = React.useState({});
   console.log(product);
+
   const [pickedPhoto, setPickedPhoto] = React.useState("");
   const [imgList, setImgList] = React.useState([]);
+  const [size, setSize] = React.useState({});
+  // console.log(size);
+
   React.useEffect(() => {
     if (isLoading || isError) return;
     if (!productInfo?.status) return;
@@ -66,10 +78,42 @@ const Index = () => {
             },
           ]
     );
+    handleChange({}, product?.variants?.[0]?._id);
   }, [product]);
+
   React.useEffect(() => {
     setPickedPhoto(imgList[0]?._id);
   }, [imgList]);
+
+  const [alignment, setAlignment] = React.useState("web");
+
+  const handleChange = (event, newAlignment) => {
+    setAlignment(newAlignment);
+    setNum(1);
+    product?.variants?.map((variant) => {
+      if (variant._id == newAlignment) {
+        setMaxNum(variant.quantity || 0);
+      }
+    });
+  };
+
+  // increment and decrement fucntion
+
+  let [num, setNum] = React.useState(1);
+  let [maxNum, setMaxNum] = React.useState(0);
+  let incNum = () => {
+    if (num < maxNum) {
+      setNum(Number(num) + 1);
+    }
+  };
+  let decNum = () => {
+    if (num > 1) {
+      setNum(num - 1);
+    }
+  };
+  let handleChangeNum = (e) => {
+    setNum(e.target.value);
+  };
 
   return (
     <Container>
@@ -98,6 +142,7 @@ const Index = () => {
             src={getAttachment(pickedPhoto)}
             alt={product.title_en}
             sx={{
+              border: "1px solid",
               borderRadius: 0,
               width: "100%",
               height: "max-content",
@@ -203,24 +248,34 @@ const Index = () => {
               my: 1.5,
             }}
           />
-
           {/* <br /> */}
 
+          {/* Selling Price Option */}
           <Stack
             direction="row"
             alignItems={"center"}
             justifyContent={"space-between"}
           >
-            <Typography
-              variant={"h3"}
-              sx={{
-                mt: 1,
-                fontWeight: "700",
-                color: "primary.main",
-              }}
-            >
-              {product.sellPrice} ৳
-            </Typography>
+            <Stack direction="row" alignItems={"center"}>
+              <Typography
+                variant={"h3"}
+                sx={{
+                  fontWeight: "600",
+                  color: "primary.main",
+                }}
+              >
+                {product.sellPrice}
+              </Typography>
+              <Typography
+                variant={"h4"}
+                sx={{
+                  fontWeight: "600",
+                  color: "primary.main",
+                }}
+              >
+                ৳
+              </Typography>
+            </Stack>
             <Stack direction="row" spacing={0.5} alignItems={"center"}>
               <Box>
                 <IconButton sx={{ color: "#018037" }}>
@@ -234,30 +289,85 @@ const Index = () => {
               </Box>
             </Stack>
           </Stack>
+          {/* Created Size Variant */}
 
-          <Stack
-            direction={"row"}
-            sx={{
-              my: 1,
-            }}
-            columnGap={2}
-            alignItems={"center"}
-          >
-            {product.quantity ? (
-              <>
-                <Chip label={"In Stock"} color={"primary"} />
-                <Typography variant={"subtitle2"}>
-                  <b>Quantity:</b> {product.quantity}
-                </Typography>
-              </>
-            ) : (
-              <>
-                <Chip label={"Out of Stock"} color={"error"} />
-              </>
-            )}
+          <Stack>
+            <Typography
+              variant={"h6"}
+              sx={{
+                fontWeight: "600",
+                color: "primary.main",
+              }}
+            >
+              Size:
+            </Typography>
+            <ToggleButtonGroup
+              value={alignment}
+              exclusive
+              onChange={handleChange}
+              aria-label="Platform"
+              sx={{
+                height: "35px",
+                columnGap: 1,
+                rowGap: 1,
+                "& .Mui-selected": {
+                  borderColor: "#F49320 !important",
+                  bgcolor: "transparent !important",
+                },
+              }}
+            >
+              {product.variants?.map((variant) => (
+                <ToggleButton
+                  sx={{
+                    // mr: 1,
+                    border: "1px solid !important",
+                    borderRadius: "2px !important",
+                  }}
+                  value={variant._id}
+                  disabled={!variant.quantity}
+                >
+                  {variant.titleEn}
+                </ToggleButton>
+              ))}
+            </ToggleButtonGroup>
+          </Stack>
+
+          {/* Create Quantity */}
+          <Stack>
+            <Typography
+              variant={"h6"}
+              sx={{
+                fontWeight: "600",
+                color: "primary.main",
+                mt: 1,
+              }}
+            >
+              Quantity:
+            </Typography>
+
+            <Stack direction="row" alignItems={"center"}>
+              <IconButton onClick={decNum} sx={{ pl: 0, color: "#69717D" }}>
+                <AiFillMinusSquare />
+              </IconButton>
+              <Typography variant="h6">{num}</Typography>
+              <IconButton onClick={incNum} sx={{ color: "#69717D" }}>
+                <AiFillPlusSquare />
+              </IconButton>
+              <Typography
+                variant={"subtitle1"}
+                sx={{
+                  fontWeight: "500",
+                  color: "#72808F",
+                }}
+              >
+                ({maxNum} items available)
+              </Typography>
+            </Stack>
           </Stack>
         </Grid>
-        <Grid item xs={12} sm={6.5}>
+
+        {/* Description part */}
+        <Grid item xs={12}>
           <Typography
             variant={"h6"}
             sx={{
@@ -266,7 +376,15 @@ const Index = () => {
           >
             Overview:
           </Typography>
-          <Typography variant={"normal"}>{product.descriptionEn}</Typography>
+          <Typography
+            variant={"body1"}
+            sx={{
+              textAlign: "justify !important",
+              fontWeight: "500",
+            }}
+          >
+            {product.descriptionEn}
+          </Typography>
           <br />
           <br />
         </Grid>
