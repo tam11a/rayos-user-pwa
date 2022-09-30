@@ -259,7 +259,7 @@ const Index = () => {
         </AppBar>
         <Box
           sx={{
-            height: "130px",
+            height: "120px",
           }}
         />
       </Hidden>

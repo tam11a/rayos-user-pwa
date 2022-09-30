@@ -50,7 +50,7 @@ const theme = createTheme({
       main: "#e86161",
     },
     warning: {
-      main: "#ffc300",
+      main: "#F49320",
       contrastText: "#272725",
     },
   },
