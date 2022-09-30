@@ -38,6 +38,7 @@ import { AiOutlineShareAlt } from "react-icons/ai";
 import { MdShare } from "react-icons/md";
 import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
 import { Icon } from "@iconify/react";
+import { useState } from "react";
 
 const Index = () => {
   const { productId } = useParams();
@@ -52,7 +53,6 @@ const Index = () => {
 
   const [pickedPhoto, setPickedPhoto] = React.useState("");
   const [imgList, setImgList] = React.useState([]);
-  const [size, setSize] = React.useState({});
   // console.log(size);
 
   React.useEffect(() => {
@@ -114,7 +114,7 @@ const Index = () => {
   let handleChangeNum = (e) => {
     setNum(e.target.value);
   };
-
+  // console.log(total);
   return (
     <Container>
       <Grid
@@ -339,7 +339,7 @@ const Index = () => {
               sx={{
                 fontWeight: "600",
                 color: "primary.main",
-                mt: 1,
+                mt: 2,
               }}
             >
               Quantity:
@@ -364,6 +364,25 @@ const Index = () => {
               </Typography>
             </Stack>
           </Stack>
+          {/* Total Price Section */}
+
+          <Typography
+            variant={"h6"}
+            sx={{
+              fontWeight: "600",
+              color: "primary.main",
+            }}
+          >
+            Total Price:{" "}
+            <span
+              style={{
+                fontWeight: "500",
+                color: "#72808F",
+              }}
+            >
+              {product?.sellPrice * num || 0}
+            </span>
+          </Typography>
         </Grid>
 
         {/* Description part */}
