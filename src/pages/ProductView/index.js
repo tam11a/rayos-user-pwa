@@ -35,7 +35,7 @@ import {
   AiFillPlusSquare,
 } from "react-icons/ai";
 import { AiOutlineShareAlt } from "react-icons/ai";
-import { MdShare } from "react-icons/md";
+import { MdCall, MdShare } from "react-icons/md";
 // import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
 import { Icon } from "@iconify/react";
 import { useState } from "react";
@@ -269,7 +269,8 @@ const Index = () => {
               <Typography
                 variant={"h4"}
                 sx={{
-                  fontWeight: "600",
+                  fontWeight: "500",
+                  fontSize: "2.5em",
                   color: "primary.main",
                 }}
               >
@@ -280,6 +281,7 @@ const Index = () => {
               <Box>
                 <IconButton sx={{ color: "#018037" }}>
                   {/* <LocalPhoneRoundedIcon /> */}
+                  <MdCall />
                 </IconButton>
               </Box>
               <Box>
@@ -380,7 +382,7 @@ const Index = () => {
                 color: "#72808F",
               }}
             >
-              {product?.sellPrice * num || 0}
+              {product?.sellPrice * num || 0}৳
             </span>
           </Typography>
         </Grid>
