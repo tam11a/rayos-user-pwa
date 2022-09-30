@@ -2,7 +2,7 @@ import { useQuery } from "react-query";
 import instance from "../service/instance";
 
 const getHomeImg = () => {
-  return instance.get(`home/img/get-home-img`);
+  return instance.get(`feed/image`);
 };
 
 export const useGetHomeImg = () => {
