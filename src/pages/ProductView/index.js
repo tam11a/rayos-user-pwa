@@ -36,7 +36,7 @@ import {
 } from "react-icons/ai";
 import { AiOutlineShareAlt } from "react-icons/ai";
 import { MdShare } from "react-icons/md";
-import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
+// import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
 import { Icon } from "@iconify/react";
 
 const Index = () => {
@@ -279,7 +279,7 @@ const Index = () => {
             <Stack direction="row" spacing={0.5} alignItems={"center"}>
               <Box>
                 <IconButton sx={{ color: "#018037" }}>
-                  <LocalPhoneRoundedIcon />
+                  {/* <LocalPhoneRoundedIcon /> */}
                 </IconButton>
               </Box>
               <Box>

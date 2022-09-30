@@ -55,7 +55,7 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: "Rajdhani, sans-serif",
+    fontFamily: "Rajdhani, Noto Sans Bengali, sans-serif",
   },
   components: {
     MuiButton: {
