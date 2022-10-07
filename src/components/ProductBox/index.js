@@ -1,4 +1,12 @@
-import { Avatar, Box, Button, Paper, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Paper,
+  Rating,
+  Stack,
+  Typography,
+} from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -21,6 +29,7 @@ const Index = ({ product }) => {
           width: "100%",
           display: "flex",
           flexDirection: "column",
+          alignItems: "flex-start",
           justifyContent: "space-between",
           textDecoration: "none",
         }}
@@ -37,15 +46,12 @@ const Index = ({ product }) => {
             borderRadius: 0,
           }}
         />
+
         <Box
           sx={{
-            flex: 1,
-            position: "relative",
+            height: "100%",
             width: "100%",
             display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
             textOverflow: "ellipsis",
           }}
         >
@@ -54,6 +60,7 @@ const Index = ({ product }) => {
             sx={{
               position: "relative",
               maxWidth: "100%",
+              fontWeight: "600",
               pt: 0.5,
             }}
             noWrap={true}
@@ -74,17 +81,45 @@ const Index = ({ product }) => {
           ) : (
             <></>
           )} */}
+        </Box>
+
+        <Box
+          sx={{
+            height: "100%",
+            width: "100%",
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
           <Typography
             variant="caption"
             sx={{
               position: "relative",
               maxWidth: "100%",
+              fontWeight: "600",
             }}
             noWrap={true}
           >
             {product.sellPrice || 0} TK
           </Typography>
+
+          <Stack direction="row" alignItems={"center"}>
+            <Rating
+              name="half-rating-read"
+              defaultValue={4.6}
+              precision={0.1}
+              size="small"
+              readOnly
+              sx={{
+                fontSize: "0.9rem",
+              }}
+            />
+            <Typography variant="caption">(14)</Typography>
+          </Stack>
         </Box>
+
         {false ? (
           <Box
             sx={{
