@@ -116,7 +116,11 @@ const Index = () => {
   };
   // console.log(total);
   return (
-    <Container>
+    <Container
+      sx={{
+        py: 1,
+      }}
+    >
       <Grid
         container
         direction={{
@@ -209,7 +213,6 @@ const Index = () => {
               >
                 {product.titleEn}
               </Typography>
-
               <Stack direction="row" spacing={0.5} alignItems={"center"}>
                 <Rating
                   name="half-rating-read"
@@ -218,29 +221,24 @@ const Index = () => {
                   size="small"
                   readOnly
                 />
-                <Typography
-                  variant="subtitle1"
-                  sx={{
-                    mt: 1,
-                    fontWeight: "600",
-                    color: "primary.main",
+                <span
+                  style={{
+                    fontWeight: "500",
+                    color: "#72808F",
                   }}
                 >
                   14 ratings
-                </Typography>
+                </span>
               </Stack>
             </Box>
             <Stack direction="row" spacing={0.5} alignItems={"center"}>
-              <Box>
-                <IconButton color="primary" aria-label="share">
-                  <MdShare />
-                </IconButton>
-              </Box>
-              <Box>
-                <IconButton color="primary" aria-label="add to favorite">
-                  <AiFillHeart />
-                </IconButton>
-              </Box>
+              <IconButton color="primary" aria-label="share">
+                <MdShare />
+              </IconButton>
+
+              <IconButton color="primary" aria-label="add to favorite">
+                <AiFillHeart />
+              </IconButton>
             </Stack>
           </Stack>
           <Divider
@@ -278,22 +276,19 @@ const Index = () => {
               </Typography>
             </Stack>
             <Stack direction="row" spacing={0.5} alignItems={"center"}>
-              <Box>
-                <IconButton sx={{ color: "#018037" }}>
-                  {/* <LocalPhoneRoundedIcon /> */}
-                  <MdCall />
-                </IconButton>
-              </Box>
-              <Box>
-                <IconButton sx={{ color: "#5766CC" }}>
-                  <Icon icon="jam:messages-f" />
-                </IconButton>
-              </Box>
+              <IconButton sx={{ color: "#018037" }}>
+                {/* <LocalPhoneRoundedIcon /> */}
+                <MdCall />
+              </IconButton>
+
+              <IconButton sx={{ color: "#5766CC" }}>
+                <Icon icon="jam:messages-f" />
+              </IconButton>
             </Stack>
           </Stack>
           {/* Created Size Variant */}
 
-          <Stack>
+          <span>
             <Typography
               variant={"h6"}
               sx={{
@@ -321,7 +316,6 @@ const Index = () => {
               {product.variants?.map((variant) => (
                 <ToggleButton
                   sx={{
-                    // mr: 1,
                     border: "1px solid !important",
                     borderRadius: "2px !important",
                   }}
@@ -332,16 +326,15 @@ const Index = () => {
                 </ToggleButton>
               ))}
             </ToggleButtonGroup>
-          </Stack>
+          </span>
 
           {/* Create Quantity */}
-          <Stack>
+          <Stack sx={{ mt: 1 }}>
             <Typography
               variant={"h6"}
               sx={{
                 fontWeight: "600",
                 color: "primary.main",
-                mt: 2,
               }}
             >
               Quantity:
@@ -373,6 +366,7 @@ const Index = () => {
             sx={{
               fontWeight: "600",
               color: "primary.main",
+              mt: 1,
             }}
           >
             Total Price:{" "}
@@ -385,10 +379,21 @@ const Index = () => {
               {product?.sellPrice * num || 0}৳
             </span>
           </Typography>
+
+          <Button
+            variant="contained"
+            startIcon={<Icon icon="ic:round-add-shopping-cart" />}
+            color={"warning"}
+            sx={{
+              mt: 1,
+            }}
+          >
+            Add to cart
+          </Button>
         </Grid>
 
         {/* Description part */}
-        <Grid item xs={12}>
+        <Grid item xs={12} mb={4}>
           <Typography
             variant={"h6"}
             sx={{
@@ -406,8 +411,6 @@ const Index = () => {
           >
             {product.descriptionEn}
           </Typography>
-          <br />
-          <br />
         </Grid>
       </Grid>
     </Container>

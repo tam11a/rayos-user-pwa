@@ -15,6 +15,7 @@ import { categoryContext } from "../../context/categoryProvider";
 import snackContext from "../../context/snackProvider";
 import {
   useGetCategoryInfo,
+  useGetProductListByCategory,
   useGetSubCategoryInfo,
   useGetSubCategoryListByCategory,
 } from "../../query/cat-subcat";
@@ -55,14 +56,13 @@ const SearchProduct = ({ name }) => {
 
   React.useEffect(() => {
     if (isLoading) return;
-    setProductList(data ? data?.data.value : []);
+    setProductList(data ? data?.data.data : []);
     if (isError)
       if (error.response.status === 400)
         createSnack(error?.response.data.msg, "error");
       else createSnack("Something Went Wrong!", "error");
   }, [data, error]);
-
-  // console.log(productList);
+  console.log(productList);
 
   return (
     <>
@@ -151,18 +151,25 @@ const CategoryProduct = ({ id }) => {
   React.useEffect(() => {
     if (isLoading) return;
     setInfo(data ? data?.data?.data : {});
-    setProductList(data ? data?.data?.data?.products : []);
+    setProductList(data ? data?.data?.data?.data : []);
     if (isError)
       if (error.response.status === 400)
         createSnack(error?.response.data.msg, "error");
       else createSnack("Something Went Wrong!", "error");
   }, [data]);
+  console.log(productList);
 
   const { data: sublistData } = useGetSubCategoryListByCategory(id);
   React.useEffect(() => {
     if (!sublistData) return;
     setSuggestionList(sublistData?.data?.data);
   }, [sublistData]);
+
+  const { data: productListbyCat } = useGetProductListByCategory(id);
+  React.useEffect(() => {
+    if (!productListbyCat) return;
+    setProductList(productListbyCat?.data?.data);
+  }, [productListbyCat]);
 
   return (
     <>
