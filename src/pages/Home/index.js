@@ -26,7 +26,7 @@ const Index = () => {
     .useState
     // "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet error soluta ducimus sint. Dolorem est laborum laboriosam officiis ad incidunt!"
     ();
-
+  // console.log(homeImgData);
   return (
     <>
       {/* Home Images */}
