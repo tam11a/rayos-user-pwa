@@ -224,10 +224,9 @@ const Index = () => {
                   style={{
                     fontWeight: "500",
                     color: "#72808F",
-                    
                   }}
                 >
-                  14 ratings
+                  {isLoading ? <Skeleton variant={"text"} /> : "14 ratings"}
                 </span>
               </Stack>
             </Box>
@@ -321,7 +320,7 @@ const Index = () => {
                 color: "primary.main",
               }}
             >
-              Size:
+              {product.variantType}:
             </Typography>
             <ToggleButtonGroup
               value={alignment}
