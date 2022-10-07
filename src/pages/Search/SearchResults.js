@@ -151,7 +151,7 @@ const CategoryProduct = ({ id }) => {
   React.useEffect(() => {
     if (isLoading) return;
     setInfo(data ? data?.data?.data : {});
-    setProductList(data ? data?.data?.data?.data : []);
+    // setProductList(data ? data?.data?.data?.data : []);
     if (isError)
       if (error.response.status === 400)
         createSnack(error?.response.data.msg, "error");
@@ -165,10 +165,11 @@ const CategoryProduct = ({ id }) => {
     setSuggestionList(sublistData?.data?.data);
   }, [sublistData]);
 
-  const { data: productListbyCat } = useGetProductListByCategory(id);
+  const { data: productListbyCat, isLoading: productLoading } =
+    useGetProductListByCategory(id);
   React.useEffect(() => {
     if (!productListbyCat) return;
-    setProductList(productListbyCat?.data?.data);
+    setProductList(productListbyCat?.data?.data || []);
   }, [productListbyCat]);
 
   return (
@@ -205,7 +206,6 @@ const CategoryProduct = ({ id }) => {
               pt: 1,
             }}
           >
-            {/* <Typography variant="button">Subcategories: </Typography> */}
             {suggestionList?.map((suggestion) => (
               <Chip
                 label={suggestion.titleEn}
@@ -232,7 +232,27 @@ const CategoryProduct = ({ id }) => {
           justifyContent: "flex-start",
         }}
       >
-        {isLoading ? (
+        <>
+          {productList?.map((product) => (
+            <Grid
+              key={product.id}
+              item
+              xs={5.9}
+              sm={3.85}
+              md={2.92}
+              lg={2.3}
+              sx={{
+                height: {
+                  xs: "280px",
+                  md: "310px",
+                },
+              }}
+            >
+              <ProductBox product={product} />
+            </Grid>
+          ))}
+        </>
+        {productLoading ? (
           <>
             {[1, 2, 3, 4, 5, 6, 7].map((num) => (
               <Skeleton
@@ -254,26 +274,7 @@ const CategoryProduct = ({ id }) => {
             ))}
           </>
         ) : (
-          <>
-            {productList?.map((product) => (
-              <Grid
-                key={product.id}
-                item
-                xs={5.9}
-                sm={3.85}
-                md={2.92}
-                lg={2.3}
-                sx={{
-                  height: {
-                    xs: "280px",
-                    md: "310px",
-                  },
-                }}
-              >
-                <ProductBox product={product} />
-              </Grid>
-            ))}
-          </>
+          <></>
         )}
       </Grid>
     </>

@@ -65,6 +65,7 @@ const Index = ({ children }) => {
   const {
     data: validationData,
     isLoading: validationLoading,
+    isRefetching: validationRefetching,
     isError: validationError,
   } = useValidate(!!token);
 
@@ -77,10 +78,8 @@ const Index = ({ children }) => {
     if (validationLoading || !token) return;
     if (validationError) logout();
     setUserId(validationData?.data?.data?._id);
-    setUser({
-      ...validationData?.data?.data,
-    });
-  }, [validationLoading, validationError]);
+    setUser(validationData?.data?.data);
+  }, [validationLoading, validationRefetching, validationError]);
 
   return (
     <authContext.Provider

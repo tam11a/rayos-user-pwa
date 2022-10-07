@@ -9,11 +9,10 @@ import {
 } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { authContext } from "../../context/authProvider";
-import { baseURL, rootURL } from "../../service/instance";
+import { baseURL } from "../../service/instance";
 import ProductDialog from "./ProductDialog";
-import ProductView from "../../pages/ProductView";
 
 const Index = ({ product }) => {
   const authCntxt = React.useContext(authContext);

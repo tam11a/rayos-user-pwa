@@ -3,45 +3,43 @@ import {
   Avatar,
   Box,
   Button,
-  Chip,
   Container,
   Divider,
   Grid,
   IconButton,
-  Paper,
   Rating,
+  Skeleton,
   Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   ToggleButton,
   ToggleButtonGroup,
   Typography,
 } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
-import AddProductButton from "../../components/ProductBox/AddProductButton";
 import { authContext } from "../../context/authProvider";
-import { useGetProductByID } from "../../query/product";
-import { rootURL } from "../../service/instance";
+import { useGetProductByID, useToggleBookmark } from "../../query/product";
 import { getAttachment } from "../../service/instance";
 
 import {
   AiFillHeart,
   AiFillMinusSquare,
   AiFillPlusSquare,
+  AiOutlineHeart,
 } from "react-icons/ai";
-import { AiOutlineShareAlt } from "react-icons/ai";
 import { MdCall, MdShare } from "react-icons/md";
 // import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
 import { Icon } from "@iconify/react";
-import { useState } from "react";
+import { responseHandler } from "../../utilities/response-handler";
+import snackContext from "../../context/snackProvider";
 
 const Index = () => {
+  const authCntxt = React.useContext(authContext);
+  const snack = React.useContext(snackContext);
+  const { mutateAsync: toggleBookmark, isLoading: bookmarkPressed } =
+    useToggleBookmark();
+
   const { productId } = useParams();
+
   const {
     data: productInfo,
     isLoading,
@@ -49,7 +47,6 @@ const Index = () => {
   } = useGetProductByID(productId);
 
   const [product, setProduct] = React.useState({});
-  console.log(product);
 
   const [pickedPhoto, setPickedPhoto] = React.useState("");
   const [imgList, setImgList] = React.useState([]);
@@ -168,36 +165,38 @@ const Index = () => {
             }}
           >
             <Swiper slidesPerView={"auto"} spaceBetween={10}>
-              {imgList?.map((perImg) => (
-                <SwiperSlide key={perImg._id}>
-                  <Button
-                    variant={"outlined"}
-                    color={"black"}
-                    // disableElevation
-                    onClick={() => setPickedPhoto(perImg._id)}
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      textTransform: "unset",
-                      rowGap: 1,
-                      width: { xs: "60px", md: "80px" },
-                      height: { xs: "60px", md: "80px" },
-                      // color: "black.light",
-                    }}
-                  >
-                    <Avatar
-                      src={getAttachment(perImg._id)}
-                      alt={perImg._id}
+              {imgList?.map((perImg, index) => (
+                <React.Fragment key={index}>
+                  <SwiperSlide>
+                    <Button
+                      variant={"outlined"}
+                      color={"black"}
+                      // disableElevation
+                      onClick={() => setPickedPhoto(perImg._id)}
                       sx={{
-                        width: { xs: "55px", md: "75px" },
-                        height: { xs: "55px", md: "75px" },
-                        borderRadius: 0,
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        textTransform: "unset",
+                        rowGap: 1,
+                        width: { xs: "60px", md: "80px" },
+                        height: { xs: "60px", md: "80px" },
+                        // color: "black.light",
                       }}
-                    />
-                  </Button>
-                </SwiperSlide>
+                    >
+                      <Avatar
+                        src={getAttachment(perImg._id)}
+                        alt={perImg._id}
+                        sx={{
+                          width: { xs: "55px", md: "75px" },
+                          height: { xs: "55px", md: "75px" },
+                          borderRadius: 0,
+                        }}
+                      />
+                    </Button>
+                  </SwiperSlide>
+                </React.Fragment>
               ))}
             </Swiper>
           </Box>
@@ -211,7 +210,7 @@ const Index = () => {
                   fontWeight: "700",
                 }}
               >
-                {product.titleEn}
+                {isLoading ? <Skeleton variant={"text"} /> : product.titleEn}
               </Typography>
               <Stack direction="row" spacing={0.5} alignItems={"center"}>
                 <Rating
@@ -225,6 +224,7 @@ const Index = () => {
                   style={{
                     fontWeight: "500",
                     color: "#72808F",
+                    
                   }}
                 >
                   14 ratings
@@ -235,10 +235,31 @@ const Index = () => {
               <IconButton color="primary" aria-label="share">
                 <MdShare />
               </IconButton>
-
-              <IconButton color="primary" aria-label="add to favorite">
-                <AiFillHeart />
-              </IconButton>
+              {authCntxt.isVerified ? (
+                <IconButton
+                  color="error"
+                  aria-label="add to favorite"
+                  disabled={bookmarkPressed}
+                  onClick={async () => {
+                    const res = await responseHandler(() =>
+                      toggleBookmark(productId)
+                    );
+                    if (res.status) {
+                      snack.createSnack(res.msg);
+                    } else {
+                      snack.createSnack(res.msg, "error");
+                    }
+                  }}
+                >
+                  {authCntxt.userInfo?.bookmarks?.includes(productId) ? (
+                    <AiFillHeart />
+                  ) : (
+                    <AiOutlineHeart />
+                  )}
+                </IconButton>
+              ) : (
+                <></>
+              )}
             </Stack>
           </Stack>
           <Divider
@@ -275,16 +296,20 @@ const Index = () => {
                 ৳
               </Typography>
             </Stack>
-            <Stack direction="row" spacing={0.5} alignItems={"center"}>
-              <IconButton sx={{ color: "#018037" }}>
-                {/* <LocalPhoneRoundedIcon /> */}
-                <MdCall />
-              </IconButton>
+            {authCntxt.isVerified ? (
+              <Stack direction="row" spacing={0.5} alignItems={"center"}>
+                <IconButton sx={{ color: "#018037" }}>
+                  {/* <LocalPhoneRoundedIcon /> */}
+                  <MdCall />
+                </IconButton>
 
-              <IconButton sx={{ color: "#5766CC" }}>
-                <Icon icon="jam:messages-f" />
-              </IconButton>
-            </Stack>
+                <IconButton sx={{ color: "#5766CC" }}>
+                  <Icon icon="jam:messages-f" />
+                </IconButton>
+              </Stack>
+            ) : (
+              <></>
+            )}
           </Stack>
           {/* Created Size Variant */}
 
@@ -321,6 +346,7 @@ const Index = () => {
                   }}
                   value={variant._id}
                   disabled={!variant.quantity}
+                  key={variant._id}
                 >
                   {variant.titleEn}
                 </ToggleButton>

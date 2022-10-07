@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import instance from "../service/instance";
 
 const getProductByID = (id) => {
@@ -34,4 +34,17 @@ const allProdCat = () => {
 
 export const useGetAllProdCat = () => {
   return useQuery(["all-prod-cat"], () => allProdCat(), {});
+};
+
+const toggleBookmark = (id) => {
+  return instance.put(`bookmark/${id}`);
+};
+
+export const useToggleBookmark = () => {
+  const queryClient = useQueryClient();
+  return useMutation(toggleBookmark, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("user-validate");
+    },
+  });
 };

@@ -26,7 +26,7 @@ export const validate = () => {
 };
 
 export const useValidate = (check) => {
-  return useQuery(["user-validate"], validate, {
+  return useQuery(["user-validate", check], validate, {
     enabled: check,
   });
 };
