@@ -40,11 +40,7 @@ const Index = ({ children }) => {
   };
 
   // Fetch Category Data
-  const {
-    data: cartData,
-    isLoading,
-    isError,
-  } = useGetCartByUser(authCntxt.userId);
+  const { data: cartData, isLoading, isError } = useGetCartByUser();
 
   // Set Cart List to State
   React.useEffect(() => {

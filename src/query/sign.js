@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { authInstance } from "../service/instance";
+import instance, { authInstance } from "../service/instance";
 
 export const signIn = (data) => {
-  return authInstance.post("login-by-phone", data);
+  return instance.post("auth/login", data);
 };
 
 export const requestSignUp = (phoneNumber) => {
@@ -22,7 +22,13 @@ export const resetPassword = (data) => {
 };
 
 export const validate = () => {
-  return authInstance.get("validate");
+  return instance.get("auth/validate");
+};
+
+export const useValidate = (check) => {
+  return useQuery(["user-validate"], validate, {
+    enabled: check,
+  });
 };
 
 const getUserProfile = (id) => {
@@ -36,13 +42,13 @@ export const useGetProfile = (id) => {
 };
 
 const updateUserProfile = (data) => {
-  return authInstance.post("update/user-profile", data);
+  return authInstance.post("auth/update", data);
 };
 
 export const useUpdateUserProfile = () => {
   const queryClient = useQueryClient();
   return useMutation(updateUserProfile, {
-    onSuccess: () => queryClient.invalidateQueries("user-info"),
+    onSuccess: () => queryClient.invalidateQueries("user-validate"),
   });
 };
 

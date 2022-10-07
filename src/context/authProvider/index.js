@@ -1,8 +1,8 @@
 import React from "react";
 import { useQueryClient } from "react-query";
 import SignIn from "../../components/Sign/SignIn";
-import { useGetProfile, validate } from "../../query/sign";
-import { updateAuthInstance, updateInstance } from "../../service/instance";
+import { useValidate } from "../../query/sign";
+import { updateInstance } from "../../service/instance";
 import { responseHandler } from "../../utilities/response-handler";
 
 export const authContext = React.createContext();
@@ -38,15 +38,15 @@ const Index = ({ children }) => {
   const [user, setUser] = React.useState({});
 
   const [userId, setUserId] = React.useState();
-  const { data } = useGetProfile(userId);
+  // const { data } = useGetProfile(userId);
 
-  React.useEffect(() => {
-    if (!data) return;
-    setUser({
-      ...user,
-      ...data.data.value,
-    });
-  }, [data]);
+  // React.useEffect(() => {
+  //   if (!data) return;
+  //   setUser({
+  //     ...user,
+  //     ...data.data.value,
+  //   });
+  // }, [data]);
 
   const setToken = (tkn) => {
     handleToken(tkn);
@@ -62,28 +62,25 @@ const Index = ({ children }) => {
     setUserId();
   };
 
+  const {
+    data: validationData,
+    isLoading: validationLoading,
+    isError: validationError,
+  } = useValidate(!!token);
+
   React.useEffect(() => {
-    // console.log(token);
     updateInstance();
-    updateAuthInstance();
-    if (token) {
-      validateUser();
-    }
+    queryClient.invalidateQueries("user-validate");
   }, [token]);
 
-  const validateUser = async () => {
-    const res = await responseHandler(() => validate());
-    if (res.status) {
-      setUserId(res.data.value.user_details.id);
-      setUser({
-        ...user,
-        ...res.data.value.user_details,
-      });
-      queryClient.invalidateQueries("user-info");
-    } else {
-      logout();
-    }
-  };
+  React.useEffect(() => {
+    if (validationLoading || !token) return;
+    if (validationError) logout();
+    setUserId(validationData?.data?.data?._id);
+    setUser({
+      ...validationData?.data?.data,
+    });
+  }, [validationLoading, validationError]);
 
   return (
     <authContext.Provider
@@ -100,7 +97,7 @@ const Index = ({ children }) => {
         setToken,
         userInfo: user,
         isVerified: !!token,
-        userId: !!token ? user.user_id : undefined,
+        userId: !!token ? userId : undefined,
         logout,
       }}
     >

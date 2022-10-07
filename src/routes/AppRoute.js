@@ -13,8 +13,6 @@ import User from "../pages/User";
 import PNDOrder from "../pages/PNDOrder";
 import PNDOrderAddress from "../pages/PNDOrderAddress";
 import PNDOrderCheckout from "../pages/PNDOrderCheckout";
-import Order from "../pages/User/Order";
-import Wallet from "../pages/User/Wallet";
 import ProductView from "../pages/ProductView";
 
 const AppRoute = () => {
@@ -38,8 +36,8 @@ const AppRoute = () => {
         <Route path="delivery-policy" element={<DeliveryPolicy />} />
         <Route path="user">
           <Route index element={<User />} />
-          <Route path="order" element={<Order />} />
-          <Route path="wallet" element={<Wallet />} />
+          {/* <Route path="order" element={<Order />} />
+          <Route path="wallet" element={<Wallet />} /> */}
         </Route>
         <Route path="order">
           <Route index element={<Navigate to={"pnd"} />} />

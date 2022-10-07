@@ -12,13 +12,17 @@ const instance = axios.create({
   headers: {
     "Content-Type": "application/json",
     accept: "*/*",
+    Authorization: `Bearer ${localStorage.getItem("tkn")}`,
   },
 });
 
 export const updateInstance = () => {
   instance.interceptors.request.use(
     (req) => {
-      req.headers["Authorization"] = `Bearer ${localStorage.getItem("tkn")}`;
+      if (localStorage.getItem("tkn"))
+        req.headers["Authorization"] = `Bearer ${localStorage.getItem("tkn")}`;
+      else req.headers["Authorization"] = undefined;
+
       return req;
     },
     (err) => {

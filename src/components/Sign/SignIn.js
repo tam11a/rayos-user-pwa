@@ -37,12 +37,10 @@ const SignIn = () => {
     const res = await responseHandler(() =>
       signIn({
         ...data,
-        phone: "88" + data.phone,
       })
     );
     if (res.status) {
-      // console.log(res);
-      auth.setToken(res.data.value.access_token);
+      auth.setToken(res.object?.token);
       snack.createSnack("Login Successfull!");
       reset();
       auth.handleOpen();

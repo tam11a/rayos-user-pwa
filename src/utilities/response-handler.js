@@ -6,12 +6,17 @@ export const responseHandler = async (func, acceptOn) => {
       res.status === accept ||
       (typeof accept === "object" && accept.includes(res.status))
     ) {
-      return { status: true, data: res.data, msg: res.data.msg };
+      return {
+        status: true,
+        data: res.data.data,
+        msg: res.data.message,
+        object: res.data,
+      };
     } else {
       if (typeof res.response.data === "object")
         return {
           status: false,
-          data: res.response.data[Object.keys(res.response.data)[0]],
+          data: res.response.data.error || res.response.data.message,
         };
       else return { status: false, data: res.response.data };
     }
@@ -24,7 +29,7 @@ export const responseHandler = async (func, acceptOn) => {
       if (typeof err.response.data === "object")
         return {
           status: false,
-          data: err.response.data[Object.keys(err.response.data)[0]],
+          data: err.response.data.error || err.response.data.message,
         };
       else return { status: false, data: err.response.data };
     } else {
