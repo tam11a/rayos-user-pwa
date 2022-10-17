@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const rootURL = "http://162.0.211.226:4001/";
+export const rootURL = "http://api.rayosbd.com/";
 export const baseURL = rootURL + "api";
 
 export const authRootURL = "https://oauth.pndservicebd.com/";
