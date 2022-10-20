@@ -15,7 +15,7 @@ import { useForm } from "react-hook-form";
 import { MdClose } from "react-icons/md";
 import { authContext } from "../../context/authProvider";
 import snackContext from "../../context/snackProvider";
-import { requestSignUp, signUp } from "../../query/sign";
+import { requestOTP, requestSignUp, signUp } from "../../query/sign";
 import { responseHandler } from "../../utilities/response-handler";
 import ShowErr from "../ShowErr";
 import CInput from "./CInput";
@@ -27,7 +27,8 @@ const SignUp = () => {
   const snack = React.useContext(snackContext);
 
   const [phone, setPhone] = React.useState();
-  const [signData, setSignData] = React.useState();
+  const [token, setToken] = React.useState();
+  const [otp, setOtp] = React.useState();
 
   const {
     reset,
@@ -37,8 +38,9 @@ const SignUp = () => {
   } = useForm({ resolver: joiResolver(schema) });
 
   const onResend = async (e) => {
-    const res = await responseHandler(() => requestSignUp("88" + e.phone));
+    const res = await responseHandler(() => requestOTP(e));
     if (res.status) {
+      setOtp(res.object.otp);
       snack.createSnack(`Resent OTP to ${e.phone}`);
       return true;
     } else {
@@ -48,12 +50,15 @@ const SignUp = () => {
   };
 
   const onValid = async (e) => {
-    const res = await responseHandler(() => requestSignUp("88" + e.phone));
+    // console.log(e);
+    delete e.confirm_password;
+    const res = await responseHandler(() => requestSignUp(e), [201]);
     if (res.status) {
+      reset();
       snack.createSnack(`Sent OTP to ${e.phone}`);
-      delete e.confirm_password;
+      setOtp(res.object.otp);
       setPhone(e.phone);
-      setSignData(e);
+      setToken(res.object?.token);
       auth.handleOpenCreate();
       handleOTP();
     } else {
@@ -67,14 +72,12 @@ const SignUp = () => {
   const handleOTPSubmit = async (code) => {
     const res = await responseHandler(() =>
       signUp({
-        ...signData,
-        phone: "88" + signData.phone,
-        code,
-        channel: "phone",
+        token,
+        otp: code,
       })
     );
     if (res.status) {
-      snack.createSnack(res.data.msg);
+      snack.createSnack("Account Verified Successfully");
       return true;
     } else {
       snack.createSnack(res.data, "error");
@@ -122,37 +125,25 @@ const SignUp = () => {
             }}
           >
             <Typography variant={"button"}>
-              name <span>*</span>
+              username <span>*</span>
             </Typography>
             <CInput
               fullWidth
               placeholder="Enter Your Name"
-              {...register("full_name")}
+              {...register("userName")}
             />
-            <ShowErr obj={errors.full_name} />
-            <Typography variant={"button"}>Company or Page Name</Typography>
-            <CInput
-              fullWidth
-              placeholder="Enter Your Company or Page Name"
-              {...register("company_name")}
-            />
-            <ShowErr obj={errors.company_name} />
-            <Typography variant={"button"}>Company or Page URL</Typography>
-            <CInput
-              fullWidth
-              placeholder="Enter Your Company or Page Website Link"
-              {...register("company_link")}
-            />
-            <ShowErr obj={errors.company_link} />
+            <ShowErr obj={errors.userName} />
+
             <Typography variant={"button"}>
-              Address <span>*</span>
+              fullname <span>*</span>
             </Typography>
             <CInput
               fullWidth
-              placeholder="Enter Your Address"
-              {...register("address")}
+              placeholder="Enter Your Name"
+              {...register("fullName")}
             />
-            <ShowErr obj={errors.address} />
+            <ShowErr obj={errors.fullName} />
+
             <Typography variant={"button"}>
               phone number <span>*</span>
             </Typography>
@@ -174,6 +165,13 @@ const SignUp = () => {
               {...register("phone")}
             />
             <ShowErr obj={errors.phone} />
+            <Typography variant={"button"}>email</Typography>
+            <CInput
+              fullWidth
+              placeholder="Enter Your Email"
+              {...register("email")}
+            />
+            <ShowErr obj={errors.email} />
             <Typography variant={"button"}>
               password <span>*</span>
             </Typography>
@@ -183,6 +181,7 @@ const SignUp = () => {
               {...register("password")}
             />
             <ShowErr obj={errors.password} />
+
             <Typography variant={"button"}>
               confirm password <span>*</span>
             </Typography>
@@ -227,6 +226,7 @@ const SignUp = () => {
       </Dialog>
       {openOTP && (
         <OTPDialog
+          otp={otp}
           open={openOTP}
           onClose={handleOTP}
           onSubmit={handleOTPSubmit}
@@ -238,22 +238,13 @@ const SignUp = () => {
 };
 
 const schema = Joi.object({
-  full_name: Joi.string().label("Name").required().messages({
+  userName: Joi.string().label("username").required().messages({
     "string.empty": "Name Required",
   }),
-  address: Joi.string().label("Address").required().messages({
-    "string.empty": "Address Required",
+  fullName: Joi.string().label("Name").required().messages({
+    "string.empty": "Name Required",
   }),
-  company_name: Joi.string().label("Company Name").allow(""),
-  company_link: Joi.string()
-    .label("Company Link")
-    .allow("")
-    .regex(
-      /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/
-    )
-    .messages({
-      "string.pattern.base": "Invalid URL",
-    }),
+
   phone: Joi.string()
     .replace("+88", "")
     .replace(" ", "")
@@ -265,6 +256,9 @@ const schema = Joi.object({
       "string.pattern.base": "Invalid Phone Number",
       "string.empty": "Phone Number Required",
     }),
+
+  email: Joi.string().label("email"),
+
   password: Joi.string().label("Password").required().messages({
     "string.empty": "Password Required",
   }),

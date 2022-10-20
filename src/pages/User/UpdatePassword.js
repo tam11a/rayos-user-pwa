@@ -9,7 +9,7 @@ import {
 import React from "react";
 import { MdClose } from "react-icons/md";
 
-const UpdateUser = ({ open, onClose }) => {
+const UpdatePassword = ({ open, onClose }) => {
   return (
     <>
       <Dialog
@@ -29,7 +29,7 @@ const UpdateUser = ({ open, onClose }) => {
             justifyContent: "space-between",
           }}
         >
-          <Typography>Edit Profile</Typography>
+          <Typography>Update Password</Typography>
           <IconButton size={"small"} onClick={onClose}>
             <MdClose />
           </IconButton>
@@ -41,4 +41,4 @@ const UpdateUser = ({ open, onClose }) => {
   );
 };
 
-export default UpdateUser;
+export default UpdatePassword;

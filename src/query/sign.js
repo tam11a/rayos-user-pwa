@@ -5,20 +5,20 @@ export const signIn = (data) => {
   return instance.post("auth/login", data);
 };
 
-export const requestSignUp = (phoneNumber) => {
-  return authInstance.get("signup/by-phone/" + phoneNumber);
+export const requestSignUp = (data) => {
+  return instance.post("auth/register", data);
 };
 
 export const signUp = (data) => {
-  return authInstance.post("signup", data);
+  return instance.post("auth/verify", data);
 };
 
-export const requestOTP = (phoneNumber) => {
-  return authInstance.get("forget-password/by-phone/" + phoneNumber);
+export const requestOTP = (data) => {
+  return instance.post("auth/forget-password", data);
 };
 
 export const resetPassword = (data) => {
-  return authInstance.post("change-password/by-phone", data);
+  return instance.post("auth/reset-password", data);
 };
 
 export const validate = () => {
@@ -51,7 +51,6 @@ export const useUpdateUserProfile = () => {
     onSuccess: () => queryClient.invalidateQueries("user-validate"),
   });
 };
-
 
 const updateUserPassword = (data) => {
   return authInstance.post("update-password", data);

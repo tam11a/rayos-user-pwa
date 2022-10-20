@@ -17,7 +17,7 @@ import CPassword from "./CPassword";
 import { MdRefresh } from "react-icons/md";
 import AuthCode from "react-auth-code-input";
 
-const OTPDialog = ({ open, onClose, onSubmit, onResendOTP }) => {
+const OTPDialog = ({ open, onClose, onSubmit, onResendOTP, otp }) => {
   const [timer, setTimer] = React.useState("60s");
   const [trigger, setTrigger] = React.useState(false);
   var interval;
@@ -88,7 +88,7 @@ const OTPDialog = ({ open, onClose, onSubmit, onResendOTP }) => {
         >
           <Typography variant={"subtitle2"}>
             A verification code has been sent to{" "}
-            {sessionStorage.getItem("sotp") || "your phone number"}.
+            {sessionStorage.getItem("sotp") || "your phone number"}. {otp}
           </Typography>
           <Box
             sx={{

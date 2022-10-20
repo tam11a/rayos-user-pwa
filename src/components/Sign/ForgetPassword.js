@@ -26,7 +26,9 @@ const ForgetPassword = () => {
   const snack = React.useContext(snackContext);
 
   const [phone, setPhone] = React.useState();
+  const [token, setToken] = React.useState();
   const [password, setPassword] = React.useState();
+  const [otp, setOtp] = React.useState();
 
   const {
     reset,
@@ -38,10 +40,12 @@ const ForgetPassword = () => {
   });
 
   const onValid = async (e) => {
-    const res = await responseHandler(() => requestOTP("88" + e.phone));
+    const res = await responseHandler(() => requestOTP(e));
     if (res.status) {
+      setOtp(res.object.otp);
       snack.createSnack(`Sent OTP to ${e.phone}`);
       setPhone(e.phone);
+      setToken(res.object?.token);
       return true;
     } else {
       snack.createSnack(res.data, "error");
@@ -53,15 +57,17 @@ const ForgetPassword = () => {
   const handleOTP = () => setOpenOTP(!openOTP);
 
   const handleOTPSubmit = async (code) => {
-    const res = await responseHandler(() =>
-      resetPassword({
-        phone: `88${phone}`,
-        code,
-        password,
-      })
+    const res = await responseHandler(
+      () =>
+        resetPassword({
+          token: token,
+          otp: code,
+          password,
+        }),
+      [204]
     );
     if (res.status) {
-      snack.createSnack(res.data.msg);
+      snack.createSnack("Password Resest Successfully");
       return true;
     } else {
       snack.createSnack(res.data, "error");
@@ -216,6 +222,7 @@ const ForgetPassword = () => {
       </Dialog>
       {openOTP && (
         <OTPDialog
+          otp={otp}
           open={openOTP}
           onClose={handleOTP}
           onSubmit={handleOTPSubmit}

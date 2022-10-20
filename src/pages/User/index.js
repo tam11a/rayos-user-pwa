@@ -31,102 +31,22 @@ import snackContext from "../../context/snackProvider";
 import UpdateUser from "./UpdateUser";
 import { postAttachments } from "../../query/attachment";
 import { MdLogout } from "react-icons/md";
+import UpdatePassword from "./UpdatePassword";
 
 const Index = () => {
   const authCntxt = React.useContext(authContext);
   const snack = React.useContext(snackContext);
 
-  // const { register, setValue, handleSubmit } = useForm();
-
-  // React.useEffect(() => {
-  //   if (!Object.keys(authCntxt.userInfo).length) return;
-  //   // console.log(authCntxt.userInfo);
-  //   setValue("user_id", authCntxt.userInfo.user_id);
-  //   setValue("full_name", authCntxt.userInfo.full_name);
-  //   setValue("company_name", authCntxt.userInfo.company_name);
-  //   setValue("phone", authCntxt.userInfo.phone);
-  //   setValue("address", authCntxt.userInfo.address);
-  //   if (authCntxt.userInfo.info) {
-  //     let additionalInfo = JSON.parse(authCntxt.userInfo.info);
-  //     setValue("cc", additionalInfo.cc);
-  //     setValue("bkash", additionalInfo.bkash);
-  //     setValue("company_link", additionalInfo.company_link);
-  //   }
-  // }, [authCntxt.userInfo]);
-
-  // const { mutateAsync: updateUserProfile } = useUpdateUserProfile();
-
-  // const updateHandler = async (e) => {
-  //   let info = {
-  //     bkash: e.bkash,
-  //     cc: e.cc,
-  //     company_link: e.company_link,
-  //   };
-  //   delete e.phone;
-  //   delete e.bkash;
-  //   delete e.company_link;
-  //   delete e.cc;
-  //   e = {
-  //     ...e,
-  //     info: JSON.stringify(JSON.stringify(info)),
-  //   };
-  //   const res = await responseHandler(() =>
-  //     updateUserProfile(objToFormData(e))
-  //   );
-  //   if (res.status) {
-  //     snack.createSnack(res.msg);
-  //   } else {
-  //     snack.createSnack(res.data, "error");
-  //   }
-  // };
-
+  const [openEdit, setOpenEdit] = React.useState(false);
+  const [openPass, setOpenPass] = React.useState(false);
   const [imgVal, setImgVal] = React.useState();
   const uploadImg = async () => {
     const res1 = await responseHandler(() => postAttachments(imgVal), [201]);
     if (res1.status && res1.data?.length) {
-      // snack.createSnack(res1.msg);
-      // const res = await responseHandler(() =>
-      //   updateUserProfile({
-      //     image: res1.data[1]._id,
-      //   })
-      // );
-      // if (res.status) {
-      //   snack.createSnack(res.msg);
-      //   setImgVal();
-      // } else {
-      //   snack.createSnack(res.data, "error");
-      // }
     } else {
       snack.createSnack(res1.data, "error");
     }
   };
-
-  // const [passError, setPassError] = React.useState();
-  // const { mutateAsync: updatePasswordMutate } = useUpdateUserPassword();
-  // const { register: registerPassword, handleSubmit: handlePasswordSubmit } =
-  //   useForm();
-
-  // const updatePasword = async (data) => {
-  //   setPassError();
-  //   if (data.confirm_password && data.confirm_password && data.confirm_password)
-  //     if (data.confirm_password !== data.new_password)
-  //       setPassError("Password didn't match!");
-  //     else {
-  //       const res = await responseHandler(() =>
-  //         updatePasswordMutate({
-  //           current_password: data.current_password,
-  //           new_password: data.new_password,
-  //           user_id: authCntxt.userInfo.user_id,
-  //         })
-  //       );
-  //       if (res.status) {
-  //         snack.createSnack(res.msg);
-  //       } else {
-  //         snack.createSnack(res.data, "error");
-  //       }
-  //     }
-  //   else setPassError("Please fill the form!");
-  // };
 
   React.useEffect(() => {
     if (!imgVal) return;
@@ -152,6 +72,7 @@ const Index = () => {
           right: 0,
           transform: "translateX(-20px)",
         }}
+        onClick={() => setOpenEdit(!openEdit)}
       >
         edit profile
       </Button>
@@ -283,6 +204,7 @@ const Index = () => {
               size={"small"}
               startIcon={<Icon icon="wpf:password1" />}
               sx={{ borderRadius: 28, my: 1, px: 2 }}
+              onClick={() => setOpenPass(!openPass)}
             >
               update password
             </Button>
@@ -308,7 +230,8 @@ const Index = () => {
           </Button>
         </Grid>
       </Grid>
-      <UpdateUser />
+      <UpdateUser open={openEdit} onClose={() => setOpenEdit(!openEdit)} />
+      <UpdatePassword open={openPass} onClose={() => setOpenPass(!openPass)} />
     </Container>
   ) : (
     <Stack
@@ -361,6 +284,6 @@ const Index = () => {
       </Button>
     </Stack>
   );
-};;;;;;;
+};
 
 export default Index;
