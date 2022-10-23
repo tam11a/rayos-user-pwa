@@ -59,20 +59,20 @@ const UpdatePassword = ({ open, onClose }) => {
           <Typography variant={"button"}>new password</Typography>
           <CPassword
             fullWidth
-            placeholder="Enter Your Password"
-            {...register("password")}
+            placeholder="Enter New Password"
+            {...register("newPassword")}
           />
-          {errors.password && (
-            <Alert severity="error">{errors.password.message}</Alert>
+          {errors.newPassword && (
+            <Alert severity="error">{errors.newPassword.message}</Alert>
           )}
           <Typography variant={"button"}>confirm password</Typography>
           <CPassword
             fullWidth
-            placeholder="Enter Your Password"
+            placeholder="Confirm New Password"
             {...register("confirm_password")}
           />
-          {errors.password && (
-            <Alert severity="error">{errors.password.message}</Alert>
+          {errors.confirm_password && (
+            <Alert severity="error">{errors.confirm_password.message}</Alert>
           )}
 
           <Button
@@ -99,7 +99,10 @@ const schema = Joi.object({
   password: Joi.string().label("Password").required().messages({
     "string.empty": "Password Required",
   }),
-  confirm_password: Joi.equal(Joi.ref("password")).messages({
+  newPassword: Joi.string().label("Password").required().messages({
+    "string.empty": "Password Required",
+  }),
+  confirm_password: Joi.equal(Joi.ref("newPassword")).messages({
     "any.only": "Password Didn't Match!!",
   }),
 });
