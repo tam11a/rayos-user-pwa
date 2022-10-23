@@ -28,7 +28,7 @@ import { useForm } from "react-hook-form";
 import { useUpdateUserPassword, useUpdateUserProfile } from "../../query/sign";
 import { responseHandler } from "../../utilities/response-handler";
 import snackContext from "../../context/snackProvider";
-import UpdateUser from "./UpdateUser";
+import UpdateUser from "../User/UpdateUser";
 import { postAttachments } from "../../query/attachment";
 import { MdLogout } from "react-icons/md";
 import UpdatePassword from "./UpdatePassword";
