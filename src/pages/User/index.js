@@ -3,6 +3,7 @@ import {
   Avatar,
   Box,
   Button,
+  ButtonGroup,
   Container,
   Divider,
   Fab,
@@ -61,21 +62,6 @@ const Index = () => {
         pb: 3,
       }}
     >
-      <Button
-        variant="outlined"
-        size={"small"}
-        startIcon={<FiEdit2 />}
-        sx={{
-          borderRadius: 28,
-          position: "absolute",
-          top: 0,
-          right: 0,
-          transform: "translateX(-20px)",
-        }}
-        onClick={() => setOpenEdit(!openEdit)}
-      >
-        edit profile
-      </Button>
       <Grid
         container
         spacing={4}
@@ -199,35 +185,90 @@ const Index = () => {
               </Hidden>
               <span>{authCntxt.userInfo?.email}</span>
             </Typography>
-            <Button
-              variant="contained"
-              size={"small"}
-              startIcon={<Icon icon="wpf:password1" />}
-              sx={{ borderRadius: 28, my: 1, px: 2 }}
-              onClick={() => setOpenPass(!openPass)}
-            >
-              update password
-            </Button>
           </Stack>
-        </Grid>
-        <Grid
-          item
-          xs={12}
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Button
-            variant="contained"
-            color={"error"}
-            startIcon={<MdLogout />}
-            sx={{ my: 1, px: 2 }}
-            onClick={() => authCntxt.logout()}
+          <Grid
+            item
+            xs={12}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: {
+                xs: "center",
+                sm: "flex-end",
+              },
+              justifyContent: "center",
+            }}
           >
-            Logout
-          </Button>
+            <ButtonGroup
+              orientation="vertical"
+              aria-label="vertical contained button group"
+              variant="contained"
+            >
+              <Button
+                variant="contained"
+                size={"small"}
+                startIcon={<Icon icon="wpf:password1" />}
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+                onClick={() => setOpenPass(!openPass)}
+              >
+                update password
+              </Button>
+              <Button
+                variant="outlined"
+                size={"small"}
+                // startIcon={}
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+                onClick={() => setOpenEdit(!openEdit)}
+              >
+                <Grid
+                  xs={12}
+                  sx={{
+                    display: "flex",
+                    flexDirection: { sm: "row" },
+                    alignItems: "center",
+                    rowGap: 2,
+                    columnGap: 3.5,
+                    justifyContent: "flex-start",
+                  }}
+                >
+                  <FiEdit2 />
+                  edit profile
+                </Grid>
+              </Button>
+              <Button
+                variant="contained"
+                color={"error"}
+                size={"small"}
+                // startIcon={}
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+                onClick={() => authCntxt.logout()}
+              >
+                <Grid
+                  xs={12}
+                  sx={{
+                    display: "flex",
+                    flexDirection: { sm: "row" },
+                    alignItems: "center",
+                    rowGap: 2,
+                    columnGap: 5.5,
+                    justifyContent: "flex-star",
+                  }}
+                >
+                  <MdLogout />
+                  Logout
+                </Grid>
+              </Button>
+            </ButtonGroup>
+          </Grid>
         </Grid>
       </Grid>
       <UpdateUser open={openEdit} onClose={() => setOpenEdit(!openEdit)} />
