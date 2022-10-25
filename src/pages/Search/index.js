@@ -18,7 +18,6 @@ import SearchResults from "./SearchResults";
 const Index = () => {
   let [searchParams, setSearchParams] = useSearchParams();
   const [search, setSearch] = React.useState();
-
   React.useEffect(() => {
     if (searchParams.get("q"))
       setSearch({
@@ -34,6 +33,10 @@ const Index = () => {
       setSearch({
         type: "subcategory",
         value: searchParams.get("subcategory"),
+      });
+    else if (searchParams.get("wishlist"))
+      setSearch({
+        type: "wishlist",
       });
     else
       setSearch({

@@ -34,6 +34,9 @@ import { postAttachments } from "../../query/attachment";
 import { MdLogout } from "react-icons/md";
 import UpdatePassword from "./UpdatePassword";
 import { ALlProductLayout } from "../Search/SearchResults";
+import { useGetBookmarkList } from "../../query/product";
+import ProductBox from "../../components/ProductBox";
+import { Link } from "react-router-dom";
 
 const Index = () => {
   const authCntxt = React.useContext(authContext);
@@ -215,69 +218,58 @@ const Index = () => {
                 }}
                 onClick={() => setOpenPass(!openPass)}
               >
-                update password
+                <span
+                  style={{
+                    flex: 1,
+                  }}
+                >
+                  update password
+                </span>
               </Button>
               <Button
                 variant="outlined"
                 size={"small"}
-                // startIcon={}
+                startIcon={<FiEdit2 />}
                 sx={{
                   display: "flex",
                   justifyContent: "space-between",
                 }}
                 onClick={() => setOpenEdit(!openEdit)}
               >
-                <Grid
-                  xs={12}
-                  sx={{
-                    display: "flex",
-                    flexDirection: { sm: "row" },
-                    alignItems: "center",
-                    rowGap: 2,
-                    columnGap: 3.5,
-                    justifyContent: "flex-start",
+                <span
+                  style={{
+                    flex: 1,
                   }}
                 >
-                  <FiEdit2 />
                   edit profile
-                </Grid>
+                </span>
               </Button>
               <Button
                 variant="contained"
                 color={"error"}
                 size={"small"}
-                // startIcon={}
+                startIcon={<MdLogout />}
                 sx={{
                   display: "flex",
                   justifyContent: "space-between",
                 }}
                 onClick={() => authCntxt.logout()}
               >
-                <Grid
-                  xs={12}
-                  sx={{
-                    display: "flex",
-                    flexDirection: { sm: "row" },
-                    alignItems: "center",
-                    rowGap: 2,
-                    columnGap: 5.5,
-                    justifyContent: "flex-star",
+                <span
+                  style={{
+                    flex: 1,
                   }}
                 >
-                  <MdLogout />
                   Logout
-                </Grid>
+                </span>
               </Button>
             </ButtonGroup>
           </Grid>
         </Grid>
       </Grid>
-
-      {/* temporary wishlist */}
-      <Box sx={{ my: 1, maxWidth: "99vw", mx: "auto", px: 1, mt: 4 }}>
-        <ALlProductLayout />
+      <Box sx={{ my: 1, maxWidth: "99vw", mx: "auto", px: 1, mt: 2 }}>
+        <WishListProduct />
       </Box>
-
       <UpdateUser open={openEdit} onClose={() => setOpenEdit(!openEdit)} />
       <UpdatePassword open={openPass} onClose={() => setOpenPass(!openPass)} />
     </Container>
@@ -331,6 +323,121 @@ const Index = () => {
         Sign Up
       </Button>
     </Stack>
+  );
+};
+
+const WishListProduct = () => {
+  const { createSnack } = React.useContext(snackContext);
+  let [info, setInfo] = React.useState({});
+  let [wishList, setWishList] = React.useState([]);
+  const { data, isLoading, isError, error } = useGetBookmarkList();
+
+  React.useEffect(() => {
+    if (isLoading) return;
+    setInfo(data ? data?.data : {});
+    setWishList(data ? data?.data?.data : []);
+    if (isError)
+      if (error.response.status === 400)
+        createSnack(error?.response.data.msg, "error");
+      else createSnack("Something Went Wrong!", "error");
+  }, [data]);
+
+  console.log(wishList);
+  return (
+    <>
+      <Divider />
+      <Stack
+        direction={"row"}
+        alignItems={"center"}
+        justifyContent={"space-between"}
+        sx={{
+          my: 1,
+        }}
+      >
+        <Typography
+          variant={"h6"}
+          sx={{
+            textTransform: "capitalize",
+          }}
+        >
+          {isLoading ? <Skeleton width={"120px"} /> : "Wishlist"}
+        </Typography>
+        {/* <Typography variant={"caption"}>
+          {isLoading ? (
+            <Skeleton width={"220px"} />
+          ) : (
+            `${info?.total || 0} Results Found`
+          )}
+        </Typography> */}
+
+        <Button
+          variant={"contained"}
+          size={"small"}
+          component={Link}
+          to={`/search?wishlist=1`}
+        >
+          See More
+        </Button>
+      </Stack>
+      <Divider />
+
+      <Grid
+        container
+        direction={"row"}
+        rowGap={0.6}
+        columnGap={0.6}
+        flexWrap={"wrap"}
+        sx={{
+          my: 2,
+          alignItems: "center",
+          justifyContent: "flex-start",
+        }}
+      >
+        {isLoading ? (
+          <>
+            {[1, 2, 3, 4, 5, 6, 7].map((num) => (
+              <Skeleton
+                key={num}
+                variant="rectangular"
+                component={Grid}
+                item
+                xs={5.9}
+                sm={3.95}
+                md={2.92}
+                lg={1.97}
+                sx={{
+                  height: {
+                    xs: "280px",
+                    md: "310px",
+                  },
+                }}
+              />
+            ))}
+          </>
+        ) : (
+          <>
+            {wishList?.map((product) => (
+              <Grid
+                key={product._id}
+                item
+                xs={5.9}
+                sm={3.85}
+                md={2.92}
+                lg={2.3}
+                sx={{
+                  height: {
+                    xs: "280px",
+                    md: "310px",
+                  },
+                }}
+              >
+                <ProductBox product={product.product} />
+              </Grid>
+            ))}
+          </>
+        )}
+      </Grid>
+    </>
   );
 };
 
