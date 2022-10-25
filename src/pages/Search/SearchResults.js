@@ -19,7 +19,11 @@ import {
   useGetSubCategoryInfo,
   useGetSubCategoryListByCategory,
 } from "../../query/cat-subcat";
-import { useGetAllProdCat, useSearchProduct } from "../../query/product";
+import {
+  useGetAllProdCat,
+  useGetBookmarkList,
+  useSearchProduct,
+} from "../../query/product";
 
 const SearchResults = ({ search }) => {
   return (
@@ -36,6 +40,8 @@ const SearchResults = ({ search }) => {
             <CategoryProduct id={search.value} />
           ) : search.type === "subcategory" ? (
             <SubcategoryProduct id={search.value} />
+          ) : search.type === "wishlist" ? (
+            <WishListProduct />
           ) : search.type === "all" ? (
             <ALlProductLayout />
           ) : (
@@ -46,6 +52,101 @@ const SearchResults = ({ search }) => {
         <SearchSkeleton />
       )}
     </Container>
+  );
+};
+
+const WishListProduct = () => {
+  const { createSnack } = React.useContext(snackContext);
+  let [info, setInfo] = React.useState({});
+  let [wishList, setWishList] = React.useState([]);
+  const { data, isLoading, isError, error } = useGetBookmarkList();
+
+  React.useEffect(() => {
+    if (isLoading) return;
+    setInfo(data ? data?.data : {});
+    setWishList(data ? data?.data?.data : []);
+    if (isError)
+      if (error.response.status === 400)
+        createSnack(error?.response.data.msg, "error");
+      else createSnack("Something Went Wrong!", "error");
+  }, [data]);
+
+  console.log(wishList);
+  return (
+    <>
+      <Typography
+        variant={"h6"}
+        sx={{
+          textTransform: "capitalize",
+        }}
+      >
+        {isLoading ? <Skeleton width={"120px"} /> : "Wishlist"}
+      </Typography>
+      <Typography variant={"caption"}>
+        {isLoading ? (
+          <Skeleton width={"220px"} />
+        ) : (
+          `${info?.total || 0} Results Found`
+        )}
+      </Typography>
+
+      <Grid
+        container
+        direction={"row"}
+        rowGap={0.6}
+        columnGap={0.6}
+        flexWrap={"wrap"}
+        sx={{
+          my: 2,
+          alignItems: "center",
+          justifyContent: "flex-start",
+        }}
+      >
+        {isLoading ? (
+          <>
+            {[1, 2, 3, 4, 5, 6, 7].map((num) => (
+              <Skeleton
+                key={num}
+                variant="rectangular"
+                component={Grid}
+                item
+                xs={5.9}
+                sm={3.95}
+                md={2.92}
+                lg={1.97}
+                sx={{
+                  height: {
+                    xs: "280px",
+                    md: "310px",
+                  },
+                }}
+              />
+            ))}
+          </>
+        ) : (
+          <>
+            {wishList?.map((product) => (
+              <Grid
+                key={product._id}
+                item
+                xs={5.9}
+                sm={3.85}
+                md={2.92}
+                lg={2.3}
+                sx={{
+                  height: {
+                    xs: "280px",
+                    md: "310px",
+                  },
+                }}
+              >
+                <ProductBox product={product.product} />
+              </Grid>
+            ))}
+          </>
+        )}
+      </Grid>
+    </>
   );
 };
 
@@ -62,7 +163,7 @@ const SearchProduct = ({ name }) => {
         createSnack(error?.response.data.msg, "error");
       else createSnack("Something Went Wrong!", "error");
   }, [data, error]);
-  console.log(productList);
+  // console.log(productList);
 
   return (
     <>

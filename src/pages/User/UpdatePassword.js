@@ -6,6 +6,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Divider,
   IconButton,
   Typography,
 } from "@mui/material";
@@ -37,58 +38,69 @@ const UpdatePassword = ({ open, onClose }) => {
         <DialogTitle
           sx={{
             display: "flex",
+            flexDirectin: "row",
             alignItems: "center",
             justifyContent: "space-between",
           }}
         >
+          <div />
           <Typography>Reset Password</Typography>
           <IconButton size={"small"} onClick={onClose}>
             <MdClose />
           </IconButton>
         </DialogTitle>
-        <DialogContent>
-          <Typography variant={"button"}>current password</Typography>
-          <CPassword
-            fullWidth
-            placeholder="Enter Your Password"
-            {...register("password")}
-          />
-          {errors.password && (
-            <Alert severity="error">{errors.password.message}</Alert>
-          )}
-          <Typography variant={"button"}>new password</Typography>
-          <CPassword
-            fullWidth
-            placeholder="Enter New Password"
-            {...register("newPassword")}
-          />
-          {errors.newPassword && (
-            <Alert severity="error">{errors.newPassword.message}</Alert>
-          )}
-          <Typography variant={"button"}>confirm password</Typography>
-          <CPassword
-            fullWidth
-            placeholder="Confirm New Password"
-            {...register("confirm_password")}
-          />
-          {errors.confirm_password && (
-            <Alert severity="error">{errors.confirm_password.message}</Alert>
-          )}
-
-          <Button
-            fullWidth
-            variant={"contained"}
-            type={"submit"}
-            // onClick={auth.handleOpenOTP}
-            color={"black"}
-            disabled={isSubmitting}
+        <Divider />
+        <form onSubmit={handleSubmit()}>
+          <DialogContent
             sx={{
-              mt: 1,
+              "& > *": {
+                my: 1,
+              },
             }}
           >
-            update password
-          </Button>
-        </DialogContent>
+            <Typography variant={"button"}>current password</Typography>
+            <CPassword
+              fullWidth
+              placeholder="Enter Your Password"
+              {...register("password")}
+            />
+            {errors.password && (
+              <Alert severity="error">{errors.password.message}</Alert>
+            )}
+            <Typography variant={"button"}>new password</Typography>
+            <CPassword
+              fullWidth
+              placeholder="Enter New Password"
+              {...register("newPassword")}
+            />
+            {errors.newPassword && (
+              <Alert severity="error">{errors.newPassword.message}</Alert>
+            )}
+            <Typography variant={"button"}>confirm password</Typography>
+            <CPassword
+              fullWidth
+              placeholder="Confirm New Password"
+              {...register("confirm_password")}
+            />
+            {errors.confirm_password && (
+              <Alert severity="error">{errors.confirm_password.message}</Alert>
+            )}
+
+            <Button
+              fullWidth
+              variant={"contained"}
+              type={"submit"}
+              // onClick={auth.handleOpenOTP}
+              color={"black"}
+              disabled={isSubmitting}
+              sx={{
+                mt: 2,
+              }}
+            >
+              update password
+            </Button>
+          </DialogContent>
+        </form>
         <DialogActions></DialogActions>
       </Dialog>
     </>

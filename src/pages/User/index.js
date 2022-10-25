@@ -3,6 +3,7 @@ import {
   Avatar,
   Box,
   Button,
+  ButtonGroup,
   Container,
   Divider,
   Fab,
@@ -32,6 +33,10 @@ import UpdateUser from "./UpdateUser";
 import { postAttachments } from "../../query/attachment";
 import { MdLogout } from "react-icons/md";
 import UpdatePassword from "./UpdatePassword";
+import { ALlProductLayout } from "../Search/SearchResults";
+import { useGetBookmarkList } from "../../query/product";
+import ProductBox from "../../components/ProductBox";
+import { Link } from "react-router-dom";
 
 const Index = () => {
   const authCntxt = React.useContext(authContext);
@@ -61,21 +66,6 @@ const Index = () => {
         pb: 3,
       }}
     >
-      <Button
-        variant="outlined"
-        size={"small"}
-        startIcon={<FiEdit2 />}
-        sx={{
-          borderRadius: 28,
-          position: "absolute",
-          top: 0,
-          right: 0,
-          transform: "translateX(-20px)",
-        }}
-        onClick={() => setOpenEdit(!openEdit)}
-      >
-        edit profile
-      </Button>
       <Grid
         container
         spacing={4}
@@ -199,37 +189,87 @@ const Index = () => {
               </Hidden>
               <span>{authCntxt.userInfo?.email}</span>
             </Typography>
-            <Button
-              variant="contained"
-              size={"small"}
-              startIcon={<Icon icon="wpf:password1" />}
-              sx={{ borderRadius: 28, my: 1, px: 2 }}
-              onClick={() => setOpenPass(!openPass)}
-            >
-              update password
-            </Button>
           </Stack>
-        </Grid>
-        <Grid
-          item
-          xs={12}
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Button
-            variant="contained"
-            color={"error"}
-            startIcon={<MdLogout />}
-            sx={{ my: 1, px: 2 }}
-            onClick={() => authCntxt.logout()}
+          <Grid
+            item
+            xs={12}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: {
+                xs: "center",
+                sm: "flex-end",
+              },
+              justifyContent: "center",
+            }}
           >
-            Logout
-          </Button>
+            <ButtonGroup
+              orientation="vertical"
+              aria-label="vertical contained button group"
+              variant="contained"
+            >
+              <Button
+                variant="contained"
+                size={"small"}
+                startIcon={<Icon icon="wpf:password1" />}
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+                onClick={() => setOpenPass(!openPass)}
+              >
+                <span
+                  style={{
+                    flex: 1,
+                  }}
+                >
+                  update password
+                </span>
+              </Button>
+              <Button
+                variant="outlined"
+                size={"small"}
+                startIcon={<FiEdit2 />}
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+                onClick={() => setOpenEdit(!openEdit)}
+              >
+                <span
+                  style={{
+                    flex: 1,
+                  }}
+                >
+                  edit profile
+                </span>
+              </Button>
+              <Button
+                variant="contained"
+                color={"error"}
+                size={"small"}
+                startIcon={<MdLogout />}
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+                onClick={() => authCntxt.logout()}
+              >
+                <span
+                  style={{
+                    flex: 1,
+                  }}
+                >
+                  Logout
+                </span>
+              </Button>
+            </ButtonGroup>
+          </Grid>
         </Grid>
       </Grid>
+      <Box sx={{ my: 1, maxWidth: "99vw", mx: "auto", px: 1, mt: 2 }}>
+        <WishListProduct />
+      </Box>
       <UpdateUser open={openEdit} onClose={() => setOpenEdit(!openEdit)} />
       <UpdatePassword open={openPass} onClose={() => setOpenPass(!openPass)} />
     </Container>
@@ -283,6 +323,121 @@ const Index = () => {
         Sign Up
       </Button>
     </Stack>
+  );
+};
+
+const WishListProduct = () => {
+  const { createSnack } = React.useContext(snackContext);
+  let [info, setInfo] = React.useState({});
+  let [wishList, setWishList] = React.useState([]);
+  const { data, isLoading, isError, error } = useGetBookmarkList();
+
+  React.useEffect(() => {
+    if (isLoading) return;
+    setInfo(data ? data?.data : {});
+    setWishList(data ? data?.data?.data : []);
+    if (isError)
+      if (error.response.status === 400)
+        createSnack(error?.response.data.msg, "error");
+      else createSnack("Something Went Wrong!", "error");
+  }, [data]);
+
+  console.log(wishList);
+  return (
+    <>
+      <Divider />
+      <Stack
+        direction={"row"}
+        alignItems={"center"}
+        justifyContent={"space-between"}
+        sx={{
+          my: 1,
+        }}
+      >
+        <Typography
+          variant={"h6"}
+          sx={{
+            textTransform: "capitalize",
+          }}
+        >
+          {isLoading ? <Skeleton width={"120px"} /> : "Wishlist"}
+        </Typography>
+        {/* <Typography variant={"caption"}>
+          {isLoading ? (
+            <Skeleton width={"220px"} />
+          ) : (
+            `${info?.total || 0} Results Found`
+          )}
+        </Typography> */}
+
+        <Button
+          variant={"contained"}
+          size={"small"}
+          component={Link}
+          to={`/search?wishlist=1`}
+        >
+          See More
+        </Button>
+      </Stack>
+      <Divider />
+
+      <Grid
+        container
+        direction={"row"}
+        rowGap={0.6}
+        columnGap={0.6}
+        flexWrap={"wrap"}
+        sx={{
+          my: 2,
+          alignItems: "center",
+          justifyContent: "flex-start",
+        }}
+      >
+        {isLoading ? (
+          <>
+            {[1, 2, 3, 4, 5, 6, 7].map((num) => (
+              <Skeleton
+                key={num}
+                variant="rectangular"
+                component={Grid}
+                item
+                xs={5.9}
+                sm={3.95}
+                md={2.92}
+                lg={1.97}
+                sx={{
+                  height: {
+                    xs: "280px",
+                    md: "310px",
+                  },
+                }}
+              />
+            ))}
+          </>
+        ) : (
+          <>
+            {wishList?.map((product) => (
+              <Grid
+                key={product._id}
+                item
+                xs={5.9}
+                sm={3.85}
+                md={2.92}
+                lg={2.3}
+                sx={{
+                  height: {
+                    xs: "280px",
+                    md: "310px",
+                  },
+                }}
+              >
+                <ProductBox product={product.product} />
+              </Grid>
+            ))}
+          </>
+        )}
+      </Grid>
+    </>
   );
 };
 

@@ -48,3 +48,11 @@ export const useToggleBookmark = () => {
     },
   });
 };
+
+const getBookmarkList = () => {
+  return instance.get(`bookmark`);
+};
+
+export const useGetBookmarkList = () => {
+  return useQuery(["Bookmark-List"], () => getBookmarkList(), {});
+};
