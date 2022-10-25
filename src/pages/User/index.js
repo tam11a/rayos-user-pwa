@@ -33,6 +33,7 @@ import UpdateUser from "./UpdateUser";
 import { postAttachments } from "../../query/attachment";
 import { MdLogout } from "react-icons/md";
 import UpdatePassword from "./UpdatePassword";
+import { ALlProductLayout } from "../Search/SearchResults";
 
 const Index = () => {
   const authCntxt = React.useContext(authContext);
@@ -271,6 +272,12 @@ const Index = () => {
           </Grid>
         </Grid>
       </Grid>
+
+      {/* temporary wishlist */}
+      <Box sx={{ my: 1, maxWidth: "99vw", mx: "auto", px: 1, mt: 4 }}>
+        <ALlProductLayout />
+      </Box>
+
       <UpdateUser open={openEdit} onClose={() => setOpenEdit(!openEdit)} />
       <UpdatePassword open={openPass} onClose={() => setOpenPass(!openPass)} />
     </Container>
