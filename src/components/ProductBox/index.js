@@ -14,7 +14,6 @@ import { useNavigate } from "react-router-dom";
 // import { Link } from "react-router-dom";
 import { authContext } from "../../context/authProvider";
 import { getAttachment } from "../../service/instance";
-import ProductDialog from "./ProductDialog";
 
 import { IoIosImages } from "react-icons/io";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
@@ -25,8 +24,6 @@ import { responseHandler } from "../../utilities/response-handler";
 const Index = ({ product, hideBookmark }) => {
   const snack = React.useContext(snackContext);
   const authCntxt = React.useContext(authContext);
-  const [open, setOpen] = React.useState(false);
-  const handleClose = () => setOpen(!open);
   const navigate = useNavigate();
 
   const { mutateAsync: toggleBookmark } = useToggleBookmark();
@@ -138,20 +135,6 @@ const Index = ({ product, hideBookmark }) => {
           >
             {product.titleEn}
           </Typography>
-          {/* {authCntxt.isVerified ? (
-            <Typography
-              variant="caption"
-              sx={{
-                position: "relative",
-                maxWidth: "100%",
-              }}
-              noWrap={true}
-            >
-              {product.sell_price} TK
-            </Typography>
-          ) : (
-            <></>
-          )} */}
         </Box>
 
         <Box
@@ -199,13 +182,6 @@ const Index = ({ product, hideBookmark }) => {
           </Stack>
         </Box>
       </Paper>
-      {open && (
-        <ProductDialog
-          open={open}
-          handleClose={handleClose}
-          product={product}
-        />
-      )}
     </>
   );
 };
