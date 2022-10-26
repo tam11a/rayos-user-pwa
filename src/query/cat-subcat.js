@@ -45,6 +45,18 @@ export const useGetProductListByCategory = (id) => {
   );
 };
 
+const getProductListBySubcategory = (id) => {
+  return instance.get(`subcategory/${id}/products`);
+};
+
+export const useGetProductListBySubcategory = (id) => {
+  return useQuery(
+    ["get-product-list-by-subcategory", id],
+    () => getProductListBySubcategory(id),
+    {}
+  );
+};
+
 const getSubCategoryListByCategory = (id) => {
   return instance.get(`category/${id}/subcategories`);
 };

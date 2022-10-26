@@ -16,6 +16,7 @@ import snackContext from "../../context/snackProvider";
 import {
   useGetCategoryInfo,
   useGetProductListByCategory,
+  useGetProductListBySubcategory,
   useGetSubCategoryInfo,
   useGetSubCategoryListByCategory,
 } from "../../query/cat-subcat";
@@ -391,12 +392,19 @@ const SubcategoryProduct = ({ id }) => {
   React.useEffect(() => {
     if (isLoading) return;
     setInfo(data ? data?.data?.data : {});
-    setProductList(data ? data?.data?.data?.products : []);
+    // setProductList(data ? data?.data?.data?.products : []);
     if (isError)
       if (error.response.status === 400)
         createSnack(error?.response.data.msg, "error");
       else createSnack("Something Went Wrong!", "error");
   }, [data]);
+
+  const { data: productListbySubcat, isLoading: productLoading } =
+    useGetProductListBySubcategory(id);
+  React.useEffect(() => {
+    if (!productListbySubcat) return;
+    setProductList(productListbySubcat?.data?.data || []);
+  }, [productListbySubcat]);
 
   return (
     <>
@@ -432,7 +440,7 @@ const SubcategoryProduct = ({ id }) => {
           justifyContent: "flex-start",
         }}
       >
-        {isLoading ? (
+        {productLoading ? (
           <>
             {[1, 2, 3, 4, 5, 6, 7].map((num) => (
               <Skeleton

@@ -509,7 +509,7 @@ const CategoryItemButton = ({ category, ...others }) => {
         </ListItemIcon>
         <ListItemText primary={category.titleEn} />
       </ListItemButton>
-      {category.subcategories.length && phoneView ? (
+      {category.subcategories.length ? (
         <Popover
           id="mouse-over-popover"
           sx={{
