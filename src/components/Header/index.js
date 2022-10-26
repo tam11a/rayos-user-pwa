@@ -27,6 +27,8 @@ import {
   Stack,
   Badge,
   Typography,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -43,7 +45,7 @@ import {
 } from "react-icons/md";
 import { HiOutlineMail } from "react-icons/hi";
 import { RiNotification2Line } from "react-icons/ri";
-import { BiMenuAltLeft } from "react-icons/bi";
+import { BiCategoryAlt, BiMenuAltLeft } from "react-icons/bi";
 import { BsBagPlus, BsChatLeft, BsSearch } from "react-icons/bs";
 import {
   AiOutlineUser,
@@ -62,7 +64,16 @@ const Index = () => {
   const [catDrawerState, setCatDrawerState] = React.useState(false);
   const handleCatDrawer = () => setCatDrawerState(!catDrawerState);
 
-  let [searchParams, setSearchParams] = useSearchParams();
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  let [searchParams] = useSearchParams();
   const [search, setSearch] = React.useState();
 
   React.useEffect(() => {
@@ -86,6 +97,7 @@ const Index = () => {
         type: "all",
       });
   }, [searchParams]);
+
   return (
     <>
       <Hidden mdDown>
@@ -168,13 +180,44 @@ const Index = () => {
                   </IconButton>
                 </Badge>
                 {authCntxt.isVerified ? (
-                  <IconButton color={"black"} component={Link} to={"/user"}>
-                    {authCntxt.userInfo ? (
-                      <Avatar src={getAttachment(authCntxt.userInfo?.image)} />
-                    ) : (
-                      <AiOutlineUser />
-                    )}
-                  </IconButton>
+                  <>
+                    <IconButton color={"black"} onClick={handleClick}>
+                      <Avatar
+                        src={getAttachment(authCntxt.userInfo?.image)}
+                        sx={{
+                          bgcolor: "transparent",
+                          color: "primary.main",
+                        }}
+                      >
+                        <AiOutlineUser />
+                      </Avatar>
+                    </IconButton>
+                    <Menu
+                      id="header-user"
+                      anchorEl={anchorEl}
+                      open={open}
+                      onClose={handleClose}
+                      MenuListProps={{
+                        "aria-labelledby": "basic-button",
+                      }}
+                    >
+                      <MenuItem
+                        onClick={handleClose}
+                        component={Link}
+                        to={"/user"}
+                      >
+                        Manage My Account
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          handleClose();
+                          authCntxt.logout();
+                        }}
+                      >
+                        Logout
+                      </MenuItem>
+                    </Menu>
+                  </>
                 ) : (
                   <Button
                     variant={"contained"}
@@ -497,12 +540,20 @@ const CategoryItemButton = ({ category, ...others }) => {
         <ListItemIcon>
           <Avatar
             alt={category.titleEn}
-            src={baseURL + "/attachments/" + category.icon}
+            src={getAttachment(category.icon)}
+            variant={"square"}
             sx={{
-              borderRadius: 0,
               p: 0.7,
+              bgcolor: "transparent",
+              color: "secondary.main",
             }}
-          />
+          >
+            <BiCategoryAlt
+              style={{
+                fontSize: "1.4em",
+              }}
+            />
+          </Avatar>
         </ListItemIcon>
         <ListItemText primary={category.titleEn} />
       </ListItemButton>

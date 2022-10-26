@@ -7,9 +7,10 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { BiCategoryAlt } from "react-icons/bi";
+import { useNavigate } from "react-router-dom";
 import { categoryContext } from "../../context/categoryProvider";
-import { baseURL, rootURL } from "../../service/instance";
+import { getAttachment, rootURL } from "../../service/instance";
 
 const CategoryFlexBoxs = () => {
   const navigate = useNavigate();
@@ -89,10 +90,12 @@ const CategoryFlexBoxs = () => {
               >
                 <Avatar
                   alt={category.titleEn}
-                  src={baseURL + "/attachments/" + category.icon}
+                  src={getAttachment(category.icon)}
                   sx={{
                     borderRadius: 0,
                     p: 1,
+                    bgcolor: "transparent",
+                    color: "secondary.main",
                     width: "100%",
                     height: "100%",
                     maxWidth: {
@@ -104,7 +107,13 @@ const CategoryFlexBoxs = () => {
                       md: "80px",
                     },
                   }}
-                />
+                >
+                  <BiCategoryAlt
+                    style={{
+                      fontSize: "2em",
+                    }}
+                  />
+                </Avatar>
                 <Typography
                   variant="subtitle2"
                   sx={{

@@ -22,7 +22,7 @@ import { authContext } from "../authProvider";
 import notFound from "../../assets/undraw_mobile_login_re_9ntv.svg";
 import noProduct from "../../assets/3298065 1.svg";
 import { RiDeleteBinLine } from "react-icons/ri";
-import { rootURL } from "../../service/instance";
+import { getAttachment, rootURL } from "../../service/instance";
 import { useDeleteCart } from "../../query/cart";
 import snackContext from "../snackProvider";
 import { responseHandler } from "../../utilities/response-handler";
@@ -30,8 +30,12 @@ import { FiArrowRight } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import pndIcon from "../../assets/pnd-favicon.svg";
 import { BsFillQuestionCircleFill } from "react-icons/bs";
+import LoadingDivider from "../../components/LoadingDivider";
+import { IoIosImages } from "react-icons/io";
+import { cartContext } from ".";
 
-const CartDrawer = ({ open, onClose, cartInfo }) => {
+const CartDrawer = ({ open, onClose }) => {
+  const cartInfo = React.useContext(cartContext);
   const authCntxt = React.useContext(authContext);
   const snack = React.useContext(snackContext);
 
@@ -45,7 +49,6 @@ const CartDrawer = ({ open, onClose, cartInfo }) => {
         cartId,
       })
     );
-
     if (res.status) {
       snack.createSnack(res.msg);
     } else {
@@ -74,6 +77,7 @@ const CartDrawer = ({ open, onClose, cartInfo }) => {
           <ListItem
             disablePadding
             sx={{
+              py: 0.5,
               px: 2,
             }}
           >
@@ -82,43 +86,92 @@ const CartDrawer = ({ open, onClose, cartInfo }) => {
               <MdClose />
             </IconButton>
           </ListItem>
-          <Divider />
+          <LoadingDivider isLoading={isLoading} />
           {authCntxt.isVerified ? (
             <>
               {cartInfo.cartList?.map((cart) => (
                 <ListItem
-                  key={cart.id}
+                  key={cart._id}
                   disablePadding
                   sx={{
                     px: 1,
+                    pt: 1,
                     pr: 2,
                   }}
                 >
                   <ListItemAvatar>
                     <Avatar
-                      src={rootURL + cart.product.photo}
+                      src={getAttachment(cart.variant.product.image)}
                       sx={{
                         borderRadius: 1,
-                        border: "1px solid",
-                        borderColor: "#00000033",
+                        height: "70px",
+                        width: "70px",
+                        background: "transparent",
+                        color: "primary.dark",
+                        mr: 1,
                       }}
-                    />
+                    >
+                      <IoIosImages
+                        style={{
+                          fontSize: "1.8em",
+                        }}
+                      />
+                    </Avatar>
                   </ListItemAvatar>
                   <ListItemText
-                    primary={cart.product.title_en}
+                    primary={
+                      <>
+                        <b>{cart.variant.product.titleEn}</b>
+                      </>
+                    }
                     secondary={
                       <>
-                        {cart.quantity} Items &times; {cart.price} ৳
+                        {cart.variant.product.variantType}:{" "}
+                        <span
+                          style={{
+                            fontWeight: 600,
+                          }}
+                        >
+                          {cart.variant.titleEn}
+                        </span>{" "}
+                        <br />
+                        <span
+                          style={{
+                            fontWeight: 600,
+                          }}
+                        >
+                          {cart.quantity}
+                        </span>{" "}
+                        Items &times;{" "}
+                        <span
+                          style={{
+                            fontWeight: 600,
+                          }}
+                        >
+                          {cart.variant.product.sellPrice}
+                        </span>{" "}
+                        ৳
                       </>
                     }
                     primaryTypographyProps={{
                       noWrap: true,
+                      sx: {
+                        color: "black.main",
+                      },
+                    }}
+                    secondaryTypographyProps={{
+                      noWrap: true,
+                      sx: {
+                        "& span": {
+                          color: "black.main",
+                        },
+                      },
                     }}
                   />
                   {/* <ListItemSecondaryAction> */}
                   <IconButton
                     size={"small"}
-                    onClick={() => onDeleteCart(cart.id)}
+                    onClick={() => onDeleteCart(cart._id)}
                     disabled={isLoading}
                   >
                     <RiDeleteBinLine />

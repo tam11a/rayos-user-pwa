@@ -40,28 +40,27 @@ const Index = ({ children }) => {
   };
 
   // Fetch Category Data
-  const { data: cartData, isLoading, isError } = useGetCartByUser();
+  const {
+    data: cartData,
+    isLoading,
+    isError,
+  } = useGetCartByUser(authCntxt.isVerified);
 
   // Set Cart List to State
   React.useEffect(() => {
+    arrangeCartData();
+  }, [cartData]);
+
+  const arrangeCartData = () => {
     if (isLoading || isError || !cartData) return;
-    if (!cartData.data.status) return;
-    setCartList(cartData.data.value);
+    if (!cartData.status) return;
+    setCartList(cartData.data.data);
     var tmpST = 0;
-    var tmpOL = {};
-    cartData.data.value?.map((c) => {
-      tmpST += parseFloat(c.total_amount);
-      tmpOL[c.id] = {
-        ...c,
-        sell_price: c.price,
-        total_amount_with_sell_price: c.price * c.quantity,
-        ...orderList[c.id],
-        ...finalChange[c.id],
-      };
+    cartData.data.data?.map((c) => {
+      tmpST += parseFloat(c.variant.product.sellPrice) * c.quantity;
     });
     setSubtotalAmount(tmpST);
-    setOrderList(tmpOL);
-  }, [cartData]);
+  };
 
   React.useEffect(() => {
     if (authCntxt.isVerified && !isError) return;
@@ -85,17 +84,7 @@ const Index = ({ children }) => {
         removeOL: () => sessionStorage.removeItem("orderList"),
       }}
     >
-      <CartDrawer
-        open={open}
-        onClose={handleOpen}
-        cartInfo={{
-          total: cartList.length,
-          subtotalAmount,
-          cartList,
-          isLoading,
-          isError,
-        }}
-      />
+      <CartDrawer open={open} onClose={handleOpen} />
       {children}
     </cartContext.Provider>
   );

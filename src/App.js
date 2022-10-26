@@ -7,7 +7,6 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import AppBody from "./components/AppBody";
 import CategoryProvider from "./context/categoryProvider";
-import ProductProvider from "./context/productProvider";
 import { OrderProvider } from "./context/orderProvider";
 import { SnackProvider } from "./context/snackProvider";
 import NotificationProvider from "./context/notificationProvider";
@@ -74,13 +73,11 @@ function App() {
                 <AuthProvider>
                   <NotificationProvider>
                     <CartProvider>
-                      <ProductProvider>
-                        <Header />
-                        <AppBody>
-                          <AppRoute />
-                        </AppBody>
-                        <Footer />
-                      </ProductProvider>
+                      <Header />
+                      <AppBody>
+                        <AppRoute />
+                      </AppBody>
+                      <Footer />
                     </CartProvider>
                   </NotificationProvider>
                 </AuthProvider>

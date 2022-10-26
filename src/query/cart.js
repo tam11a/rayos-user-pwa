@@ -1,20 +1,19 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import instance from "../service/instance";
 
-const getCartByUser = (userId) => {
-  return instance.get(`cart/get-cart-info-by-userid/${userId}`);
+const getCartByUser = () => {
+  return instance.get(`cart`);
 };
 
-export const useGetCartByUser = (userId) => {
-  return useQuery(["get-cart-by-user", userId], () => getCartByUser(userId), {
-    enabled: !!userId,
-    retry: 0,
+export const useGetCartByUser = (check) => {
+  return useQuery(["get-cart-by-user", check], () => getCartByUser(), {
+    enabled: check,
     // refetchInterval: 20000,
   });
 };
 
-const createCart = (data) => {
-  return instance.post("cart/create", data);
+const createCart = ({ variantId, quantity }) => {
+  return instance.post(`cart/${variantId}?quantity=${quantity}`);
 };
 
 export const useCreateCart = () => {
@@ -25,7 +24,7 @@ export const useCreateCart = () => {
 };
 
 const deleteCart = ({ cartId }) => {
-  return instance.delete(`cart/delete/${cartId}`);
+  return instance.delete(`cart/${cartId}`);
 };
 
 export const useDeleteCart = () => {
