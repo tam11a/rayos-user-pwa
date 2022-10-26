@@ -94,6 +94,7 @@ const Index = ({ children }) => {
         handleOpenOTP,
         token,
         setToken,
+        isLoading: validationLoading,
         userInfo: user,
         isVerified: !!token,
         userId: !!token ? userId : undefined,

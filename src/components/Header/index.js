@@ -1,7 +1,7 @@
 import React from "react";
 
 // Instance
-import { authRootURL, baseURL } from "../../service/instance";
+import { authRootURL, baseURL, getAttachment } from "../../service/instance";
 
 // Context
 import { categoryContext } from "../../context/categoryProvider";
@@ -170,10 +170,7 @@ const Index = () => {
                 {authCntxt.isVerified ? (
                   <IconButton color={"black"} component={Link} to={"/user"}>
                     {authCntxt.userInfo ? (
-                      <Avatar
-                        src={authRootURL + authCntxt.userInfo?.image}
-                        alt={authCntxt.userInfo?.full_name}
-                      />
+                      <Avatar src={getAttachment(authCntxt.userInfo?.image)} />
                     ) : (
                       <AiOutlineUser />
                     )}

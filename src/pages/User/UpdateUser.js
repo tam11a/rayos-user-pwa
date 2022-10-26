@@ -12,16 +12,52 @@ import Joi from "joi";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { MdClose } from "react-icons/md";
+import LoadingDivider from "../../components/LoadingDivider";
 import ShowErr from "../../components/ShowErr";
 import CInput from "../../components/Sign/CInput";
+import { authContext } from "../../context/authProvider";
+import snackContext from "../../context/snackProvider";
+import { useUpdateUserProfile } from "../../query/sign";
+import { responseHandler } from "../../utilities/response-handler";
 
 const UpdateUser = ({ open, onClose }) => {
+  const authCntxt = React.useContext(authContext);
+  const snack = React.useContext(snackContext);
+
+  const { mutateAsync: updateUserProfile, isLoading } = useUpdateUserProfile();
+
   const {
     reset,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     register,
-  } = useForm({ resolver: joiResolver(schema) });
+  } = useForm({
+    resolver: joiResolver(schema),
+    defaultValues: {
+      userName: authCntxt.userInfo?.userName,
+      fullName: authCntxt.userInfo?.fullName,
+      email: authCntxt.userInfo?.email,
+    },
+  });
+
+  const onValid = async (data) => {
+    const res = await responseHandler(() => updateUserProfile(data), [201]);
+    if (res.status) {
+      snack.createSnack(res.msg);
+    } else {
+      snack.createSnack(res.data, "error");
+    }
+  };
+
+  React.useEffect(
+    () =>
+      reset({
+        userName: authCntxt.userInfo?.userName,
+        fullName: authCntxt.userInfo?.fullName,
+        email: authCntxt.userInfo?.email,
+      }),
+    [open]
+  );
 
   return (
     <>
@@ -48,78 +84,61 @@ const UpdateUser = ({ open, onClose }) => {
             <MdClose />
           </IconButton>
         </DialogTitle>
-        <DialogContent>
-          <Typography variant={"button"}>fullname</Typography>
-          <CInput
-            fullWidth
-            placeholder="Enter Your Name"
-            {...register("fullName")}
-          />
-          <ShowErr obj={errors.fullName} />
-          <Typography variant={"button"}>phone number</Typography>
-          <CInput
-            fullWidth
-            placeholder="01****"
-            startAdornment={
-              <Typography
-                sx={{
-                  mr: 1,
-                }}
-              >
-                +88
-              </Typography>
-            }
-            inputProps={{
-              type: "tel",
-            }}
-            {...register("phone")}
-          />
-          <ShowErr obj={errors.phone} />
-          <Typography variant={"button"}>email</Typography>
-          <CInput
-            fullWidth
-            placeholder="Enter Your Email"
-            {...register("email")}
-          />
-          <ShowErr obj={errors.email} />
-
-          <Button
-            fullWidth
-            variant={"contained"}
-            type={"submit"}
-            // onClick={auth.handleOpenOTP}
-            color={"black"}
-            disabled={isSubmitting}
+        <LoadingDivider isLoading={isLoading} />
+        <form onSubmit={handleSubmit(onValid)}>
+          <DialogContent
             sx={{
-              mt: 2,
+              "& > *": {
+                my: 1,
+              },
             }}
           >
-            update changes
-          </Button>
-        </DialogContent>
-        <DialogActions></DialogActions>
+            <Typography variant={"button"}>Username</Typography>
+            <CInput
+              fullWidth
+              placeholder="Enter Username"
+              {...register("userName")}
+            />
+            <ShowErr obj={errors.userName} />
+            <Typography variant={"button"}>fullname</Typography>
+            <CInput
+              fullWidth
+              placeholder="Enter Name"
+              {...register("fullName")}
+            />
+            <ShowErr obj={errors.fullName} />
+
+            <Typography variant={"button"}>email</Typography>
+            <CInput
+              fullWidth
+              placeholder="you@example.com"
+              {...register("email")}
+            />
+            <ShowErr obj={errors.email} />
+
+            <Button
+              fullWidth
+              variant={"contained"}
+              type={"submit"}
+              color={"black"}
+              disabled={isLoading}
+            >
+              update changes
+            </Button>
+          </DialogContent>
+        </form>
       </Dialog>
     </>
   );
 };
 
 const schema = Joi.object({
+  userName: Joi.string().label("Username").required().messages({
+    "string.empty": "Username Required",
+  }),
   fullName: Joi.string().label("Name").required().messages({
     "string.empty": "Name Required",
   }),
-
-  phone: Joi.string()
-    .replace("+88", "")
-    .replace(" ", "")
-    .replace("-", "")
-    .label("Phone Number")
-    .regex(/01\d{9}$/)
-    .required()
-    .messages({
-      "string.pattern.base": "Invalid Phone Number",
-      "string.empty": "Phone Number Required",
-    }),
-
   email: Joi.string().label("email"),
 });
 

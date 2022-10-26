@@ -31,18 +31,8 @@ export const useValidate = (check) => {
   });
 };
 
-const getUserProfile = (id) => {
-  return authInstance.get("user-profile/" + id);
-};
-
-export const useGetProfile = (id) => {
-  return useQuery(["user-info", id], () => getUserProfile(id), {
-    enabled: !!id,
-  });
-};
-
 const updateUserProfile = (data) => {
-  return authInstance.post("auth/update", data);
+  return instance.patch("auth/update", data);
 };
 
 export const useUpdateUserProfile = () => {
@@ -53,12 +43,9 @@ export const useUpdateUserProfile = () => {
 };
 
 const updateUserPassword = (data) => {
-  return authInstance.post("update-password", data);
+  return instance.post("update-password", data);
 };
 
 export const useUpdateUserPassword = () => {
-  // const queryClient = useQueryClient();
-  return useMutation(updateUserPassword, {
-    // onSuccess: () => queryClient.invalidateQueries("user-info"),
-  });
+  return useMutation(updateUserPassword, {});
 };

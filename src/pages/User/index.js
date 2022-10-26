@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   ButtonGroup,
+  CircularProgress,
   Container,
   Divider,
   Fab,
@@ -25,15 +26,13 @@ import { Icon } from "@iconify/react";
 import { FaPhoneAlt } from "react-icons/fa";
 import { FiEdit2 } from "react-icons/fi";
 import { GrMail } from "react-icons/gr";
-import { useForm } from "react-hook-form";
-import { useUpdateUserPassword, useUpdateUserProfile } from "../../query/sign";
+import { useUpdateUserProfile } from "../../query/sign";
 import { responseHandler } from "../../utilities/response-handler";
 import snackContext from "../../context/snackProvider";
 import UpdateUser from "./UpdateUser";
-import { postAttachments } from "../../query/attachment";
+import { postAttachments, usePostAttachments } from "../../query/attachment";
 import { MdLogout } from "react-icons/md";
 import UpdatePassword from "./UpdatePassword";
-import { ALlProductLayout } from "../Search/SearchResults";
 import { useGetBookmarkList } from "../../query/product";
 import ProductBox from "../../components/ProductBox";
 import { Link } from "react-router-dom";
@@ -45,9 +44,26 @@ const Index = () => {
   const [openEdit, setOpenEdit] = React.useState(false);
   const [openPass, setOpenPass] = React.useState(false);
   const [imgVal, setImgVal] = React.useState();
+  const { mutateAsync: postAttachments, isLoading: attachmentLoading } =
+    usePostAttachments();
+  const { mutateAsync: updateUserProfile, isLoading: updateLoading } =
+    useUpdateUserProfile();
+
   const uploadImg = async () => {
     const res1 = await responseHandler(() => postAttachments(imgVal), [201]);
-    if (res1.status && res1.data?.length) {
+    if (res1.status) {
+      const res = await responseHandler(
+        () =>
+          updateUserProfile({
+            image: res1.data?.[0]?._id,
+          }),
+        [201]
+      );
+      if (res.status) {
+        snack.createSnack(res.msg);
+      } else {
+        snack.createSnack(res.data, "error");
+      }
     } else {
       snack.createSnack(res1.data, "error");
     }
@@ -56,7 +72,7 @@ const Index = () => {
   React.useEffect(() => {
     if (!imgVal) return;
     // setImgVal();
-    // uploadImg();
+    uploadImg();
   }, [imgVal]);
 
   return authCntxt.isVerified ? (
@@ -91,17 +107,35 @@ const Index = () => {
           <Box
             sx={{
               position: "relative",
+              minHeight: "150px",
+              minWidth: "150px",
             }}
             component={"form"}
           >
-            <Avatar
-              sx={{
-                width: "150px",
-                height: "150px",
-              }}
-              src={getAttachment(authCntxt.userInfo?.image)}
-              alt={authCntxt.userInfo?.fullName}
-            />
+            {/* {true ? ( */}
+            {attachmentLoading || updateLoading ? (
+              <Box
+                sx={{
+                  borderRadius: "50%",
+                  position: "relative",
+                  height: "150px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <CircularProgress color={"black"} />
+              </Box>
+            ) : (
+              <Avatar
+                sx={{
+                  width: "150px",
+                  height: "150px",
+                }}
+                src={getAttachment(authCntxt.userInfo?.image)}
+                alt={authCntxt.userInfo?.fullName}
+              />
+            )}
             <Tooltip title={"Upload Photo"}>
               <Fab
                 size="small"
@@ -125,6 +159,7 @@ const Index = () => {
               </Fab>
             </Tooltip>
           </Box>
+
           <Stack
             direction={"column"}
             sx={{
@@ -135,7 +170,8 @@ const Index = () => {
             }}
           >
             <Typography variant={"h6"}>
-              {authCntxt.userInfo?.fullName}
+              {authCntxt.userInfo?.fullName}{" "}
+              <b>({authCntxt.userInfo?.userName})</b>
               {/* <Hidden smDown>
                 <IconButton
                   size={"small"}
@@ -342,7 +378,6 @@ const WishListProduct = () => {
       else createSnack("Something Went Wrong!", "error");
   }, [data]);
 
-  console.log(wishList);
   return (
     <>
       <Divider />
