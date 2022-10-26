@@ -13,9 +13,12 @@ import {
   Fab,
   Grid,
   Hidden,
+  Icon,
   IconButton,
   List,
   ListItem,
+  ListItemButton,
+  ListItemIcon,
   ListItemText,
   Paper,
   Stack,
@@ -26,7 +29,7 @@ import {
 // icons
 import { HiLocationMarker, HiOutlineMail } from "react-icons/hi";
 import { GrFacebookOption, GrLocation } from "react-icons/gr";
-import { MdCall, MdClose } from "react-icons/md";
+import { MdCall, MdClose, MdLogout } from "react-icons/md";
 import { ImGooglePlus } from "react-icons/im";
 import {
   RiDashboardLine,
@@ -48,7 +51,7 @@ import {
   FaUserCircle,
 } from "react-icons/fa";
 import { authContext } from "../../context/authProvider";
-import { authRootURL } from "../../service/instance";
+import { authRootURL, getAttachment } from "../../service/instance";
 import { IoCallOutline } from "react-icons/io5";
 
 const Index = () => {
@@ -401,56 +404,82 @@ const FooterDrawer = ({ open, handleClose }) => {
     >
       <List disablePadding>
         <ListItem>
-          <IconButton color={"black"} size={"small"} onClick={handleClose}>
-            <MdClose />
-          </IconButton>
           <Box
             sx={{
               flex: 1,
             }}
           />
-          <IconButton color={"error"} size={"small"} onClick={handleClose}>
-            <BsYoutube />
+          <IconButton color={"black"} size={"small"} onClick={handleClose}>
+            <MdClose />
           </IconButton>
         </ListItem>
         <Divider />
-        <ListItem>
-          {authCntxt.isVerified ? (
-            <Button
-              fullWidth
-              color={"black"}
-              variant={"contained"}
-              startIcon={
-                <Avatar
-                  src={authRootURL + authCntxt.userInfo?.image}
-                  alt={authCntxt.userInfo?.fullName}
+        {authCntxt.isVerified ? (
+          <>
+            <ListItem>
+              <Button
+                fullWidth
+                color={"black"}
+                variant={"contained"}
+                startIcon={
+                  <Avatar
+                    src={getAttachment(authCntxt.userInfo?.image)}
+                    alt={authCntxt.userInfo?.fullName}
+                    sx={{
+                      bgcolor: "transparent",
+                    }}
+                  >
+                    <AiOutlineUser
+                      style={{
+                        fontSize: "1.3em",
+                      }}
+                    />
+                  </Avatar>
+                }
+                component={Link}
+                to={"/user"}
+                onClick={handleClose}
+              >
+                <ListItemText
+                  primary={authCntxt.userInfo?.userName}
+                  secondary={authCntxt.userInfo?.phone}
+                  sx={{
+                    textTransform: "none",
+                    textAlign: "left",
+                    // pl: 1,
+                  }}
+                  primaryTypographyProps={{
+                    noWrap: true,
+                  }}
+                  secondaryTypographyProps={{
+                    noWrap: true,
+                    sx: {
+                      color: "#ffffff77",
+                      fontSize: "0.7rem",
+                    },
+                  }}
                 />
-              }
-              component={Link}
-              to={"/user"}
-              onClick={handleClose}
+              </Button>
+            </ListItem>
+            <ListItemButton
+              sx={{
+                mx: 2,
+              }}
+              onClick={() => {
+                authCntxt.logout();
+                handleClose();
+              }}
             >
-              <ListItemText
-                primary={authCntxt.userInfo?.userName}
-                secondary={authCntxt.userInfo?.phone}
-                sx={{
-                  textTransform: "none",
-                  textAlign: "left",
-                  pl: 1,
-                }}
-                primaryTypographyProps={{
-                  noWrap: true,
-                }}
-                secondaryTypographyProps={{
-                  noWrap: true,
-                  sx: {
-                    color: "#ffffff77",
-                    fontSize: "0.7rem",
-                  },
-                }}
-              />
-            </Button>
-          ) : (
+              <ListItemIcon>
+                <Icon color="error">
+                  <MdLogout />
+                </Icon>
+              </ListItemIcon>
+              <ListItemText primary={"Logout"} />
+            </ListItemButton>
+          </>
+        ) : (
+          <ListItem>
             <Button
               fullWidth
               variant={"contained"}
@@ -487,8 +516,8 @@ const FooterDrawer = ({ open, handleClose }) => {
                 }}
               />
             </Button>
-          )}
-        </ListItem>
+          </ListItem>
+        )}
       </List>
     </Drawer>
   );

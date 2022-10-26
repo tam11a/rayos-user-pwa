@@ -81,15 +81,10 @@ const Index = () => {
       sx={{
         position: "relative",
         pb: 3,
+        pt: "20px",
       }}
     >
-      <Grid
-        container
-        spacing={4}
-        sx={{
-          mt: 1,
-        }}
-      >
+      <Grid container spacing={4}>
         <Grid
           item
           xs={12}
@@ -170,18 +165,23 @@ const Index = () => {
               },
             }}
           >
-            <Typography variant={"h6"}>
+            <Typography
+              variant={"h6"}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                columnGap: 1,
+              }}
+            >
               <b>{authCntxt.userInfo?.userName}</b>
-              {/* <Hidden smDown>
+              <Hidden smDown>
                 <IconButton
                   size={"small"}
-                  sx={{
-                    ml: 1,
-                  }}
+                  onClick={() => setOpenEdit(!openEdit)}
                 >
                   <FiEdit2 />
                 </IconButton>
-              </Hidden> */}
+              </Hidden>
             </Typography>
             {/* <Hidden smDown>
               <Typography
@@ -243,21 +243,68 @@ const Index = () => {
             item
             xs={12}
             sx={{
+              height: "100%",
               display: "flex",
               flexDirection: "column",
               alignItems: {
                 xs: "center",
                 sm: "flex-end",
               },
-              justifyContent: "center",
+              justifyContent: "flex-start",
             }}
           >
+            <Hidden smDown>
+              <Button
+                variant="outlined"
+                size={"small"}
+                startIcon={<Icon icon="wpf:password1" />}
+                sx={{
+                  borderRadius: "40px",
+                }}
+                onClick={() => setOpenPass(!openPass)}
+              >
+                <Hidden mdDown>update password</Hidden>
+                <Hidden mdUp>Security</Hidden>
+              </Button>
+            </Hidden>
+            <Hidden smUp>
+              <Button
+                variant="contained"
+                size={"small"}
+                startIcon={<FiEdit2 />}
+                sx={{
+                  borderRadius: "40px",
+                }}
+                onClick={() => setOpenEdit(!openEdit)}
+              >
+                update account
+              </Button>
+              <Stack
+                direction={"row"}
+                alignItems={"center"}
+                sx={{
+                  mt: 1,
+                  rowGap: 1,
+                  columnGap: 1,
+                }}
+              >
+                <IconButton
+                  color={"primary"}
+                  onClick={() => setOpenPass(!openPass)}
+                >
+                  <Icon icon="wpf:password1" />
+                </IconButton>
+                <IconButton color={"error"} onClick={() => authCntxt.logout()}>
+                  <MdLogout />
+                </IconButton>
+              </Stack>
+            </Hidden>
             <ButtonGroup
               orientation="vertical"
               aria-label="vertical contained button group"
               variant="contained"
             >
-              <Button
+              {/* <Button
                 variant="contained"
                 size={"small"}
                 startIcon={<Icon icon="wpf:password1" />}
@@ -274,8 +321,8 @@ const Index = () => {
                 >
                   update password
                 </span>
-              </Button>
-              <Button
+              </Button> */}
+              {/* <Button
                 variant="outlined"
                 size={"small"}
                 startIcon={<FiEdit2 />}
@@ -292,8 +339,8 @@ const Index = () => {
                 >
                   edit profile
                 </span>
-              </Button>
-              <Button
+              </Button> */}
+              {/* <Button
                 variant="contained"
                 color={"error"}
                 size={"small"}
@@ -311,7 +358,7 @@ const Index = () => {
                 >
                   Logout
                 </span>
-              </Button>
+              </Button> */}
             </ButtonGroup>
           </Grid>
         </Grid>
