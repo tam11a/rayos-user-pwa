@@ -43,7 +43,7 @@ import {
 } from "react-icons/md";
 import { HiOutlineMail } from "react-icons/hi";
 import { RiNotification2Line } from "react-icons/ri";
-import { BiMenuAltLeft } from "react-icons/bi";
+import { BiCategoryAlt, BiMenuAltLeft } from "react-icons/bi";
 import { BsBagPlus, BsChatLeft, BsSearch } from "react-icons/bs";
 import {
   AiOutlineUser,
@@ -497,12 +497,20 @@ const CategoryItemButton = ({ category, ...others }) => {
         <ListItemIcon>
           <Avatar
             alt={category.titleEn}
-            src={baseURL + "/attachments/" + category.icon}
+            src={getAttachment(category.icon)}
+            variant={"square"}
             sx={{
-              borderRadius: 0,
               p: 0.7,
+              bgcolor: "transparent",
+              color: "secondary.main",
             }}
-          />
+          >
+            <BiCategoryAlt
+              style={{
+                fontSize: "1.4em",
+              }}
+            />
+          </Avatar>
         </ListItemIcon>
         <ListItemText primary={category.titleEn} />
       </ListItemButton>

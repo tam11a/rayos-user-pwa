@@ -79,7 +79,12 @@ const Index = ({ children }) => {
     if (validationError) logout();
     setUserId(validationData?.data?.data?._id);
     setUser(validationData?.data?.data);
-  }, [validationLoading, validationRefetching, validationError]);
+  }, [
+    validationData,
+    validationLoading,
+    validationRefetching,
+    validationError,
+  ]);
 
   return (
     <authContext.Provider

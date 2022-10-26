@@ -423,7 +423,7 @@ const FooterDrawer = ({ open, handleClose }) => {
               startIcon={
                 <Avatar
                   src={authRootURL + authCntxt.userInfo?.image}
-                  alt={authCntxt.userInfo?.full_name}
+                  alt={authCntxt.userInfo?.fullName}
                 />
               }
               component={Link}
@@ -431,7 +431,7 @@ const FooterDrawer = ({ open, handleClose }) => {
               onClick={handleClose}
             >
               <ListItemText
-                primary={authCntxt.userInfo?.full_name}
+                primary={authCntxt.userInfo?.userName}
                 secondary={authCntxt.userInfo?.phone}
                 sx={{
                   textTransform: "none",

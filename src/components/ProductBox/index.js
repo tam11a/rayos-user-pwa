@@ -2,6 +2,8 @@ import {
   Avatar,
   Box,
   Button,
+  Chip,
+  IconButton,
   Paper,
   Rating,
   Stack,
@@ -11,14 +13,23 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 // import { Link } from "react-router-dom";
 import { authContext } from "../../context/authProvider";
-import { baseURL } from "../../service/instance";
+import { getAttachment } from "../../service/instance";
 import ProductDialog from "./ProductDialog";
 
-const Index = ({ product }) => {
+import { IoIosImages } from "react-icons/io";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import { useToggleBookmark } from "../../query/product";
+import snackContext from "../../context/snackProvider";
+import { responseHandler } from "../../utilities/response-handler";
+
+const Index = ({ product, hideBookmark }) => {
+  const snack = React.useContext(snackContext);
   const authCntxt = React.useContext(authContext);
   const [open, setOpen] = React.useState(false);
   const handleClose = () => setOpen(!open);
   const navigate = useNavigate();
+
+  const { mutateAsync: toggleBookmark } = useToggleBookmark();
 
   return (
     <>
@@ -31,20 +42,79 @@ const Index = ({ product }) => {
           alignItems: "flex-start",
           justifyContent: "space-between",
           textDecoration: "none",
+          pb: 1,
         }}
         component={Button}
-        elevation={3}
-        onClick={() => navigate(`/product/${product._id}`)}
+        disableRipple
+        elevation={0}
       >
         <Avatar
-          src={baseURL + "/attachments/" + product.image}
+          src={getAttachment(product.image)}
           alt={product.title_en}
+          variant={"square"}
           sx={{
             height: "85%",
             width: "100%",
-            borderRadius: 0,
+            bgcolor: "#00000011",
+            color: "primary.dark",
           }}
-        />
+          onClick={() => navigate(`/product/${product._id}`)}
+        >
+          <IoIosImages
+            style={{
+              fontSize: "3em",
+            }}
+          />
+        </Avatar>
+
+        {!product.quantity ? (
+          <Chip
+            color={"error"}
+            label={"Out of Stock"}
+            sx={{
+              position: "absolute",
+              bottom: "60px",
+              left: "50%",
+              transform: "translateX(-50%)",
+            }}
+          />
+        ) : (
+          <></>
+        )}
+
+        {!hideBookmark && authCntxt.isVerified ? (
+          <IconButton
+            sx={{
+              position: "absolute",
+              top: "5px",
+              right: "5px",
+              "& svg": {
+                filter: "drop-shadow(0px 0px 10px #ffffff)",
+              },
+            }}
+            color="error"
+            aria-label="add to favorite"
+            // disabled={bookmarkPressed}
+            onClick={async () => {
+              const res = await responseHandler(() =>
+                toggleBookmark(product._id)
+              );
+              if (res.status) {
+                snack.createSnack(res.msg);
+              } else {
+                snack.createSnack(res.msg, "error");
+              }
+            }}
+          >
+            {authCntxt.userInfo?.bookmarks?.includes(product._id) ? (
+              <AiFillHeart />
+            ) : (
+              <AiOutlineHeart />
+            )}
+          </IconButton>
+        ) : (
+          <></>
+        )}
 
         <Box
           sx={{
@@ -53,6 +123,7 @@ const Index = ({ product }) => {
             display: "flex",
             textOverflow: "ellipsis",
           }}
+          onClick={() => navigate(`/product/${product._id}`)}
         >
           <Typography
             variant="caption"
@@ -60,6 +131,7 @@ const Index = ({ product }) => {
               position: "relative",
               maxWidth: "100%",
               fontWeight: "600",
+              fontSize: "1em",
               pt: 0.5,
             }}
             noWrap={true}
@@ -91,6 +163,7 @@ const Index = ({ product }) => {
             alignItems: "center",
             justifyContent: "space-between",
           }}
+          onClick={() => navigate(`/product/${product._id}`)}
         >
           <Typography
             variant="caption"
@@ -104,10 +177,10 @@ const Index = ({ product }) => {
             {product.sellPrice || 0} TK
           </Typography>
 
-          <Stack direction="row" alignItems={"center"}>
+          <Stack direction="row" alignItems={"center"} columnGap={0.5}>
             <Rating
               name="half-rating-read"
-              defaultValue={4.6}
+              defaultValue={3.6}
               precision={0.1}
               size="small"
               readOnly
@@ -115,31 +188,16 @@ const Index = ({ product }) => {
                 fontSize: "0.9rem",
               }}
             />
-            <Typography variant="caption">(14)</Typography>
+            <Typography
+              variant="caption"
+              sx={{
+                fontWeight: "600",
+              }}
+            >
+              (14)
+            </Typography>
           </Stack>
         </Box>
-
-        {false ? (
-          <Box
-            sx={{
-              position: "absolute",
-              top: 0,
-              height: "84%",
-              width: "100%",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              bgcolor: "#000000aa",
-              color: "#fff",
-              fontWeight: "bold",
-            }}
-          >
-            Out of Stock!!
-          </Box>
-        ) : (
-          <></>
-        )}
       </Paper>
       {open && (
         <ProductDialog

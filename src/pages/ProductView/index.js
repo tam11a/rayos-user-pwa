@@ -31,15 +31,17 @@ import { MdCall, MdShare } from "react-icons/md";
 import { Icon } from "@iconify/react";
 import { responseHandler } from "../../utilities/response-handler";
 import snackContext from "../../context/snackProvider";
+import { IoIosImages } from "react-icons/io";
+import { useCreateCart } from "../../query/cart";
 
 const Index = () => {
-  const authCntxt = React.useContext(authContext);
-  const snack = React.useContext(snackContext);
-  const { mutateAsync: toggleBookmark, isLoading: bookmarkPressed } =
-    useToggleBookmark();
-
   const { productId } = useParams();
 
+  const authCntxt = React.useContext(authContext);
+  const snack = React.useContext(snackContext);
+
+  const { mutateAsync: toggleBookmark, isLoading: bookmarkPressed } =
+    useToggleBookmark();
   const {
     data: productInfo,
     isLoading,
@@ -47,10 +49,8 @@ const Index = () => {
   } = useGetProductByID(productId);
 
   const [product, setProduct] = React.useState({});
-
   const [pickedPhoto, setPickedPhoto] = React.useState("");
   const [imgList, setImgList] = React.useState([]);
-  // console.log(size);
 
   React.useEffect(() => {
     if (isLoading || isError) return;
@@ -58,23 +58,22 @@ const Index = () => {
     setProduct(productInfo?.data?.data);
   }, [isLoading]);
 
-  // console.log(getAttachment(pickedPhoto));
-
   React.useEffect(() => {
-    setImgList(
-      product.multiimgs
-        ? [
-            {
-              _id: product.image,
-            },
-            ...product.multiimgs,
-          ]
-        : [
-            {
-              _id: product.image,
-            },
-          ]
-    );
+    if (product.image)
+      setImgList(
+        product.multiimgs
+          ? [
+              {
+                _id: product.image,
+              },
+              ...product.multiimgs,
+            ]
+          : [
+              {
+                _id: product.image,
+              },
+            ]
+      );
     handleChange({}, product?.variants?.[0]?._id);
   }, [product]);
 
@@ -82,12 +81,13 @@ const Index = () => {
     setPickedPhoto(imgList[0]?._id);
   }, [imgList]);
 
-  const [alignment, setAlignment] = React.useState("web");
+  const [alignment, setAlignment] = React.useState();
 
   const handleChange = (event, newAlignment) => {
+    if (!newAlignment) return;
     setAlignment(newAlignment);
-    setNum(1);
     product?.variants?.map((variant) => {
+      setNum(1);
       if (variant._id == newAlignment) {
         setMaxNum(variant.quantity || 0);
       }
@@ -96,7 +96,7 @@ const Index = () => {
 
   // increment and decrement fucntion
 
-  let [num, setNum] = React.useState(1);
+  let [num, setNum] = React.useState(product.quantity ? 1 : 0);
   let [maxNum, setMaxNum] = React.useState(0);
   let incNum = () => {
     if (num < maxNum) {
@@ -108,9 +108,26 @@ const Index = () => {
       setNum(num - 1);
     }
   };
-  let handleChangeNum = (e) => {
-    setNum(e.target.value);
+
+  const { mutateAsync: createCart, isLoading: cartCreationLoading } =
+    useCreateCart();
+
+  const postCart = async () => {
+    const res = await responseHandler(
+      () =>
+        createCart({
+          variantId: alignment,
+          quantity: num,
+        }),
+      [201]
+    );
+    if (res.status) {
+      snack.createSnack(res.msg);
+    } else {
+      snack.createSnack(res.data, "error");
+    }
   };
+
   // console.log(total);
   return (
     <Container
@@ -142,13 +159,23 @@ const Index = () => {
           <Avatar
             src={getAttachment(pickedPhoto)}
             alt={product.title_en}
+            variant={"square"}
             sx={{
               border: "1px solid",
-              borderRadius: 0,
+              borderColor: "#00000011",
               width: "100%",
               height: "max-content",
+              minHeight: "450px",
+              bgcolor: "transparent",
+              color: "primary.dark",
             }}
-          />
+          >
+            <IoIosImages
+              style={{
+                fontSize: "3em",
+              }}
+            />
+          </Avatar>
           <Box
             sx={{
               position: "relative",
@@ -169,7 +196,7 @@ const Index = () => {
                 <React.Fragment key={index}>
                   <SwiperSlide>
                     <Button
-                      variant={"outlined"}
+                      // variant={"outlined"}
                       color={"black"}
                       // disableElevation
                       onClick={() => setPickedPhoto(perImg._id)}
@@ -180,6 +207,7 @@ const Index = () => {
                         justifyContent: "center",
                         textTransform: "unset",
                         rowGap: 1,
+                        p: 0,
                         width: { xs: "60px", md: "80px" },
                         height: { xs: "60px", md: "80px" },
                         // color: "black.light",
@@ -188,12 +216,20 @@ const Index = () => {
                       <Avatar
                         src={getAttachment(perImg._id)}
                         alt={perImg._id}
+                        variant={"square"}
                         sx={{
                           width: { xs: "55px", md: "75px" },
                           height: { xs: "55px", md: "75px" },
-                          borderRadius: 0,
+                          bgcolor: "#00000011",
+                          color: "primary.dark",
                         }}
-                      />
+                      >
+                        <IoIosImages
+                          style={{
+                            fontSize: "1.2em",
+                          }}
+                        />
+                      </Avatar>
                     </Button>
                   </SwiperSlide>
                 </React.Fragment>
@@ -312,46 +348,52 @@ const Index = () => {
           </Stack>
           {/* Created Size Variant */}
 
-          <span>
-            <Typography
-              variant={"h6"}
-              sx={{
-                fontWeight: "600",
-                color: "primary.main",
-              }}
-            >
-              {product.variantType}:
-            </Typography>
-            <ToggleButtonGroup
-              value={alignment}
-              exclusive
-              onChange={handleChange}
-              aria-label="Platform"
-              sx={{
-                height: "35px",
-                columnGap: 1,
-                rowGap: 1,
-                "& .Mui-selected": {
-                  borderColor: "#F49320 !important",
-                  bgcolor: "transparent !important",
-                },
-              }}
-            >
-              {product.variants?.map((variant) => (
-                <ToggleButton
+          {product.variants?.length ? (
+            <>
+              <span>
+                <Typography
+                  variant={"h6"}
                   sx={{
-                    border: "1px solid !important",
-                    borderRadius: "2px !important",
+                    fontWeight: "600",
+                    color: "primary.main",
                   }}
-                  value={variant._id}
-                  disabled={!variant.quantity}
-                  key={variant._id}
                 >
-                  {variant.titleEn}
-                </ToggleButton>
-              ))}
-            </ToggleButtonGroup>
-          </span>
+                  {product.variantType}:
+                </Typography>
+                <ToggleButtonGroup
+                  value={alignment}
+                  exclusive
+                  onChange={handleChange}
+                  sx={{
+                    height: "35px",
+                    columnGap: 0.5,
+                    rowGap: 0.5,
+                    "& .Mui-selected": {
+                      borderColor: "#F49320 !important",
+                      bgcolor: "transparent !important",
+                    },
+                  }}
+                >
+                  {product.variants?.map((variant) => (
+                    <ToggleButton
+                      sx={{
+                        border: "1px solid !important",
+                        borderColor: "#00000044 !important",
+                        borderRadius: "2px !important",
+                      }}
+                      value={variant._id}
+                      disabled={!variant.quantity}
+                      key={variant._id}
+                    >
+                      {variant.titleEn}
+                    </ToggleButton>
+                  ))}
+                </ToggleButtonGroup>
+              </span>
+            </>
+          ) : (
+            <></>
+          )}
 
           {/* Create Quantity */}
           <Stack sx={{ mt: 1 }}>
@@ -366,11 +408,19 @@ const Index = () => {
             </Typography>
 
             <Stack direction="row" alignItems={"center"}>
-              <IconButton onClick={decNum} sx={{ pl: 0, color: "#69717D" }}>
+              <IconButton
+                onClick={decNum}
+                sx={{ pl: 0, color: "#69717D" }}
+                disabled={!product.quantity}
+              >
                 <AiFillMinusSquare />
               </IconButton>
               <Typography variant="h6">{num}</Typography>
-              <IconButton onClick={incNum} sx={{ color: "#69717D" }}>
+              <IconButton
+                onClick={incNum}
+                sx={{ color: "#69717D" }}
+                disabled={!product.quantity}
+              >
                 <AiFillPlusSquare />
               </IconButton>
               <Typography
@@ -412,6 +462,8 @@ const Index = () => {
             sx={{
               mt: 1,
             }}
+            disabled={!product.variants?.length || cartCreationLoading}
+            onClick={postCart}
           >
             Add to cart
           </Button>

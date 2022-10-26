@@ -36,6 +36,7 @@ import UpdatePassword from "./UpdatePassword";
 import { useGetBookmarkList } from "../../query/product";
 import ProductBox from "../../components/ProductBox";
 import { Link } from "react-router-dom";
+import { BiUserPin } from "react-icons/bi";
 
 const Index = () => {
   const authCntxt = React.useContext(authContext);
@@ -170,8 +171,7 @@ const Index = () => {
             }}
           >
             <Typography variant={"h6"}>
-              {authCntxt.userInfo?.fullName}{" "}
-              <b>({authCntxt.userInfo?.userName})</b>
+              <b>{authCntxt.userInfo?.userName}</b>
               {/* <Hidden smDown>
                 <IconButton
                   size={"small"}
@@ -205,6 +205,19 @@ const Index = () => {
                 mt: {
                   sm: 0.5,
                 },
+              }}
+            >
+              <Hidden smDown>
+                <BiUserPin />
+              </Hidden>
+              <span>{authCntxt.userInfo?.fullName}</span>
+            </Typography>
+            <Typography
+              variant={"subtitle2"}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                columnGap: 1,
               }}
             >
               <Hidden smDown>
@@ -466,7 +479,7 @@ const WishListProduct = () => {
                   },
                 }}
               >
-                <ProductBox product={product.product} />
+                <ProductBox product={product.product} hideBookmark={true} />
               </Grid>
             ))}
           </>
