@@ -3,7 +3,7 @@ import instance from "../service/instance";
 
 const postAttachments = (attachments) => {
   return instance.postForm(`attachments`, {
-    Files: attachments,
+    "Files[]": attachments,
   });
 };
 
