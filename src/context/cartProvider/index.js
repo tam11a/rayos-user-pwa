@@ -56,8 +56,8 @@ const Index = ({ children }) => {
     if (!cartData.status) return;
     setCartList(cartData.data.data);
     var tmpST = 0;
-    cartData.data.data?.map((c) => {
-      tmpST += parseFloat(c.variant.product.sellPrice) * c.quantity;
+    cartData.data?.data?.map((c) => {
+      tmpST += parseFloat(c.variant?.product?.price || 0) * c.quantity;
     });
     setSubtotalAmount(tmpST);
   };

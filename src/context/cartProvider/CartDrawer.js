@@ -101,7 +101,7 @@ const CartDrawer = ({ open, onClose }) => {
                 >
                   <ListItemAvatar>
                     <Avatar
-                      src={getAttachment(cart.variant.product.image)}
+                      src={getAttachment(cart.variant?.product?.image)}
                       sx={{
                         borderRadius: 1,
                         height: "70px",
@@ -121,18 +121,18 @@ const CartDrawer = ({ open, onClose }) => {
                   <ListItemText
                     primary={
                       <>
-                        <b>{cart.variant.product.titleEn}</b>
+                        <b>{cart.variant?.product?.titleEn}</b>
                       </>
                     }
                     secondary={
                       <>
-                        {cart.variant.product.variantType}:{" "}
+                        {cart.variant?.product?.variantType}:{" "}
                         <span
                           style={{
                             fontWeight: 600,
                           }}
                         >
-                          {cart.variant.titleEn}
+                          {cart.variant?.titleEn}
                         </span>{" "}
                         <br />
                         <span
@@ -148,7 +148,7 @@ const CartDrawer = ({ open, onClose }) => {
                             fontWeight: 600,
                           }}
                         >
-                          {cart.variant.product.sellPrice}
+                          {cart.variant?.product?.sellPrice}
                         </span>{" "}
                         ৳
                       </>
