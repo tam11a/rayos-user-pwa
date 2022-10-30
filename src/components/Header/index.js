@@ -209,6 +209,20 @@ const Index = () => {
                         Manage My Account
                       </MenuItem>
                       <MenuItem
+                        onClick={handleClose}
+                        component={Link}
+                        to={"/user/order"}
+                      >
+                        My Orders
+                      </MenuItem>
+                      <MenuItem
+                        onClick={handleClose}
+                        component={Link}
+                        to={"/search?wishlist=1"}
+                      >
+                        Wishlist
+                      </MenuItem>
+                      <MenuItem
                         onClick={() => {
                           handleClose();
                           authCntxt.logout();

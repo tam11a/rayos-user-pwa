@@ -14,31 +14,6 @@ const Index = ({ children }) => {
   const [cartList, setCartList] = React.useState([]);
   const [subtotalAmount, setSubtotalAmount] = React.useState(0);
 
-  // Manage OrderList
-  const [orderList, setOrderList] = React.useState(
-    sessionStorage.getItem("orderList")
-      ? JSON.parse(sessionStorage.getItem("orderList"))
-      : {}
-  );
-  const [finalChange, setFinalChange] = React.useState({});
-
-  const updateCartFromOrderList = async (id, data) => {
-    setOrderList({
-      ...orderList,
-      [id]: {
-        ...orderList[id],
-        ...data,
-      },
-    });
-    setFinalChange({
-      ...finalChange,
-      [id]: {
-        ...finalChange[id],
-        ...data,
-      },
-    });
-  };
-
   // Fetch Category Data
   const {
     data: cartData,
@@ -53,7 +28,7 @@ const Index = ({ children }) => {
 
   const arrangeCartData = () => {
     if (isLoading || isError || !cartData) return;
-    if (!cartData.status) return;
+    if (!cartData.data.success) return;
     setCartList(cartData.data.data);
     var tmpST = 0;
     cartData.data?.data?.map((c) => {
@@ -76,12 +51,6 @@ const Index = ({ children }) => {
         cartList,
         isLoading,
         isError,
-        orderList,
-        setOrderList,
-        updateCartFromOrderList,
-        saveOL: () =>
-          sessionStorage.setItem("orderList", JSON.stringify(orderList)),
-        removeOL: () => sessionStorage.removeItem("orderList"),
       }}
     >
       <CartDrawer open={open} onClose={handleOpen} />

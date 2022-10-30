@@ -9,7 +9,7 @@ export const OrderProvider = ({ children }) => {
   return (
     <orderContext.Provider
       value={{
-        popCongratulations,
+        pop: popCongratulations,
       }}
     >
       <Dialog open={open} onClose={popCongratulations}>

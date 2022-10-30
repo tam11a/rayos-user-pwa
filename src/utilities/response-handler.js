@@ -17,8 +17,14 @@ export const responseHandler = async (func, acceptOn) => {
         return {
           status: false,
           data: res.response.data.error || res.response.data.message,
+          msg: res.response.data.error || res.response.data.message,
         };
-      else return { status: false, data: res.response.data };
+      else
+        return {
+          status: false,
+          data: res.response.data || res.response.error,
+          msg: res.response.data || res.response.error,
+        };
     }
   } catch (err) {
     if (
@@ -30,8 +36,14 @@ export const responseHandler = async (func, acceptOn) => {
         return {
           status: false,
           data: err.response.data.error || err.response.data.message,
+          msg: err.response.data.error || err.response.data.message,
         };
-      else return { status: false, data: err.response.data };
+      else
+        return {
+          status: false,
+          data: err.response.data || err.response.error,
+          msg: err.response.data || err.response.error,
+        };
     } else {
       return { status: false, data: "Something Went Wrong!!" };
     }
