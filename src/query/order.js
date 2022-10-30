@@ -1,18 +1,38 @@
-import { useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import instance from "../service/instance";
 
-const getWalletByUser = (userId) => {
-  return instance.get(`info/get-user/${userId}`);
+const calculateOrder = (data) => {
+  return instance.post("order/calculate", data);
 };
 
-export const useGetWalletByUser = (userId) => {
-  return useQuery(
-    ["get-wallet-by-user", userId],
-    () => getWalletByUser(userId),
-    {
-      enabled: !!userId,
-    }
-  );
+export const useCalculateOrder = () => {
+  const queryClient = useQueryClient();
+  return useMutation(calculateOrder, {
+    onSuccess: () => queryClient.invalidateQueries("get-order-calculate"),
+  });
+};
+
+const createOrder = (data) => {
+  return instance.post("order/create", data);
+};
+
+export const useCreateOrder = () => {
+  const queryClient = useQueryClient();
+  return useMutation(createOrder, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("get-cart-by-user");
+    },
+  });
+};
+
+const getOrderCalculateByUser = () => {
+  return instance.get(`order/calculate`);
+};
+
+export const useGetOrderCalculateByUser = () => {
+  return useQuery(["get-order-calculate"], getOrderCalculateByUser, {
+    retry: 1,
+  });
 };
 
 const getOrderListByUser = (params) => {

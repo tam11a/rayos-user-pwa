@@ -23,6 +23,17 @@ export const useCreateCart = () => {
   });
 };
 
+const updateCart = ({ cartId, quantity }) => {
+  return instance.patch(`cart/${cartId}?quantity=${quantity}`);
+};
+
+export const useUpdateCart = () => {
+  const queryClient = useQueryClient();
+  return useMutation(updateCart, {
+    onSuccess: () => queryClient.invalidateQueries("get-cart-by-user"),
+  });
+};
+
 const deleteCart = ({ cartId }) => {
   return instance.delete(`cart/${cartId}`);
 };
@@ -34,10 +45,3 @@ export const useDeleteCart = () => {
   });
 };
 
-export const calculateOrder = (data) => {
-  return instance.post("order/calculate", data);
-};
-
-export const createOrder = (data) => {
-  return instance.post("order/create", data);
-};

@@ -9,11 +9,10 @@ import ReturnPolicy from "../pages/ReturnPolicy";
 import DeliveryPolicy from "../pages/DeliveryPolicy";
 import Search from "../pages/Search";
 import Notification from "../pages/Notification";
+import ProcessOrder from "../pages/ProcessOrder";
 import User from "../pages/User";
-import PNDOrder from "../pages/PNDOrder";
-import PNDOrderAddress from "../pages/PNDOrderAddress";
-import PNDOrderCheckout from "../pages/PNDOrderCheckout";
 import ProductView from "../pages/ProductView";
+import Order from "../pages/User/Order";
 
 const AppRoute = () => {
   const location = useLocation();
@@ -28,6 +27,7 @@ const AppRoute = () => {
     <>
       <Routes path="/">
         <Route index element={<Home />} />
+        <Route path="product/:productId" element={<ProductView />} />
         <Route path="search" element={<Search />} />
         <Route path="notification" element={<Notification />} />
         <Route path="about" element={<About />} />
@@ -36,38 +36,14 @@ const AppRoute = () => {
         <Route path="delivery-policy" element={<DeliveryPolicy />} />
         <Route path="user">
           <Route index element={<User />} />
-          {/* <Route path="order" element={<Order />} />
-          <Route path="wallet" element={<Wallet />} /> */}
-        </Route>
-        <Route path="order">
-          <Route index element={<Navigate to={"pnd"} />} />
-          <Route path="pnd">
-            <Route index element={<PNDOrder />} />
-            <Route
-              path="address"
-              element={
-                sessionStorage.getItem("orderList") ? (
-                  <PNDOrderAddress />
-                ) : (
-                  <Navigate to={"../"} />
-                )
-              }
-            />
-            <Route
-              path="checkout"
-              element={
-                sessionStorage.getItem("pnd_checkout") ? (
-                  <PNDOrderCheckout />
-                ) : (
-                  <Navigate to={"../"} />
-                )
-              }
-            />
+          <Route path="order">
+            <Route index element={<Order />} />
+            <Route path=":orderId" element={<></>} />
           </Route>
-          <Route path="bi" element={<>Brothers Importing Order</>} />
+          {/* <Route path="wallet" element={<Wallet />} /> */}
         </Route>
-        <Route path="product/:productId" element={<ProductView />} />
-        <Route path="*" element={<Navigate to={"/"} />} />
+        <Route path="process-order" element={<ProcessOrder />} />
+        <Route path="*" element={<>404</>} />
       </Routes>
     </>
   );

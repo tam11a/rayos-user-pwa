@@ -42,9 +42,11 @@ const Index = () => {
 
   const { mutateAsync: toggleBookmark, isLoading: bookmarkPressed } =
     useToggleBookmark();
+
   const {
     data: productInfo,
     isLoading,
+    isRefetching,
     isError,
   } = useGetProductByID(productId);
 
@@ -53,12 +55,14 @@ const Index = () => {
   const [imgList, setImgList] = React.useState([]);
 
   React.useEffect(() => {
-    if (isLoading || isError) return;
+    if (isLoading || isError || isRefetching) return;
     if (!productInfo?.status) return;
     setProduct(productInfo?.data?.data);
-  }, [isLoading]);
+  }, [isLoading, isRefetching]);
+
 
   React.useEffect(() => {
+    setImgList([]);
     if (product.image)
       setImgList(
         product.multiimgs
@@ -492,6 +496,6 @@ const Index = () => {
       </Grid>
     </Container>
   );
-};
+};;;
 
 export default Index;
