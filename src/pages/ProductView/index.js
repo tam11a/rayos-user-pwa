@@ -78,7 +78,10 @@ const Index = () => {
               },
             ]
       );
-    handleChange({}, product?.variants?.[0]?._id);
+    handleChange(
+      {},
+      product?.variants?.filter((v) => v.isActive && v.quantity)?.[0]?._id
+    );
   }, [product]);
 
   React.useEffect(() => {
@@ -132,8 +135,15 @@ const Index = () => {
     }
   };
 
-  // console.log(total);
-  return (
+  return isError ? (
+    <Container
+      sx={{
+        py: 1,
+      }}
+    >
+      No Product Found
+    </Container>
+  ) : (
     <Container
       sx={{
         py: 1,
@@ -378,20 +388,23 @@ const Index = () => {
                     },
                   }}
                 >
-                  {product.variants?.map((variant) => (
-                    <ToggleButton
-                      sx={{
-                        border: "1px solid !important",
-                        borderColor: "#00000044 !important",
-                        borderRadius: "2px !important",
-                      }}
-                      value={variant._id}
-                      disabled={!variant.quantity}
-                      key={variant._id}
-                    >
-                      {variant.titleEn}
-                    </ToggleButton>
-                  ))}
+                  {product.variants?.map(
+                    (variant) =>
+                      variant.isActive && (
+                        <ToggleButton
+                          sx={{
+                            border: "1px solid !important",
+                            borderColor: "#00000044 !important",
+                            borderRadius: "2px !important",
+                          }}
+                          value={variant._id}
+                          disabled={!variant.quantity}
+                          key={variant._id}
+                        >
+                          {variant.titleEn}
+                        </ToggleButton>
+                      )
+                  )}
                 </ToggleButtonGroup>
               </span>
             </>
