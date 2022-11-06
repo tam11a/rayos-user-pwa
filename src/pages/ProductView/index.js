@@ -60,7 +60,6 @@ const Index = () => {
     setProduct(productInfo?.data?.data);
   }, [isLoading, isRefetching]);
 
-
   React.useEffect(() => {
     setImgList([]);
     if (product.image)
@@ -265,7 +264,7 @@ const Index = () => {
               <Stack direction="row" spacing={0.5} alignItems={"center"}>
                 <Rating
                   name="half-rating-read"
-                  defaultValue={4.6}
+                  value={product?.rating?.total || 0}
                   precision={0.1}
                   size="small"
                   readOnly
@@ -276,7 +275,12 @@ const Index = () => {
                     color: "#72808F",
                   }}
                 >
-                  {isLoading ? <Skeleton variant={"text"} /> : "14 ratings"}
+                  {isLoading ? (
+                    <Skeleton variant={"text"} />
+                  ) : (
+                    product?.rating?.count?.all
+                  )}{" "}
+                  ratings
                 </span>
               </Stack>
             </Box>
@@ -509,6 +513,6 @@ const Index = () => {
       </Grid>
     </Container>
   );
-};;;
+};
 
 export default Index;

@@ -25,6 +25,7 @@ const Index = ({ product, hideBookmark }) => {
   const snack = React.useContext(snackContext);
   const authCntxt = React.useContext(authContext);
   const navigate = useNavigate();
+  // console.log(product);
 
   const { mutateAsync: toggleBookmark } = useToggleBookmark();
 
@@ -159,27 +160,30 @@ const Index = ({ product, hideBookmark }) => {
           >
             {product.sellPrice || 0} TK
           </Typography>
-
-          <Stack direction="row" alignItems={"center"} columnGap={0.5}>
-            <Rating
-              name="half-rating-read"
-              defaultValue={3.6}
-              precision={0.1}
-              size="small"
-              readOnly
-              sx={{
-                fontSize: "0.9rem",
-              }}
-            />
-            <Typography
-              variant="caption"
-              sx={{
-                fontWeight: "600",
-              }}
-            >
-              (14)
-            </Typography>
-          </Stack>
+          {product.rating.count.all ? (
+            <Stack direction="row" alignItems={"center"} columnGap={0.5}>
+              <Rating
+                name="half-rating-read"
+                defaultValue={product?.rating?.total}
+                precision={0.1}
+                size="small"
+                readOnly
+                sx={{
+                  fontSize: "0.9rem",
+                }}
+              />
+              <Typography
+                variant="caption"
+                sx={{
+                  fontWeight: "600",
+                }}
+              >
+                ({product?.rating?.count?.all})
+              </Typography>
+            </Stack>
+          ) : (
+            <></>
+          )}
         </Box>
       </Paper>
     </>
