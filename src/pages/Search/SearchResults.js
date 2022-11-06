@@ -518,7 +518,6 @@ export const ALlProductLayout = () => {
           >
             Products
           </Typography>
-          <Divider />
 
           {productList?.map((perCat, index) => (
             <React.Fragment key={perCat._id}>
@@ -601,7 +600,7 @@ export const ALlProductLayout = () => {
                       </Grid>
                     ))}
                   </Grid>
-                  {!(index !== productList.length - 1) && <Divider />}
+                  {index !== productList.length - 1 && <Divider />}
                 </>
               ) : (
                 <></>
