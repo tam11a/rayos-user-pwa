@@ -22,6 +22,7 @@ import snackContext from "../../context/snackProvider";
 import { useGetAllOrderForUser } from "../../query/order";
 // import OrderStatus from "../../components/OrderStatus";
 
+
 const Order = ({ uid }) => {
   const authCntxt = React.useContext(authContext);
   const snack = React.useContext(snackContext);
@@ -32,6 +33,7 @@ const Order = ({ uid }) => {
     page: 1,
     filters: [],
   });
+
 
   const { data, isLoading } = useGetAllOrderForUser(params);
   console.log(data);
@@ -402,6 +404,7 @@ const Order = ({ uid }) => {
       ;
     </>
   );
+
 };
 
 export default Order;
