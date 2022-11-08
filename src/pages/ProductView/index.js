@@ -7,6 +7,7 @@ import {
   Divider,
   Grid,
   IconButton,
+  LinearProgress,
   Rating,
   Skeleton,
   Stack,
@@ -59,6 +60,7 @@ const Index = () => {
     if (!productInfo?.status) return;
     setProduct(productInfo?.data?.data);
   }, [isLoading, isRefetching]);
+  console.log(product);
 
   React.useEffect(() => {
     setImgList([]);
@@ -509,6 +511,157 @@ const Index = () => {
           >
             {product.descriptionEn}
           </Typography>
+        </Grid>
+        <Grid item xs={12} mb={4}>
+          <Typography
+            variant={"h6"}
+            sx={{
+              fontWeight: "700",
+            }}
+          >
+            Ratings & Reviews:
+          </Typography>
+          <Stack
+            direction="row"
+            alignItems={"start"}
+            justifyContent={"space-between"}
+            width={"95vw"}
+            maxWidth={"600px"}
+          >
+            <Stack direction={"column"}>
+              <Stack direction={"row"} alignItems={"baseline"}>
+                <Typography variant={"h3"} sx={{ fontWeight: "500" }}>
+                  {product?.rating?.total}
+                </Typography>
+                <Typography variant={"h4"} color={"gray"}>
+                  /5
+                </Typography>
+              </Stack>
+              <Rating
+                name="half-rating-read"
+                value={product?.rating?.total || 0}
+                precision={0.1}
+                size="large"
+                readOnly
+              />
+              <span
+                style={{
+                  fontSize: "16px",
+                  fontWeight: "500",
+                  color: "#72808F",
+                }}
+              >
+                {isLoading ? (
+                  <Skeleton variant={"text"} />
+                ) : (
+                  product?.rating?.count?.all
+                )}
+                {" Ratings"}
+              </span>
+            </Stack>
+            <Stack direction={"column"}>
+              <Stack direction="row" alignItems={"center"} columnGap={1}>
+                <Rating
+                  name="half-rating-read"
+                  value={5}
+                  precision={0.1}
+                  size="small"
+                  readOnly
+                />
+                <LinearProgress
+                  variant="determinate"
+                  value={
+                    (product?.rating?.count?.five /
+                      product?.rating?.count?.all) *
+                    100
+                  }
+                  sx={{ width: "200px", height: "10px", color: "gray" }}
+                  color="rating"
+                />
+                <Typography>{product?.rating?.count?.five}</Typography>
+              </Stack>
+              <Stack direction="row" alignItems={"center"} columnGap={1}>
+                <Rating
+                  name="half-rating-read"
+                  value={4}
+                  precision={0.1}
+                  size="small"
+                  readOnly
+                />
+                <LinearProgress
+                  variant="determinate"
+                  value={
+                    (product?.rating?.count?.four /
+                      product?.rating?.count?.all) *
+                    100
+                  }
+                  sx={{ width: "200px", height: "10px", color: "gray" }}
+                  color="rating"
+                />
+                <Typography>{product?.rating?.count?.four}</Typography>
+              </Stack>
+              <Stack direction="row" alignItems={"center"} columnGap={1}>
+                <Rating
+                  name="half-rating-read"
+                  value={3}
+                  precision={0.1}
+                  size="small"
+                  readOnly
+                />
+                <LinearProgress
+                  variant="determinate"
+                  value={
+                    (product?.rating?.count?.three /
+                      product?.rating?.count?.all) *
+                    100
+                  }
+                  sx={{ width: "200px", height: "10px", color: "gray" }}
+                  color="rating"
+                />
+                <Typography>{product?.rating?.count?.three}</Typography>
+              </Stack>
+              <Stack direction="row" alignItems={"center"} columnGap={1}>
+                <Rating
+                  name="half-rating-read"
+                  value={2}
+                  precision={0.1}
+                  size="small"
+                  readOnly
+                />
+                <LinearProgress
+                  variant="determinate"
+                  value={
+                    (product?.rating?.count?.two /
+                      product?.rating?.count?.all) *
+                    100
+                  }
+                  sx={{ width: "200px", height: "10px", color: "gray" }}
+                  color="rating"
+                />
+                <Typography>{product?.rating?.count?.two}</Typography>
+              </Stack>
+              <Stack direction="row" alignItems={"center"} columnGap={1}>
+                <Rating
+                  name="half-rating-read"
+                  value={1}
+                  precision={0.1}
+                  size="small"
+                  readOnly
+                />
+                <LinearProgress
+                  variant="determinate"
+                  value={
+                    (product?.rating?.count?.one /
+                      product?.rating?.count?.all) *
+                    100
+                  }
+                  sx={{ width: "200px", height: "10px", color: "gray" }}
+                  color="rating"
+                />
+                <Typography>{product?.rating?.count?.one}</Typography>
+              </Stack>
+            </Stack>
+          </Stack>
         </Grid>
       </Grid>
     </Container>
