@@ -483,6 +483,9 @@ const ShippingDialog = ({ shippingId, setShippingId }) => {
               },
             }}
           />
+          <IconButton size={"small"}>
+            <FiEdit2 />
+          </IconButton>
         </ListItemButton>
       )}
       <Dialog
