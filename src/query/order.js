@@ -1,6 +1,24 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import instance from "../service/instance";
 
+const getAllOrderForUser = (params) => {
+  return instance.get(
+    `order/user?${
+      params.method && params.method !== "all" ? `status=${params.method}&` : ""
+    }limit=${params.limit}&page=${params.page}`
+  );
+};
+
+export const useGetAllOrderForUser = (params) => {
+  return useQuery(
+    ["get-all-order-for-user", params],
+    () => getAllOrderForUser(params),
+    {
+      // refetchInterval: 20000,
+    }
+  );
+};
+
 const calculateOrder = (data) => {
   return instance.post("order/calculate", data);
 };
