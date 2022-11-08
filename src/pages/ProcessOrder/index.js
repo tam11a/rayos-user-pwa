@@ -10,15 +10,18 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
+  DialogContentText,
   DialogTitle,
   Divider,
   FormControlLabel,
   Grid,
   Hidden,
   IconButton,
+  InputBase,
   List,
   ListItem,
   ListItemAvatar,
+  ListItemButton,
   ListItemText,
   Paper,
   Radio,
@@ -36,7 +39,7 @@ import { getAttachment } from "../../service/instance";
 import snackContext from "../../context/snackProvider";
 import { responseHandler } from "../../utilities/response-handler";
 import { useDeleteCart, useUpdateCart } from "../../query/cart";
-import { MdOutlineAddShoppingCart } from "react-icons/md";
+import { MdClose, MdOutlineAddShoppingCart } from "react-icons/md";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { IoIosImages } from "react-icons/io";
@@ -47,6 +50,12 @@ import {
   useGetOrderCalculateByUser,
 } from "../../query/order";
 import orderContext from "../../context/orderProvider";
+import { useCreateAddress, useGetAddressByUser } from "../../query/address";
+import { HiOutlineQueueList } from "react-icons/hi2";
+import { useForm } from "react-hook-form";
+import LoadingDivider from "../../components/LoadingDivider";
+import { FiEdit2 } from "react-icons/fi";
+import tableOptionsStyle from "../../styles/tableOptions";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -57,12 +66,18 @@ const Index = () => {
   const [openCalculation, setOpenCalculation] = React.useState(false);
   const handleOpenCalculation = () => navigate("");
 
+  const [shippingId, setShippingId] = React.useState();
+
   React.useEffect(() => {
     if (!searchParams.get("confirm")) setOpenCalculation(false);
     else setOpenCalculation(true);
   }, [searchParams]);
 
   const onCalculateOrder = async () => {
+    if (!shippingId) {
+      snack.createSnack("Please add a shipping address", "error");
+      return;
+    }
     const res = await responseHandler(
       () =>
         calculateOrder({
@@ -72,7 +87,7 @@ const Index = () => {
             };
           }),
           paymentMethod: "COD",
-          shipping: "Dhaka, Bangladesh",
+          shipping: shippingId,
         }),
       [201]
     );
@@ -312,12 +327,20 @@ const Index = () => {
                     />
                   </RadioGroup>
                 </ListItem>
-                {/* <Divider />
-              <ListItem>
-                <Typography variant={"body1"} fontWeight={"bold"}>
-                  Shipping Info
-                </Typography>
-              </ListItem> */}
+                <Divider />
+                <ListItem
+                  sx={{
+                    mt: 2,
+                  }}
+                >
+                  <Typography variant={"body1"} fontWeight={"bold"}>
+                    Shipping Info
+                  </Typography>
+                </ListItem>
+                <ShippingDialog
+                  shippingId={shippingId}
+                  setShippingId={setShippingId}
+                />
               </List>
             </Paper>
             <Hidden xsUp>
@@ -379,6 +402,261 @@ const Index = () => {
           onClose={handleOpenCalculation}
         />
       )}
+    </>
+  );
+};
+
+const ShippingDialog = ({ shippingId, setShippingId }) => {
+  const snack = React.useContext(snackContext);
+  const [open, setOpen] = React.useState(false);
+  const onClose = () => {
+    setOpen(!open);
+    setOpenForm(false);
+  };
+  const { data: address, isLoading: loadingAddress } = useGetAddressByUser();
+  const [shipping, setShipping] = React.useState();
+
+  const [openForm, setOpenForm] = React.useState(false);
+  const handleForm = () => setOpenForm(!openForm);
+
+  const {
+    reset,
+    watch,
+    handleSubmit,
+    formState: { errors },
+    register,
+  } = useForm({});
+
+  const { mutateAsync, isLoading } = useCreateAddress();
+
+  React.useEffect(() => {
+    if (openForm) return;
+    reset({});
+  }, [openForm]);
+
+  const onValid = async (data) => {
+    const res = await responseHandler(() => mutateAsync(data), [201]);
+    if (res.status) {
+      snack.createSnack(res.msg);
+      setShipping(res.data);
+      setShippingId(res.data?._id);
+      onClose();
+    } else {
+      snack.createSnack(res.msg, "error");
+    }
+  };
+
+  return (
+    <>
+      {!shippingId ? (
+        <ListItem>
+          <Button
+            variant={"outlined"}
+            startIcon={<HiOutlineQueueList />}
+            onClick={onClose}
+            fullWidth
+          >
+            Select Shipping Location
+          </Button>
+        </ListItem>
+      ) : (
+        <ListItemButton
+          sx={{
+            border: "1px solid",
+            borderColor: "#333",
+            bgcolor: "#00000011",
+            m: 1,
+          }}
+          onClick={onClose}
+        >
+          <ListItemText
+            primary={shipping?.label}
+            secondary={
+              <>
+                <div>{shipping?.details}</div>
+                <div>{shipping?.phone}</div>
+              </>
+            }
+            primaryTypographyProps={{
+              sx: {
+                fontWeight: "500",
+              },
+            }}
+          />
+        </ListItemButton>
+      )}
+      <Dialog
+        open={open}
+        onClose={onClose}
+        PaperProps={{
+          sx: {
+            width: "95vw",
+            maxWidth: "550px",
+          },
+        }}
+      >
+        <DialogTitle
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <span>Shipping Location</span>
+          <IconButton size={"small"} onClick={onClose}>
+            <MdClose />
+          </IconButton>
+        </DialogTitle>
+        <LoadingDivider isLoading={loadingAddress || isLoading} />
+        {openForm ? (
+          <form onSubmit={handleSubmit(onValid)}>
+            <DialogContent>
+              <DialogContentText
+                sx={{
+                  mb: 1,
+                }}
+              >
+                Label
+              </DialogContentText>
+              <InputBase
+                sx={tableOptionsStyle}
+                placeholder={"Home, Work, Office etc."}
+                fullWidth
+                {...register("label")}
+              />
+              <DialogContentText
+                sx={{
+                  my: 1,
+                }}
+              >
+                Phone Number
+              </DialogContentText>
+              <InputBase
+                sx={tableOptionsStyle}
+                placeholder="01****"
+                startAdornment={
+                  <Typography
+                    sx={{
+                      mr: 1,
+                    }}
+                  >
+                    +88
+                  </Typography>
+                }
+                inputProps={{
+                  type: "tel",
+                }}
+                fullWidth
+                {...register("phone")}
+              />
+              <DialogContentText
+                sx={{
+                  my: 1,
+                }}
+              >
+                Address
+              </DialogContentText>
+              <InputBase
+                sx={{
+                  ...tableOptionsStyle,
+                  height: "unset",
+                }}
+                multiline
+                minRows={4}
+                placeholder={"Aa..."}
+                fullWidth
+                {...register("details")}
+              />
+            </DialogContent>
+            <Divider />
+            <DialogActions>
+              <Button variant={"outlined"} color={"error"} onClick={handleForm}>
+                Cancel
+              </Button>
+              {/* <Button variant={"outlined"} type={"submit"}>
+                {watch("_id") ? "Update" : "Create"}
+              </Button> */}
+              <Button variant={"contained"} type={"submit"}>
+                {watch("_id") ? "Update" : "Create"} & Select
+              </Button>
+            </DialogActions>
+          </form>
+        ) : (
+          <>
+            <DialogContent>
+              {![...(address?.data?.data || [])].length && (
+                <Alert
+                  action={
+                    <Button
+                      color={"success"}
+                      variant={"outlined"}
+                      onClick={setOpenForm}
+                    >
+                      Create New
+                    </Button>
+                  }
+                >
+                  No location saved.
+                </Alert>
+              )}
+              {[...(address?.data?.data || [])]?.map?.((saved) => (
+                <ListItemButton
+                  sx={{
+                    border: "1px solid",
+                    borderColor: shippingId === saved._id ? "#333" : "#ccc",
+                    bgcolor:
+                      shippingId === saved._id ? "#00000011" : "transparent",
+                    my: 1,
+                  }}
+                >
+                  <ListItemText
+                    primary={saved?.label}
+                    secondary={
+                      <>
+                        <div>{saved.details}</div>
+                        <div>{saved.phone}</div>
+                      </>
+                    }
+                    primaryTypographyProps={{
+                      sx: {
+                        fontWeight: "500",
+                      },
+                    }}
+                    onClick={() => {
+                      setShippingId(saved._id);
+                      setShipping(saved);
+                      onClose();
+                    }}
+                  />
+                  <IconButton
+                    onClick={() => {
+                      reset({
+                        ...saved,
+                        id: saved._id,
+                      });
+                      handleForm();
+                    }}
+                  >
+                    <FiEdit2 />
+                  </IconButton>
+                </ListItemButton>
+              ))}
+            </DialogContent>
+            <Divider />
+            <DialogActions>
+              <Button
+                variant={"contained"}
+                onClick={() => {
+                  reset({});
+                  handleForm();
+                }}
+              >
+                New Location
+              </Button>
+            </DialogActions>
+          </>
+        )}
+      </Dialog>
     </>
   );
 };
@@ -575,9 +853,19 @@ const CalculationDialog = ({ open, onClose }) => {
               my: 2,
             }}
           />
-          <Typography variant="button">Shipping Address :</Typography>
-          <Typography variant="body1" fontWeight={500}>
-            {order?.shipping}
+          <Stack
+            direction={"row"}
+            alignItems={"center"}
+            justifyContent={"space-between"}
+            sx={{
+              width: "100%",
+            }}
+          >
+            <Typography variant="button">Shipping Address :</Typography>
+            <b>{order?.shipping.phone}</b>
+          </Stack>
+          <Typography variant="subtitle2" fontWeight={500} textAlign={"right"}>
+            {order?.shipping.details}
           </Typography>
 
           <Divider

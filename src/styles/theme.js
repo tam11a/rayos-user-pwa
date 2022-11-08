@@ -65,6 +65,9 @@ const theme = createTheme({
           borderRadius: "2px",
           fontWeight: "500",
         },
+        outlined: {
+          borderRadius: "2px",
+        },
       },
     },
     MuiSelect: {
