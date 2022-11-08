@@ -13,6 +13,7 @@ import ProcessOrder from "../pages/ProcessOrder";
 import User from "../pages/User";
 import ProductView from "../pages/ProductView";
 import Order from "../pages/User/Order";
+import Test from "../pages/Test";
 
 const AppRoute = () => {
   const location = useLocation();
@@ -43,6 +44,7 @@ const AppRoute = () => {
           {/* <Route path="wallet" element={<Wallet />} /> */}
         </Route>
         <Route path="process-order" element={<ProcessOrder />} />
+        <Route path="test" element={<Test />} />
         <Route path="*" element={<>404</>} />
       </Routes>
     </>

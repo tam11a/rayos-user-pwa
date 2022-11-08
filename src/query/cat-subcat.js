@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useInfiniteQuery, useQuery } from "react-query";
 import instance from "../service/instance";
 
 const getCategory = () => {
@@ -33,15 +33,36 @@ export const useGetSubCategoryInfo = (id) => {
   return useQuery(["get-subcategory", id], () => getSubCategoryInfo(id), {});
 };
 
-const getProductListByCategory = (id) => {
-  return instance.get(`category/${id}/products`);
+const getProductListByCategory = ({ queryKey, pageParam = 1 }) => {
+  return instance.get(`category/${queryKey[1]}/products`, {
+    params: {
+      page: pageParam,
+    },
+  });
 };
 
 export const useGetProductListByCategory = (id) => {
   return useQuery(
-    ["get-product-list-by-category", id],
-    () => getProductListByCategory(id),
+    ["get-product-list-by-category", { id }],
+    () => getProductListByCategory({ id }),
     {}
+  );
+};
+
+export const useInfiniteProductListByCategory = ({ id }) => {
+  return useInfiniteQuery(
+    ["Infinite-Catprod-List", id],
+    getProductListByCategory,
+    {
+      select: (data) => {
+        return data.pages.flatMap((p) => p.data.data);
+      },
+      getNextPageParam: (lastPage) => {
+        if (lastPage.data.page * lastPage.data.limit < lastPage.data.total)
+          return lastPage.data.page + 1;
+      },
+      enabled: !!id,
+    }
   );
 };
 

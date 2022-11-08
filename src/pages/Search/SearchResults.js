@@ -19,10 +19,12 @@ import {
   useGetProductListBySubcategory,
   useGetSubCategoryInfo,
   useGetSubCategoryListByCategory,
+  useInfiniteProductListByCategory,
 } from "../../query/cat-subcat";
 import {
   useGetAllProdCat,
   useGetBookmarkList,
+  useInfiniteBookmarkList,
   useSearchProduct,
 } from "../../query/product";
 
@@ -59,20 +61,34 @@ const SearchResults = ({ search }) => {
 const WishListProduct = () => {
   const { createSnack } = React.useContext(snackContext);
   let [info, setInfo] = React.useState({});
-  let [wishList, setWishList] = React.useState([]);
-  const { data, isLoading, isError, error } = useGetBookmarkList();
+  const { data, isLoading, isError, error } = useGetBookmarkList({ page: 1 });
 
   React.useEffect(() => {
     if (isLoading) return;
     setInfo(data ? data?.data : {});
-    setWishList(data ? data?.data?.data : []);
     if (isError)
       if (error.response.status === 400)
         createSnack(error?.response.data.msg, "error");
       else createSnack("Something Went Wrong!", "error");
   }, [data]);
 
-  console.log(wishList);
+  const {
+    isLoading: infIsLoading,
+    isError: infIsError,
+    error: infError,
+    data: wishList,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetched,
+    isFetchingNextPage,
+  } = useInfiniteBookmarkList();
+
+  React.useEffect(() => {
+    console.log(hasNextPage);
+    if (hasNextPage) fetchNextPage();
+  }, [isFetched, hasNextPage, wishList]);
+
   return (
     <>
       <Typography
@@ -103,7 +119,25 @@ const WishListProduct = () => {
           justifyContent: "flex-start",
         }}
       >
-        {isLoading ? (
+        {wishList?.map((product) => (
+          <Grid
+            key={product._id}
+            item
+            xs={5.9}
+            sm={3.85}
+            md={2.92}
+            lg={2.3}
+            sx={{
+              height: {
+                xs: "280px",
+                md: "310px",
+              },
+            }}
+          >
+            <ProductBox product={product.product} />
+          </Grid>
+        ))}
+        {infIsLoading || isFetching || isFetchingNextPage ? (
           <>
             {[1, 2, 3, 4, 5, 6, 7].map((num) => (
               <Skeleton
@@ -125,26 +159,7 @@ const WishListProduct = () => {
             ))}
           </>
         ) : (
-          <>
-            {wishList?.map((product) => (
-              <Grid
-                key={product._id}
-                item
-                xs={5.9}
-                sm={3.85}
-                md={2.92}
-                lg={2.3}
-                sx={{
-                  height: {
-                    xs: "280px",
-                    md: "310px",
-                  },
-                }}
-              >
-                <ProductBox product={product.product} />
-              </Grid>
-            ))}
-          </>
+          <></>
         )}
       </Grid>
     </>
@@ -247,7 +262,7 @@ const CategoryProduct = ({ id }) => {
   const { createSnack } = React.useContext(snackContext);
   let [info, setInfo] = React.useState({});
   let [suggestionList, setSuggestionList] = React.useState([]);
-  let [productList, setProductList] = React.useState([]);
+  // let [productList, setProductList] = React.useState([]);
   const { data, isLoading, isError, error } = useGetCategoryInfo(id);
 
   React.useEffect(() => {
@@ -259,7 +274,7 @@ const CategoryProduct = ({ id }) => {
         createSnack(error?.response.data.msg, "error");
       else createSnack("Something Went Wrong!", "error");
   }, [data]);
-  console.log(productList);
+  // console.log(productList);
 
   const { data: sublistData } = useGetSubCategoryListByCategory(id);
   React.useEffect(() => {
@@ -267,12 +282,18 @@ const CategoryProduct = ({ id }) => {
     setSuggestionList(sublistData?.data?.data);
   }, [sublistData]);
 
-  const { data: productListbyCat, isLoading: productLoading } =
-    useGetProductListByCategory(id);
+  const {
+    isLoading: infIsLoading,
+    data: productList,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetched,
+  } = useInfiniteProductListByCategory({ id });
+
   React.useEffect(() => {
-    if (!productListbyCat) return;
-    setProductList(productListbyCat?.data?.data || []);
-  }, [productListbyCat]);
+    if (hasNextPage) fetchNextPage();
+  }, [isFetched, hasNextPage, productList]);
 
   return (
     <>
@@ -292,7 +313,7 @@ const CategoryProduct = ({ id }) => {
         {isLoading ? (
           <Skeleton width={"220px"} />
         ) : (
-          `${productList?.length || 0} Results Found`
+          `${info.totalProducts || 0} Results Found`
         )}
       </Typography>
       {suggestionList?.length ? (
@@ -354,7 +375,7 @@ const CategoryProduct = ({ id }) => {
             </Grid>
           ))}
         </>
-        {productLoading ? (
+        {infIsLoading || isFetching ? (
           <>
             {[1, 2, 3, 4, 5, 6, 7].map((num) => (
               <Skeleton

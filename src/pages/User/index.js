@@ -426,7 +426,10 @@ const WishListProduct = () => {
   const { createSnack } = React.useContext(snackContext);
   let [info, setInfo] = React.useState({});
   let [wishList, setWishList] = React.useState([]);
-  const { data, isLoading, isError, error } = useGetBookmarkList();
+  const { data, isLoading, isError, error } = useGetBookmarkList({
+    page: 1,
+    limit: 5,
+  });
 
   React.useEffect(() => {
     if (isLoading) return;

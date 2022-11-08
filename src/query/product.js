@@ -1,4 +1,9 @@
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "react-query";
 import instance from "../service/instance";
 
 const getProductByID = (id) => {
@@ -12,28 +17,12 @@ export const useGetProductByID = (id) => {
   });
 };
 
-const getAllProduct = () => {
-  return instance.get(`product/get-all-product-info`);
-};
-
-export const useGetAllProduct = () => {
-  return useQuery("get-all-products", () => getAllProduct(), {});
-};
-
 const searchProduct = (name) => {
   return instance.get(`product/search-product?type=name&keyword=${name}`);
 };
 
 export const useSearchProduct = (name) => {
   return useQuery(["search-product", name], () => searchProduct(name), {});
-};
-
-const allProdCat = () => {
-  return instance.get(`category/get-all-category-info-with-prod-sub`);
-};
-
-export const useGetAllProdCat = () => {
-  return useQuery(["all-prod-cat"], () => allProdCat(), {});
 };
 
 const toggleBookmark = (id) => {
@@ -45,14 +34,37 @@ export const useToggleBookmark = () => {
   return useMutation(toggleBookmark, {
     onSuccess: () => {
       queryClient.invalidateQueries("user-validate");
+      queryClient.invalidateQueries("Bookmark-List");
+      queryClient.invalidateQueries("Infinite-Bookmark-List");
     },
   });
 };
 
-const getBookmarkList = () => {
-  return instance.get(`bookmark`);
+const getBookmarkList = ({ pageParam = 1, limit }) => {
+  return instance.get(`bookmark`, {
+    params: {
+      page: pageParam,
+      limit,
+    },
+  });
 };
 
-export const useGetBookmarkList = () => {
-  return useQuery(["Bookmark-List"], () => getBookmarkList(), {});
+export const useGetBookmarkList = ({ page = 1, limit }) => {
+  return useQuery(
+    ["Bookmark-List", page, limit],
+    () => getBookmarkList({ pageParam: page, limit }),
+    {}
+  );
+};
+
+export const useInfiniteBookmarkList = () => {
+  return useInfiniteQuery(["Infinite-Bookmark-List"], getBookmarkList, {
+    select: (data) => {
+      return data.pages.flatMap((p) => p.data.data);
+    },
+    getNextPageParam: (lastPage) => {
+      if (lastPage.data.page * lastPage.data.limit < lastPage.data.total)
+        return lastPage.data.page + 1;
+    },
+  });
 };
