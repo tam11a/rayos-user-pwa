@@ -118,7 +118,6 @@ const Steppers = ({ timelines }) => {
                   </Alert>
                 </StepContent>
               </Hidden>
-              s
             </Step>
           ))}
       </Stepper>

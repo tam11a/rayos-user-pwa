@@ -32,6 +32,7 @@ import { TbFileInvoice } from "react-icons/tb";
 import { GrMail } from "react-icons/gr";
 import Steppers from "./Steppers";
 import OrderStatus from "../../components/OrderStatus";
+import { MdRateReview } from "react-icons/md";
 
 const OrderInfo = () => {
   const snack = React.useContext(snackContext);
@@ -49,7 +50,7 @@ const OrderInfo = () => {
   React.useEffect(() => {
     setProductInfo(orderInfo?.data?.data?.products || []);
   }, [isLoading]);
-  console.log(productInfo);
+  console.log(orderInfo);
 
   return (
     <>
@@ -142,11 +143,11 @@ const OrderInfo = () => {
                             mr: 1,
                           }}
                         >
-                          <IoIosImages
+                          {/* <IoIosImages
                             style={{
                               fontSize: "1.8em",
                             }}
-                          />
+                          /> */}
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText
@@ -219,6 +220,19 @@ const OrderInfo = () => {
                         {prodItem?.quantity * prodItem?.product?.sellPrice || 0}{" "}
                         ৳
                       </Typography>
+                      {orderInfo?.data?.data?.status === "Delivered" ||
+                      orderInfo?.data?.data?.status === "Returned" ? (
+                        <IconButton
+                          size={"small"}
+                          sx={{ ml: 1 }}
+                          color={"black"}
+                          disabled={!!prodItem?.review}
+                        >
+                          <MdRateReview />
+                        </IconButton>
+                      ) : (
+                        <></>
+                      )}
                     </ListItem>
                   );
                 })}

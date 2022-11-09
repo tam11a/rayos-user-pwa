@@ -40,7 +40,7 @@ const AppRoute = () => {
           <Route index element={<User />} />
           <Route path="order">
             <Route index element={<Order />} />
-            <Route path=":orderId" element={<OrderInfo />} />
+            <Route path=":oid" element={<OrderInfo />} />
           </Route>
           {/* <Route path="wallet" element={<Wallet />} /> */}
         </Route>
