@@ -13,6 +13,7 @@ import ProcessOrder from "../pages/ProcessOrder";
 import User from "../pages/User";
 import ProductView from "../pages/ProductView";
 import Order from "../pages/User/Order";
+import OrderInfo from "../pages/User/OrderInfo";
 import Test from "../pages/Test";
 
 const AppRoute = () => {
@@ -39,7 +40,7 @@ const AppRoute = () => {
           <Route index element={<User />} />
           <Route path="order">
             <Route index element={<Order />} />
-            <Route path=":orderId" element={<></>} />
+            <Route path=":orderId" element={<OrderInfo />} />
           </Route>
           {/* <Route path="wallet" element={<Wallet />} /> */}
         </Route>
