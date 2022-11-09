@@ -1,41 +1,78 @@
 import { Paper, Avatar, Stack, Grid, Typography, Rating } from "@mui/material";
 import React from "react";
+import { useParams } from "react-router-dom";
+import { useGetReviewsByProductID } from "../../query/review";
+import snackContext from "../../context/snackProvider";
+import { authContext } from "../../context/authProvider";
+import { getAttachment } from "../../service/instance";
+import moment from "moment/moment";
 
 const Index = () => {
+  const { productId } = useParams();
+  const authCntxt = React.useContext(authContext);
+  const snack = React.useContext(snackContext);
+
+  const {
+    data: reviewData,
+    isLoading,
+    isError,
+  } = useGetReviewsByProductID(productId);
+
+  const [review, setReview] = React.useState({});
+
+  React.useEffect(() => {
+    setReview(reviewData?.data?.data || []);
+  }, [isLoading]);
+  console.log(review);
   return (
     <>
-      <Paper elevation={0}>
-        <Grid>
-          <Stack
-            direction="row"
-            alignItems={"start"}
-            justifyContent={"space-between"}
-          >
+      {review?.map?.((perCat, index) => (
+        <React.Fragment key={index}>
+          <Paper elevation={0} sx={{ my: 2 }}>
             <Stack
               direction="row"
-              columnGap={3}
-              alignItems="start"
-              width="40vw"
-              minWidth={"200px"}
+              alignItems={"start"}
+              justifyContent={"space-between"}
+              columnGap={4}
             >
-              <Avatar sx={{ width: 56, height: 56 }} />
-              <Stack direction="column" rowGap={0.5}>
-                <Typography>User FullName </Typography>
-                <Rating size="small" />
+              <Stack
+                direction="column"
+                alignItems={"center"}
+                rowGap={0.5}
+                maxWidth="62px"
+              >
+                <Avatar
+                  sx={{ width: 38, height: 38 }}
+                  src={getAttachment(perCat.author.image)}
+                  alt={perCat.author.fullName}
+                />
+                <Typography
+                  variant={"caption"}
+                  sx={{ fontWeight: 600 }}
+                  noWrap="wrap"
+                  maxWidth="62px"
+                >
+                  {perCat.author.userName}{" "}
+                </Typography>
+              </Stack>
+              <Stack direction="column" rowGap={0.5} flex={1}>
+                <Rating
+                  name="half-rating-read"
+                  value={perCat?.rating}
+                  precision={0.1}
+                  size="small"
+                  readOnly
+                />
+                <Typography>{perCat?.message}</Typography>
+                <Typography variant={"caption"}>
+                  {" "}
+                  {moment(perCat?.createdAt).format("lll")}
+                </Typography>
               </Stack>
             </Stack>
-            <Typography>
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-              reprehenderit in voluptate velit esse cillum dolore eu fugiat
-              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-              sunt in culpa qui officia deserunt mollit anim id est laborum."
-            </Typography>
-          </Stack>
-        </Grid>
-      </Paper>
+          </Paper>
+        </React.Fragment>
+      ))}
     </>
   );
 };

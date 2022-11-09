@@ -61,7 +61,7 @@ const Index = () => {
     if (!productInfo?.status) return;
     setProduct(productInfo?.data?.data);
   }, [isLoading, isRefetching]);
-  console.log(product);
+  // console.log(product);
 
   React.useEffect(() => {
     setImgList([]);
@@ -494,7 +494,7 @@ const Index = () => {
         </Grid>
 
         {/* Description part */}
-        <Grid item xs={12} mb={4}>
+        <Grid item xs={12} mb={1}>
           <Typography
             variant={"h6"}
             sx={{
@@ -523,11 +523,12 @@ const Index = () => {
             Ratings & Reviews:
           </Typography>
           <Stack
-            direction="row"
+            direction={{ xs: "column", sm: "row" }}
             alignItems={"start"}
             justifyContent={"space-between"}
             width={"95vw"}
             maxWidth={"600px"}
+            rowGap={1}
           >
             <Stack direction={"column"}>
               <Stack direction={"row"} alignItems={"baseline"}>
@@ -550,6 +551,7 @@ const Index = () => {
                   fontSize: "16px",
                   fontWeight: "500",
                   color: "#72808F",
+                  paddingLeft: "8px",
                 }}
               >
                 {isLoading ? (
