@@ -20,6 +20,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { authContext } from "../../context/authProvider";
 import { useGetProductByID, useToggleBookmark } from "../../query/product";
 import { getAttachment } from "../../service/instance";
+import ReviewBox from "../../components/ReviewBox";
 
 import {
   AiFillHeart,
@@ -662,6 +663,9 @@ const Index = () => {
               </Stack>
             </Stack>
           </Stack>
+          <Box sx={{ mt: 2 }}>
+            <ReviewBox />
+          </Box>
         </Grid>
       </Grid>
     </Container>
