@@ -20,7 +20,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { authContext } from "../../context/authProvider";
 import { useGetProductByID, useToggleBookmark } from "../../query/product";
 import { getAttachment } from "../../service/instance";
-import ReviewBox from "../../components/ReviewBox";
+import ReviewBoxs from "../../components/ReviewBoxs";
 
 import {
   AiFillHeart,
@@ -283,7 +283,7 @@ const Index = () => {
                   ) : (
                     product?.rating?.count?.all
                   )}{" "}
-                  ratings
+                  reviews
                 </span>
               </Stack>
             </Box>
@@ -559,118 +559,65 @@ const Index = () => {
                 ) : (
                   product?.rating?.count?.all
                 )}
-                {" Ratings"}
+                {" Reviews"}
               </span>
             </Stack>
             <Stack direction={"column"}>
-              <Stack direction="row" alignItems={"center"} columnGap={1}>
-                <Rating
-                  name="half-rating-read"
-                  value={5}
-                  precision={0.1}
-                  size="small"
-                  readOnly
-                />
-                <LinearProgress
-                  variant="determinate"
-                  value={
-                    (product?.rating?.count?.five /
-                      product?.rating?.count?.all) *
-                    100
-                  }
-                  sx={{ width: "200px", height: "10px", color: "gray" }}
-                  color="rating"
-                />
-                <Typography>{product?.rating?.count?.five}</Typography>
-              </Stack>
-              <Stack direction="row" alignItems={"center"} columnGap={1}>
-                <Rating
-                  name="half-rating-read"
-                  value={4}
-                  precision={0.1}
-                  size="small"
-                  readOnly
-                />
-                <LinearProgress
-                  variant="determinate"
-                  value={
-                    (product?.rating?.count?.four /
-                      product?.rating?.count?.all) *
-                    100
-                  }
-                  sx={{ width: "200px", height: "10px", color: "gray" }}
-                  color="rating"
-                />
-                <Typography>{product?.rating?.count?.four}</Typography>
-              </Stack>
-              <Stack direction="row" alignItems={"center"} columnGap={1}>
-                <Rating
-                  name="half-rating-read"
-                  value={3}
-                  precision={0.1}
-                  size="small"
-                  readOnly
-                />
-                <LinearProgress
-                  variant="determinate"
-                  value={
-                    (product?.rating?.count?.three /
-                      product?.rating?.count?.all) *
-                    100
-                  }
-                  sx={{ width: "200px", height: "10px", color: "gray" }}
-                  color="rating"
-                />
-                <Typography>{product?.rating?.count?.three}</Typography>
-              </Stack>
-              <Stack direction="row" alignItems={"center"} columnGap={1}>
-                <Rating
-                  name="half-rating-read"
-                  value={2}
-                  precision={0.1}
-                  size="small"
-                  readOnly
-                />
-                <LinearProgress
-                  variant="determinate"
-                  value={
-                    (product?.rating?.count?.two /
-                      product?.rating?.count?.all) *
-                    100
-                  }
-                  sx={{ width: "200px", height: "10px", color: "gray" }}
-                  color="rating"
-                />
-                <Typography>{product?.rating?.count?.two}</Typography>
-              </Stack>
-              <Stack direction="row" alignItems={"center"} columnGap={1}>
-                <Rating
-                  name="half-rating-read"
-                  value={1}
-                  precision={0.1}
-                  size="small"
-                  readOnly
-                />
-                <LinearProgress
-                  variant="determinate"
-                  value={
-                    (product?.rating?.count?.one /
-                      product?.rating?.count?.all) *
-                    100
-                  }
-                  sx={{ width: "200px", height: "10px", color: "gray" }}
-                  color="rating"
-                />
-                <Typography>{product?.rating?.count?.one}</Typography>
-              </Stack>
+              <RatingLine
+                ratingValue={5}
+                count={product?.rating?.count?.five}
+                total={product?.rating?.count?.all}
+              />
+              <RatingLine
+                ratingValue={4}
+                count={product?.rating?.count?.four}
+                total={product?.rating?.count?.all}
+              />
+
+              <RatingLine
+                ratingValue={3}
+                count={product?.rating?.count?.three}
+                total={product?.rating?.count?.all}
+              />
+              <RatingLine
+                ratingValue={2}
+                count={product?.rating?.count?.two}
+                total={product?.rating?.count?.all}
+              />
+              <RatingLine
+                ratingValue={1}
+                count={product?.rating?.count?.one}
+                total={product?.rating?.count?.all}
+              />
             </Stack>
           </Stack>
           <Box sx={{ mt: 2 }}>
-            <ReviewBox />
+            <ReviewBoxs />
           </Box>
         </Grid>
       </Grid>
     </Container>
+  );
+};
+
+const RatingLine = ({ ratingValue, count, total }) => {
+  return (
+    <Stack direction="row" alignItems={"center"} columnGap={1}>
+      <Rating
+        name="half-rating-read"
+        value={ratingValue} // ratingValue
+        precision={0.1}
+        size="small"
+        readOnly
+      />
+      <LinearProgress
+        variant="determinate"
+        value={total ? (count / total) * 100 : 0}
+        sx={{ width: "200px", height: "10px", color: "gray" }}
+        color="rating"
+      />
+      <Typography>{count}</Typography>
+    </Stack>
   );
 };
 
