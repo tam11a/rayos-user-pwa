@@ -15,14 +15,12 @@ import { categoryContext } from "../../context/categoryProvider";
 import snackContext from "../../context/snackProvider";
 import {
   useGetCategoryInfo,
-  useGetProductListByCategory,
-  useGetProductListBySubcategory,
   useGetSubCategoryInfo,
   useGetSubCategoryListByCategory,
   useInfiniteProductListByCategory,
+  useInfiniteProductListBySubcategory,
 } from "../../query/cat-subcat";
 import {
-  useGetAllProdCat,
   useGetBookmarkList,
   useInfiniteBookmarkList,
   useSearchProduct,
@@ -407,25 +405,29 @@ const CategoryProduct = ({ id }) => {
 const SubcategoryProduct = ({ id }) => {
   const { createSnack } = React.useContext(snackContext);
   let [info, setInfo] = React.useState({});
-  let [productList, setProductList] = React.useState([]);
   const { data, isLoading, isError, error } = useGetSubCategoryInfo(id);
 
   React.useEffect(() => {
     if (isLoading) return;
     setInfo(data ? data?.data?.data : {});
-    // setProductList(data ? data?.data?.data?.products : []);
     if (isError)
       if (error.response.status === 400)
         createSnack(error?.response.data.msg, "error");
       else createSnack("Something Went Wrong!", "error");
   }, [data]);
 
-  const { data: productListbySubcat, isLoading: productLoading } =
-    useGetProductListBySubcategory(id);
+  const {
+    isLoading: infIsLoading,
+    data: productList,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetched,
+  } = useInfiniteProductListBySubcategory({ id });
+
   React.useEffect(() => {
-    if (!productListbySubcat) return;
-    setProductList(productListbySubcat?.data?.data || []);
-  }, [productListbySubcat]);
+    if (hasNextPage) fetchNextPage();
+  }, [isFetched, hasNextPage, productList]);
 
   return (
     <>
@@ -461,7 +463,27 @@ const SubcategoryProduct = ({ id }) => {
           justifyContent: "flex-start",
         }}
       >
-        {productLoading ? (
+        <>
+          {productList?.map((product) => (
+            <Grid
+              key={product.id}
+              item
+              xs={5.9}
+              sm={3.85}
+              md={2.92}
+              lg={2.3}
+              sx={{
+                height: {
+                  xs: "280px",
+                  md: "310px",
+                },
+              }}
+            >
+              <ProductBox product={product} />
+            </Grid>
+          ))}
+        </>
+        {infIsLoading || isFetching ? (
           <>
             {[1, 2, 3, 4, 5, 6, 7].map((num) => (
               <Skeleton
@@ -483,26 +505,7 @@ const SubcategoryProduct = ({ id }) => {
             ))}
           </>
         ) : (
-          <>
-            {productList?.map((product) => (
-              <Grid
-                key={product.id}
-                item
-                xs={5.9}
-                sm={3.85}
-                md={2.92}
-                lg={2.3}
-                sx={{
-                  height: {
-                    xs: "280px",
-                    md: "310px",
-                  },
-                }}
-              >
-                <ProductBox product={product} />
-              </Grid>
-            ))}
-          </>
+          <></>
         )}
       </Grid>
     </>

@@ -41,14 +41,6 @@ const getProductListByCategory = ({ queryKey, pageParam = 1 }) => {
   });
 };
 
-export const useGetProductListByCategory = (id) => {
-  return useQuery(
-    ["get-product-list-by-category", { id }],
-    () => getProductListByCategory({ id }),
-    {}
-  );
-};
-
 export const useInfiniteProductListByCategory = ({ id }) => {
   return useInfiniteQuery(
     ["Infinite-Catprod-List", id],
@@ -66,15 +58,28 @@ export const useInfiniteProductListByCategory = ({ id }) => {
   );
 };
 
-const getProductListBySubcategory = (id) => {
-  return instance.get(`subcategory/${id}/products`);
+const getProductListBySubcategory = ({ queryKey, pageParam = 1 }) => {
+  return instance.get(`subcategory/${queryKey[1]}/products`, {
+    params: {
+      page: pageParam,
+    },
+  });
 };
 
-export const useGetProductListBySubcategory = (id) => {
-  return useQuery(
-    ["get-product-list-by-subcategory", id],
-    () => getProductListBySubcategory(id),
-    {}
+export const useInfiniteProductListBySubcategory = ({ id }) => {
+  return useInfiniteQuery(
+    ["Infinite-Subcatprod-List", id],
+    getProductListBySubcategory,
+    {
+      select: (data) => {
+        return data.pages.flatMap((p) => p.data.data);
+      },
+      getNextPageParam: (lastPage) => {
+        if (lastPage.data.page * lastPage.data.limit < lastPage.data.total)
+          return lastPage.data.page + 1;
+      },
+      enabled: !!id,
+    }
   );
 };
 
