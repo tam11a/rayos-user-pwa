@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useQuery } from "react-query";
 import instance from "../service/instance";
 
 const getReviewsByProductID = (id) => {
