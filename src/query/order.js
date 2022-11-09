@@ -70,3 +70,33 @@ export const useGetOrderListCartByUser = (params) => {
     }
   );
 };
+
+const getProductsByOrderID = (order_id) => {
+  return instance.get(`order/${order_id}`);
+};
+
+export const useGetProductsByOrderID = (order_id) => {
+  return useQuery(
+    ["get-products-by-order-id", order_id],
+    () => getProductsByOrderID(order_id),
+    {
+      // refetchInterval: 20000,
+    }
+  );
+};
+
+// order status
+const updateOrderStatus = ({ id, status }) => {
+  return instance.put(`order/${id}?status=${status}`);
+};
+
+export const useUpdateOrderStatus = () => {
+  const queryClient = useQueryClient();
+  return useMutation(updateOrderStatus, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("get-all-order");
+      queryClient.invalidateQueries("get-user-orderlist-by-id");
+      queryClient.invalidateQueries("get-products-by-order-id");
+    },
+  });
+};
