@@ -2,6 +2,7 @@
 // D5E4DB -> Light Green
 
 import { createTheme } from "@mui/material/styles";
+import { amber } from "@mui/material/colors";
 
 // colors
 const primary = "#272643";
@@ -53,6 +54,11 @@ const theme = createTheme({
     warning: {
       main: "#F49320",
       contrastText: "#272725",
+    },
+    rating: {
+      main: amber[500],
+      dark: amber[900],
+      light: amber[200],
     },
   },
   typography: {
