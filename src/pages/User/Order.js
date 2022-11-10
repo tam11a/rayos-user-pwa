@@ -377,7 +377,7 @@ const Order = ({ uid }) => {
             my: 2,
           }}
           columns={cols}
-          rows={data?.data?.data || []}
+          rows={data?.data?.data?.data || []}
           isLoading={isLoading}
           paginationMode={"server"}
           rowCount={data?.data?.total || 0}
