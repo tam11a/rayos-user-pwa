@@ -23,6 +23,7 @@ import {
 import {
   useGetBookmarkList,
   useInfiniteBookmarkList,
+  useInfiniteSearch,
   useSearchProduct,
 } from "../../query/product";
 
@@ -165,19 +166,18 @@ const WishListProduct = () => {
 };
 
 const SearchProduct = ({ name }) => {
-  const { createSnack } = React.useContext(snackContext);
-  let [productList, setProductList] = React.useState([]);
-  const { data, isLoading, isError, error } = useSearchProduct(name);
+  const {
+    isLoading: infIsLoading,
+    data: productList,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetched,
+  } = useInfiniteSearch({ search: name });
 
   React.useEffect(() => {
-    if (isLoading) return;
-    setProductList(data ? data?.data.data : []);
-    if (isError)
-      if (error.response.status === 400)
-        createSnack(error?.response.data.msg, "error");
-      else createSnack("Something Went Wrong!", "error");
-  }, [data, error]);
-  // console.log(productList);
+    if (hasNextPage) fetchNextPage();
+  }, [isFetched, hasNextPage, productList]);
 
   return (
     <>
@@ -187,10 +187,10 @@ const SearchProduct = ({ name }) => {
           textTransform: "capitalize",
         }}
       >
-        {isLoading ? <Skeleton width={"120px"} /> : "Search : " + name}
+        {infIsLoading ? <Skeleton width={"120px"} /> : "Search : " + name}
       </Typography>
       <Typography variant={"caption"}>
-        {isLoading ? (
+        {infIsLoading ? (
           <Skeleton width={"220px"} />
         ) : (
           `${productList?.length} Results Found`
@@ -208,7 +208,25 @@ const SearchProduct = ({ name }) => {
           justifyContent: "flex-start",
         }}
       >
-        {isLoading ? (
+        {productList?.map((product) => (
+          <Grid
+            key={product.id}
+            item
+            xs={5.9}
+            sm={3.85}
+            md={2.92}
+            lg={2.3}
+            sx={{
+              height: {
+                xs: "280px",
+                md: "310px",
+              },
+            }}
+          >
+            <ProductBox product={product} />
+          </Grid>
+        ))}
+        {infIsLoading || isFetching ? (
           <>
             {[1, 2, 3, 4, 5, 6, 7].map((num) => (
               <Skeleton
@@ -230,26 +248,7 @@ const SearchProduct = ({ name }) => {
             ))}
           </>
         ) : (
-          <>
-            {productList?.map((product) => (
-              <Grid
-                key={product.id}
-                item
-                xs={5.9}
-                sm={3.85}
-                md={2.92}
-                lg={2.3}
-                sx={{
-                  height: {
-                    xs: "280px",
-                    md: "310px",
-                  },
-                }}
-              >
-                <ProductBox product={product} />
-              </Grid>
-            ))}
-          </>
+          <></>
         )}
       </Grid>
     </>
