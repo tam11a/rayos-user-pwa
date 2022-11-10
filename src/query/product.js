@@ -17,14 +17,27 @@ export const useGetProductByID = (id) => {
   });
 };
 
-const searchProduct = (name) => {
-  return instance.get(`product/search-product?type=name&keyword=${name}`);
+const searchProduct = ({ queryKey, pageParam = 1 }) => {
+  return instance.get(`search`, {
+    params: {
+      search: queryKey[1],
+      page: pageParam,
+    },
+  });
 };
 
-export const useSearchProduct = (name) => {
-  return useQuery(["search-product", name], () => searchProduct(name), {});
+export const useInfiniteSearch = ({ search }) => {
+  return useInfiniteQuery(["Infinite-Subcatprod-List", search], searchProduct, {
+    select: (data) => {
+      return data.pages.flatMap((p) => p.data.data);
+    },
+    getNextPageParam: (lastPage) => {
+      if (lastPage.data.page * lastPage.data.limit < lastPage.data.total)
+        return lastPage.data.page + 1;
+    },
+    enabled: !!search,
+  });
 };
-
 const toggleBookmark = (id) => {
   return instance.put(`bookmark/${id}`);
 };
