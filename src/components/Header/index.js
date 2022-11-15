@@ -57,6 +57,11 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import InstallationButton from "./InstallationButton";
 import { authContext } from "../../context/authProvider";
 import { cartContext } from "../../context/cartProvider";
+import { FaMicrophone, FaMicrophoneSlash } from "react-icons/fa";
+
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from "react-speech-recognition";
 
 const Index = () => {
   const authCntxt = React.useContext(authContext);
@@ -366,12 +371,30 @@ const Index = () => {
 
 export const SearchProduct = ({ inputStyle, ...others }) => {
   let navigate = useNavigate();
+
+  const {
+    listening,
+    browserSupportsSpeechRecognition,
+    finalTranscript,
+    resetTranscript,
+    isMicrophoneAvailable,
+  } = useSpeechRecognition();
+
+  const [value, setValue] = React.useState("");
+
+  React.useEffect(() => {
+    if (!finalTranscript) return;
+    setValue(finalTranscript);
+    navigate(`/search?q=${finalTranscript}`);
+  }, [finalTranscript]);
+
   return (
     <form
       style={{
         minWidth: "180%",
         ...others.style,
       }}
+      id={"search-form-full"}
       onSubmit={(e) => {
         e.preventDefault();
         const data = new FormData(e.target);
@@ -381,13 +404,34 @@ export const SearchProduct = ({ inputStyle, ...others }) => {
     >
       <InputBase
         startAdornment={
-          <BsSearch style={{ marginRight: "10px", fontSize: "1.3rem" }} />
+          <BsSearch style={{ marginRight: "10px", fontSize: "1rem" }} />
+        }
+        endAdornment={
+          browserSupportsSpeechRecognition && isMicrophoneAvailable ? (
+            <IconButton
+              onClick={
+                listening
+                  ? SpeechRecognition.stopListening
+                  : SpeechRecognition.startListening
+              }
+            >
+              {!listening ? (
+                <FaMicrophone style={{ fontSize: "1rem" }} />
+              ) : (
+                <FaMicrophoneSlash style={{ fontSize: "1rem" }} />
+              )}
+            </IconButton>
+          ) : (
+            <></>
+          )
         }
         sx={{
           bgcolor: "#ffffff88",
-          px: 1.5,
+          pl: 1.5,
+          pr: 0.5,
           borderRadius: "100px",
-          fontSize: "1.2rem",
+          fontSize: "1rem",
+          py: 0.5,
           // boxShadow: "inset 0 0 3px #000000",
           "& svg": {
             color: "primary.main",
@@ -397,6 +441,11 @@ export const SearchProduct = ({ inputStyle, ...others }) => {
         fullWidth
         placeholder={"Search..."}
         name={"search"}
+        value={value}
+        onChange={(e) => {
+          resetTranscript();
+          setValue(e.target.value);
+        }}
       />
     </form>
   );
@@ -462,9 +511,27 @@ export const CategoryDrawer = ({ open, handleClose }) => {
 
 export const SearchHeader = ({ search, sx }) => {
   let navigate = useNavigate();
+
+  const {
+    listening,
+    browserSupportsSpeechRecognition,
+    finalTranscript,
+    isMicrophoneAvailable,
+  } = useSpeechRecognition();
+
   const [searchText, setSearchText] = React.useState(
     search && search.type === "q" ? search.value : ""
   );
+
+  React.useEffect(() => {
+    if (!finalTranscript) return;
+    setSearchText(finalTranscript);
+  }, [finalTranscript]);
+
+  React.useEffect(() => {
+    navigate(`/search?q=${searchText}`);
+  }, [searchText]);
+
   return (
     <form
       style={{
@@ -480,7 +547,11 @@ export const SearchHeader = ({ search, sx }) => {
         endAdornment={
           <Stack direction={"row"}>
             {searchText ? (
-              <IconButton color="error" onClick={() => setSearchText("")}>
+              <IconButton
+                size={"small"}
+                color="error"
+                onClick={() => setSearchText("")}
+              >
                 <MdClose
                   style={{
                     color: "unset",
@@ -490,14 +561,29 @@ export const SearchHeader = ({ search, sx }) => {
             ) : (
               <></>
             )}
-            <IconButton type="submit">
+            {/* <IconButton type="submit">
               <BsSearch />
-            </IconButton>
+            </IconButton> */}
+            {browserSupportsSpeechRecognition && isMicrophoneAvailable ? (
+              <IconButton
+                onClick={
+                  listening
+                    ? SpeechRecognition.stopListening
+                    : SpeechRecognition.startListening
+                }
+                size={"small"}
+              >
+                {!listening ? <FaMicrophone /> : <FaMicrophoneSlash />}
+              </IconButton>
+            ) : (
+              <></>
+            )}
           </Stack>
         }
         sx={{
           bgcolor: "#ffffff88",
-          pl: 2,
+          pl: 1.5,
+          pr: 0.5,
           borderRadius: "100px",
           // boxShadow: "inset 0 0 3px #000000",
           "& svg": {
