@@ -439,7 +439,7 @@ export const SearchProduct = ({ inputStyle, ...others }) => {
           ...inputStyle,
         }}
         fullWidth
-        placeholder={"Search..."}
+        placeholder={listening ? "Listening...." : "Search..."}
         name={"search"}
         value={value}
         onChange={(e) => {
@@ -592,7 +592,7 @@ export const SearchHeader = ({ search, sx }) => {
           ...sx,
         }}
         fullWidth
-        placeholder={"Search..."}
+        placeholder={listening ? "Listening..." : "Search..."}
         name={"search"}
         value={searchText}
         onChange={(e) => setSearchText(e.target.value)}
