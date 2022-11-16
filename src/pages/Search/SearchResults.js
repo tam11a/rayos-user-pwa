@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Button,
   Chip,
   Container,
@@ -26,6 +27,8 @@ import {
   useInfiniteSearch,
   useSearchProduct,
 } from "../../query/product";
+import { getAttachment } from "../../service/instance";
+import ImageSlider from "../Home/ImageSlider";
 
 const SearchResults = ({ search }) => {
   return (
@@ -294,28 +297,41 @@ const CategoryProduct = ({ id }) => {
 
   return (
     <>
-      <Typography
-        variant={"h6"}
-        sx={{
-          textTransform: "capitalize",
-        }}
-      >
+      <ImageSlider homeImgList={info?.images || []} />
+      <Stack direction={"row"} alignItems={"center"} columnGap={2}>
         {isLoading ? (
-          <Skeleton width={"120px"} />
+          <Skeleton variant={"rectangular"} height={"70px"} width={"70px"} />
         ) : (
-          "Category : " + (info?.titleEn || "Not Found")
+          <Avatar
+            variant={"rounded"}
+            src={getAttachment(info?.icon?._id)}
+          ></Avatar>
         )}
-      </Typography>
-      <Typography variant={"caption"}>
-        {isLoading ? (
-          <Skeleton width={"220px"} />
-        ) : (
-          `${info.totalProducts || 0} Results Found`
-        )}
-      </Typography>
+        <Stack direction={"column"}>
+          <Typography
+            variant={"h6"}
+            sx={{
+              textTransform: "capitalize",
+              fontWeight: "600",
+            }}
+          >
+            {isLoading ? (
+              <Skeleton width={"120px"} />
+            ) : (
+              info?.titleEn || "Not Found"
+            )}
+          </Typography>
+          <Typography variant={"caption"}>
+            {isLoading ? (
+              <Skeleton width={"220px"} />
+            ) : (
+              `${productList?.length || 0} Results Found`
+            )}
+          </Typography>
+        </Stack>
+      </Stack>
       {suggestionList?.length ? (
         <>
-          <br />
           <Stack
             direction={"row"}
             rowGap={1}
@@ -330,6 +346,10 @@ const CategoryProduct = ({ id }) => {
               <Chip
                 label={suggestion.titleEn}
                 key={suggestion._id}
+                sx={{
+                  borderRadius: "2px",
+                  letterSpacing: "1px",
+                }}
                 clickable
                 component={Link}
                 to={`/search?subcategory=${suggestion._id}`}
@@ -347,7 +367,7 @@ const CategoryProduct = ({ id }) => {
         columnGap={0.6}
         flexWrap={"wrap"}
         sx={{
-          my: 2,
+          my: 1,
           alignItems: "center",
           justifyContent: "flex-start",
         }}
@@ -404,6 +424,7 @@ const CategoryProduct = ({ id }) => {
 const SubcategoryProduct = ({ id }) => {
   const { createSnack } = React.useContext(snackContext);
   let [info, setInfo] = React.useState({});
+  let [suggestionList, setSuggestionList] = React.useState([]);
   const { data, isLoading, isError, error } = useGetSubCategoryInfo(id);
 
   React.useEffect(() => {
@@ -414,6 +435,14 @@ const SubcategoryProduct = ({ id }) => {
         createSnack(error?.response.data.msg, "error");
       else createSnack("Something Went Wrong!", "error");
   }, [data]);
+
+  const { data: sublistData } = useGetSubCategoryListByCategory(
+    info?.category?._id
+  );
+  React.useEffect(() => {
+    if (!sublistData) return;
+    setSuggestionList(sublistData?.data?.data);
+  }, [sublistData]);
 
   const {
     isLoading: infIsLoading,
@@ -430,25 +459,65 @@ const SubcategoryProduct = ({ id }) => {
 
   return (
     <>
-      <Typography
-        variant={"h6"}
-        sx={{
-          textTransform: "capitalize",
-        }}
-      >
+      <Stack direction={"row"} alignItems={"center"} columnGap={2}>
         {isLoading ? (
-          <Skeleton width={"120px"} />
+          <Skeleton variant={"rectangular"} height={"70px"} width={"70px"} />
         ) : (
-          "Subcategory : " + (info?.titleEn || "Not Found")
+          <Avatar
+            variant={"rounded"}
+            src={getAttachment(info?.category?.icon)}
+          ></Avatar>
         )}
-      </Typography>
-      <Typography variant={"caption"}>
-        {isLoading ? (
-          <Skeleton width={"220px"} />
-        ) : (
-          `${productList?.length || 0} Results Found`
-        )}
-      </Typography>
+        <Stack direction={"column"}>
+          <Typography
+            variant={"h6"}
+            sx={{
+              textTransform: "capitalize",
+              fontWeight: "600",
+            }}
+          >
+            {isLoading ? <Skeleton width={"120px"} /> : info?.titleEn || ""}
+          </Typography>
+          <Typography variant={"caption"}>
+            {isLoading ? (
+              <Skeleton width={"220px"} />
+            ) : (
+              `${productList?.length || 0} Results Found`
+            )}
+          </Typography>
+        </Stack>
+      </Stack>
+
+      {suggestionList?.length ? (
+        <>
+          <Stack
+            direction={"row"}
+            rowGap={1}
+            columnGap={1}
+            alignItems={"center"}
+            flexWrap={"wrap"}
+            sx={{
+              pt: 1,
+            }}
+          >
+            {suggestionList?.map((suggestion) => (
+              <Chip
+                label={suggestion.titleEn}
+                key={suggestion._id}
+                sx={{
+                  borderRadius: "2px",
+                  letterSpacing: "1px",
+                }}
+                clickable
+                component={Link}
+                to={`/search?subcategory=${suggestion._id}`}
+              />
+            ))}
+          </Stack>
+        </>
+      ) : (
+        <></>
+      )}
 
       <Grid
         container
@@ -457,7 +526,7 @@ const SubcategoryProduct = ({ id }) => {
         columnGap={0.6}
         flexWrap={"wrap"}
         sx={{
-          my: 2,
+          my: 1,
           alignItems: "center",
           justifyContent: "flex-start",
         }}
@@ -529,7 +598,7 @@ export const ALlProductLayout = () => {
         <SearchSkeleton />
       ) : (
         <>
-          <Typography
+          {/* <Typography
             variant="h5"
             sx={{
               fontWeight: "bold",
@@ -540,7 +609,7 @@ export const ALlProductLayout = () => {
             }}
           >
             Products
-          </Typography>
+          </Typography> */}
 
           {productList?.map((perCat, index) => (
             <React.Fragment key={perCat._id}>
@@ -552,12 +621,18 @@ export const ALlProductLayout = () => {
                     justifyContent={"space-between"}
                     sx={{
                       my: 1,
+                      bgcolor: "#efefef",
+                      p: 1,
+                      pl: 2,
+                      borderRadius: "2px",
                     }}
                   >
                     <Typography
                       variant={"h6"}
                       sx={{
                         textTransform: "capitalize",
+                        fontWeight: "600",
+                        letterSpacing: "1px",
                       }}
                     >
                       {perCat.titleEn}
@@ -571,7 +646,7 @@ export const ALlProductLayout = () => {
                       See More
                     </Button>
                   </Stack>
-                  <Divider />
+                  {/* <Divider /> */}
                   <Stack
                     direction={"row"}
                     rowGap={1}
@@ -582,10 +657,16 @@ export const ALlProductLayout = () => {
                       my: 1,
                     }}
                   >
-                    {perCat?.subcategories?.map((perSubCat) => (
+                    {perCat?.subcategories?.slice?.(0, 4)?.map((perSubCat) => (
                       <Chip
                         label={perSubCat.titleEn}
                         key={perSubCat._id}
+                        sx={{
+                          borderRadius: "2px",
+                          letterSpacing: "1px",
+                          fontWeight: '500'
+                        }}
+                        color={'secondary'}
                         clickable
                         component={Link}
                         to={`/search?subcategory=${perSubCat._id}`}
@@ -623,7 +704,7 @@ export const ALlProductLayout = () => {
                       </Grid>
                     ))}
                   </Grid>
-                  {index !== productList.length - 1 && <Divider />}
+                  {/* {index !== productList.length - 1 && <Divider />} */}
                 </>
               ) : (
                 <></>

@@ -91,7 +91,9 @@ export const useGetSubCategoryListByCategory = (id) => {
   return useQuery(
     ["get-subcategory-list-by-category", id],
     () => getSubCategoryListByCategory(id),
-    {}
+    {
+      enabled: !!id,
+    }
   );
 };
 

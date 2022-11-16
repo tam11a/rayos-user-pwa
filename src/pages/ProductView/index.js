@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Alert,
   Avatar,
   Box,
   Button,
@@ -35,6 +36,7 @@ import { responseHandler } from "../../utilities/response-handler";
 import snackContext from "../../context/snackProvider";
 import { IoIosImages } from "react-icons/io";
 import { useCreateCart } from "../../query/cart";
+import { TbNoteOff } from "react-icons/tb";
 
 const Index = () => {
   const { productId } = useParams();
@@ -64,22 +66,20 @@ const Index = () => {
   // console.log(product);
 
   React.useEffect(() => {
-    setImgList([]);
-    if (product.image)
-      setImgList(
-        product.multiimgs
+    if (isLoading || isError) return;
+    try {
+      setImgList([
+        ...(product && product?.image
           ? [
               {
-                _id: product.image,
-              },
-              ...product.multiimgs,
-            ]
-          : [
-              {
-                _id: product.image,
+                image: product?.image,
               },
             ]
-      );
+          : []),
+        ...(product ? product?.images : []),
+      ]);
+    } catch {}
+
     handleChange(
       {},
       product?.variants?.filter((v) => v.isActive && v.quantity)?.[0]?._id
@@ -87,7 +87,7 @@ const Index = () => {
   }, [product]);
 
   React.useEffect(() => {
-    setPickedPhoto(imgList[0]?._id);
+    setPickedPhoto(imgList[0]?.image);
   }, [imgList]);
 
   const [alignment, setAlignment] = React.useState();
@@ -141,9 +141,39 @@ const Index = () => {
     <Container
       sx={{
         py: 1,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        maxWidth: "300px",
+        rowGap: 1,
       }}
     >
-      No Product Found
+      <Avatar
+        sx={{
+          width: "80vw",
+          maxWidth: "300px",
+          border: "1px solid",
+          borderColor: "#00000011",
+          minHeight: "450px",
+          bgcolor: "transparent",
+          color: "primary.dark",
+        }}
+        variant={"rounded"}
+      >
+        <TbNoteOff
+          style={{
+            fontSize: "5em",
+          }}
+        />
+      </Avatar>
+      <Alert
+        severity="error"
+        sx={{
+          width: "100%",
+        }}
+      >
+        No Product Found
+      </Alert>
     </Container>
   ) : (
     <Container
@@ -180,7 +210,7 @@ const Index = () => {
               border: "1px solid",
               borderColor: "#00000011",
               width: "100%",
-              height: "max-content",
+              // height: "max-content",
               minHeight: "450px",
               bgcolor: "transparent",
               color: "primary.dark",
@@ -215,7 +245,7 @@ const Index = () => {
                       // variant={"outlined"}
                       color={"black"}
                       // disableElevation
-                      onClick={() => setPickedPhoto(perImg._id)}
+                      onClick={() => setPickedPhoto(perImg.image)}
                       sx={{
                         display: "flex",
                         flexDirection: "column",
@@ -230,8 +260,8 @@ const Index = () => {
                       }}
                     >
                       <Avatar
-                        src={getAttachment(perImg._id)}
-                        alt={perImg._id}
+                        src={getAttachment(perImg.image)}
+                        alt={perImg.image}
                         variant={"square"}
                         sx={{
                           width: { xs: "55px", md: "75px" },
@@ -355,13 +385,12 @@ const Index = () => {
             {authCntxt.isVerified ? (
               <Stack direction="row" spacing={0.5} alignItems={"center"}>
                 <IconButton sx={{ color: "#018037" }}>
-                  {/* <LocalPhoneRoundedIcon /> */}
                   <MdCall />
                 </IconButton>
 
-                <IconButton sx={{ color: "#5766CC" }}>
+                {/* <IconButton sx={{ color: "#5766CC" }}>
                   <Icon icon="jam:messages-f" />
-                </IconButton>
+                </IconButton> */}
               </Stack>
             ) : (
               <></>
@@ -487,7 +516,7 @@ const Index = () => {
               mt: 1,
             }}
             disabled={!product.variants?.length || cartCreationLoading}
-            onClick={postCart}
+            onClick={authCntxt.isVerified ? postCart : authCntxt.handleOpen}
           >
             Add to cart
           </Button>
@@ -533,7 +562,7 @@ const Index = () => {
             <Stack direction={"column"}>
               <Stack direction={"row"} alignItems={"baseline"}>
                 <Typography variant={"h3"} sx={{ fontWeight: "500" }}>
-                  {product?.rating?.total}
+                  {product?.rating?.total || 0}
                 </Typography>
                 <Typography variant={"h4"} color={"gray"}>
                   /5
@@ -557,7 +586,7 @@ const Index = () => {
                 {isLoading ? (
                   <Skeleton variant={"text"} />
                 ) : (
-                  product?.rating?.count?.all
+                  product?.rating?.count?.all || 0
                 )}
                 {" Reviews"}
               </span>

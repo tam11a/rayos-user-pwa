@@ -37,7 +37,7 @@ const Index = () => {
   return (
     <>
       {review?.slice?.(0, 2).map?.((perCat, index) => (
-        <React.Fragment key={index}>
+        <React.Fragment key={perCat?._id}>
           <ReviewBox perCat={perCat} />
         </React.Fragment>
       ))}
@@ -45,7 +45,7 @@ const Index = () => {
         <>
           <Collapse in={checked}>
             {review?.slice?.(2, review.length).map?.((perCat, index) => (
-              <React.Fragment key={index}>
+              <React.Fragment key={perCat?._id}>
                 <ReviewBox perCat={perCat} />
               </React.Fragment>
             ))}

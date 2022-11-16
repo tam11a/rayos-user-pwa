@@ -19,7 +19,7 @@ const CategoryFlexBoxs = () => {
 
   return (
     <>
-      <Typography
+      {/* <Typography
         variant="h5"
         sx={{
           fontWeight: "bold",
@@ -37,7 +37,7 @@ const CategoryFlexBoxs = () => {
         ) : (
           ""
         )}
-      </Typography>
+      </Typography> */}
       <Stack
         sx={{ my: 1, maxWidth: "99vw", mx: "auto" }}
         direction={"row"}
@@ -74,12 +74,12 @@ const CategoryFlexBoxs = () => {
                     xs: "110px",
                     md: "130px",
                   },
-                  boxShadow: "2",
+                  // boxShadow: "2",
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
                   justifyContent: "center",
-                  border: "1px solid",
+                  border: "3px solid",
                   borderColor: "primary.contrastText",
                   rowGap: 1,
                   textDecoration: "none",

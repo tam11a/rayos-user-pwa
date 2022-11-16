@@ -157,12 +157,12 @@ const Index = () => {
                   justifyContent: "flex-end",
                 }}
               >
-                <Badge overlap={"circular"} badgeContent={5} color="black">
+                {/* <Badge overlap={"circular"} badgeContent={5} color="black">
                   <IconButton color={"black"} component={Link} to={"/chat"}>
                     <MdChatBubbleOutline />
                   </IconButton>
-                </Badge>
-                <Badge overlap={"circular"} badgeContent={5} color="black">
+                </Badge> */}
+                <Badge overlap={"circular"} badgeContent={0} color="black">
                   <IconButton
                     color={"black"}
                     component={Link}
@@ -286,7 +286,7 @@ const Index = () => {
                 >
                   CATEGORIES
                 </Button>
-                <Button
+                {/* <Button
                   size={"large"}
                   sx={{
                     fontWeight: 600,
@@ -301,7 +301,7 @@ const Index = () => {
                   }}
                 >
                   Gadget madness
-                </Button>
+                </Button> */}
               </span>
               <span>
                 {/* <InstallationButton />
@@ -529,7 +529,7 @@ export const SearchHeader = ({ search, sx }) => {
   }, [finalTranscript]);
 
   React.useEffect(() => {
-    navigate(`/search?q=${searchText}`);
+    if (searchText) navigate(`/search?q=${searchText}`);
   }, [searchText]);
 
   return (

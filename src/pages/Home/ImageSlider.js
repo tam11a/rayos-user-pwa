@@ -18,10 +18,6 @@ const ImageSlider = ({ homeImgList }) => {
   return (
     <Box
       sx={{
-        mx: {
-          xs: 1,
-          md: 0,
-        },
         "& .swiper-pagination-bullet": {
           bgcolor: "white.main",
           // border: "1px solid #aaa",
@@ -47,6 +43,12 @@ const ImageSlider = ({ homeImgList }) => {
                 px: 0.5,
                 "& img": {
                   width: "100%",
+                  height: {
+                    xs: "170px",
+                    md: "300px",
+                  },
+                  objectFit: "cover",
+                  objectPosition: "center",
                   borderRadius: "4px",
                 },
               }}

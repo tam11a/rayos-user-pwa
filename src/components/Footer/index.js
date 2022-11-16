@@ -91,12 +91,8 @@ const Index = () => {
                     Information
                   </Typography>
                   <Typography>About Us</Typography>
-                  <Typography>Delivery Information</Typography>
-                  <Typography>Careery</Typography>
                   <Typography>Privacy Policy</Typography>
                   <Typography>Terms & Conditions</Typography>
-                  <Typography>FAQs</Typography>
-                  <Typography>Return Policy</Typography>
                 </Stack>
               </Grid>
               <Grid item xs={4}>
@@ -121,8 +117,8 @@ const Index = () => {
                     Customer Service
                   </Typography>
                   <Typography>Contact Us</Typography>
-                  <Typography>Return</Typography>
-                  <Typography>Order History</Typography>
+                  <Typography>Delivery Policy</Typography>
+                  <Typography>Return Policy</Typography>
                 </Stack>
               </Grid>
               <Grid item xs={4}>
@@ -199,7 +195,7 @@ const Index = () => {
                     >
                       <IoCallOutline />
                     </IconButton>
-                    <Typography>01878044347</Typography>
+                    <Typography>01768161994</Typography>
                   </Stack>
                 </Stack>
               </Grid>
@@ -328,7 +324,7 @@ const Index = () => {
                 component={Link}
                 to={"/notification"}
               >
-                <Badge overlap={"circular"} badgeContent={1} color="black">
+                <Badge overlap={"circular"} badgeContent={0} color="black">
                   <IoMdNotificationsOutline />
                 </Badge>
               </IconButton>
@@ -456,27 +452,12 @@ const FooterDrawer = ({ open, handleClose }) => {
                     sx: {
                       color: "#ffffff77",
                       fontSize: "0.7rem",
+                      fontWeight: "600",
                     },
                   }}
                 />
               </Button>
             </ListItem>
-            <ListItemButton
-              sx={{
-                mx: 2,
-              }}
-              onClick={() => {
-                authCntxt.logout();
-                handleClose();
-              }}
-            >
-              <ListItemIcon>
-                <Icon color="error">
-                  <MdLogout />
-                </Icon>
-              </ListItemIcon>
-              <ListItemText primary={"Logout"} />
-            </ListItemButton>
           </>
         ) : (
           <ListItem>
@@ -517,6 +498,24 @@ const FooterDrawer = ({ open, handleClose }) => {
               />
             </Button>
           </ListItem>
+        )}
+        {authCntxt.isVerified && (
+          <ListItemButton
+            sx={{
+              mx: 2,
+            }}
+            onClick={() => {
+              authCntxt.logout();
+              handleClose();
+            }}
+          >
+            <ListItemIcon>
+              <Icon color="error">
+                <MdLogout />
+              </Icon>
+            </ListItemIcon>
+            <ListItemText primary={"Logout"} />
+          </ListItemButton>
         )}
       </List>
     </Drawer>
