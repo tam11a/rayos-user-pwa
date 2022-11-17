@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const rootURL = "https://api.rayosbd.com/";
+export const rootURL = "http://api.rayosbd.com/";
 export const baseURL = rootURL + "api";
 
 const instance = axios.create({
