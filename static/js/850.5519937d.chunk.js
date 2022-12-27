@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkrayos_user_pwa=self.webpackChunkrayos_user_pwa||[]).push([[850],{3850:function(r,e,s){s.r(e);var i=s(7227),n=s(9881),o=(s(7313),s(860)),t=s(6417);e.default=function(){return(0,t.jsx)(i.Z,{sx:{mt:{md:2}},children:(0,t.jsx)(n.Z,{severity:"error",icon:(0,t.jsx)(o.ir_,{}),children:"No Notification to Show"})})}}}]);
