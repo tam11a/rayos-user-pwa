@@ -3,24 +3,45 @@ import Title from "../../components/Title";
 import { Container, Typography } from "@mui/material";
 
 const Index = () => {
-  return (
-    <Container>
-      <Title>About Us</Title>
-      <Typography
-        sx={{
-          textAlign: "justify",
-        }}
-      >
-        PND সার্ভিস এমন একটি সার্ভিস কোম্পানি, যারা কাজ করছে সারাদেশের সে সব
-        মানুষদের সাথে যারা প্রতিনিয়ত উদ্যোগতা হবার চেষ্টা করছে। কিন্তু পর্য়াপ্ত
-        মুলধন, ডেলিভারি ও প্যাকেজিং সমস্যার কারনে তারা এগিয়ে যেতে পারছে না। PND
-        সার্ভিস আপনাকে দিবে কোন প্রকার মুলধন ছাড়া, পুরো বাংলাদেশে ব্যবসা করার
-        সুযোগ। আপনি কোন মুলধন ছাড়াই আমাদের পণ্য বিক্রি করতে পারবেন। এতে করে,
-        আপনার লাভের অংশ থেকে আমরা নাম মাএ সার্ভিস ফি নিয়ে আপনার অর্ডার নেয়া পণ্য
-        টি পাঠিয়ে দিব প্রাপকের ঠিকানা মতো। আর লাভের টাকা চলে যাবে আপনার ঠিকানায়।
-      </Typography>
-    </Container>
-  );
+	return (
+		<Container>
+			<Title>About Us</Title>
+			<Typography variant="h6">Our Story</Typography>
+			<br />
+			<Typography
+				sx={{
+					textAlign: "justify",
+				}}
+			>
+				We start our journey in 2022 as an e-commerce marketplace. We offer more
+				than 20 categories of products, including health and beauty, cosmetics,
+				electronics and etc. Rayos BD is dedicated to Change Experience via
+				superior customer support and fulfillment, ensuring that consumers in
+				every part of Bangladesh receive hassle-free product delivery. Customers
+				may also order our items via Cash on Delivery and free returns, and
+				prompt refunds. we do not take any advance money from our customers. To
+				keep informed about our most recent promotions, campaigns, and events,
+				follow us on Facebook, Twitter, YouTube, and Instagram.
+			</Typography>
+			<br />
+			<Typography variant="h6">Our Promise</Typography>
+			<br />
+			<Typography
+				sx={{
+					textAlign: "justify",
+				}}
+			>
+				<ul>
+					<li>Full coverage in Bangladesh</li>
+					<li>Fastest delivery</li>
+					<li>Wide range of product</li>
+					<li>Easy order and return policy</li>
+					<li>Easy warranty policy</li>
+					<li>24/7 customer policy</li>
+				</ul>
+			</Typography>
+		</Container>
+	);
 };
 
 export default Index;
