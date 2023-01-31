@@ -3,104 +3,99 @@ import Title from "../../components/Title";
 import { Box, Container, Typography } from "@mui/material";
 
 const Index = () => {
-  return (
-    <Container>
-      <Title>Privacy policy</Title>
+	return (
+		<Container>
+			<Title>Privacy policy</Title>
 
-      <Box
-        sx={{
-          "& > *": {
-            my: 2,
-          },
-        }}
-      >
-        <Typography
-          sx={{
-            textAlign: "justify",
-          }}
-        >
-          PNDSERVICEBD.COM এ আপনাকে স্বাগতম। PND service একটি লাভজনক আর্থিক
-          প্রতিষ্ঠান। এখানে আমরা শুধু pnd service এর কাস্টমার ছাড়াও সারা
-          বাংলাদেশ জুরে অগণিত উদ্যোক্তাদের সাথে কাজ করে থাকি। আমাদের ওয়েবসাইট
-          ব্যবহারকারীদের গোপনীয়তা রক্ষা করা আমাদের নীতিমালার প্রধান অংশ। আমরা
-          একটি গোপনীয় নীতিমালা প্রকাশ করছি, যেখানে আমাদের গোপনীয়তা রক্ষার বিষয়টি
-          বিস্তারিত ভাবে বর্ণনা করা হয়েছে। আমরা শুধুমাএ যে ওয়েবসাইট ব্যবহার করে
-          অর্ডার নিয়ে থাকি, শুধুমাএ সে সব তথ্য আমরা সংরক্ষণ করে রাখি। অনুগ্রহ
-          করে সম্পূর্ণ তথ্য জানতে গোপনীয়তার নীতিমালা টি পড়ুন।
-        </Typography>
+			<Box
+				sx={{
+					py: 2,
+					"& > *": {
+						my: 2,
+					},
+				}}
+			>
+				<Typography
+					sx={{
+						textAlign: "justify",
+					}}
+				>
+					Welcome to Rayos BD. We respect your private information. We are
+					committed to upholding customer rights and ensuring the safety. Please
+					read this Privacy Policy for more information.
+				</Typography>
 
-        <b>ব্যাক্তিগত তথ্যঃ </b>
-        <Typography
-          sx={{
-            textAlign: "justify",
-          }}
-        >
-          আপনারা যখন pndservicebd.com এর মাধ্যমে আমাদের কাছে কোন প্রডাক্ট এর
-          জন্য অর্ডার করে থাকেন, তখন আপনাদের নিদিষ্ট কিছু তথ্য দিতে হয়, যেমনঃ
-          ফোন নাম্বার, নাম, ঠিকানা ইত্যাদি। আপনার সবধরনের তথ্য আমরা আমাদের
-          নিজস্ব ওয়েবসাইটের ডাটাবেজে সংরক্ষণ করে রাখি। যা আমরা কোন থার্ড পার্সন
-          বা অন্য কোন কোম্পানির সাথে কখনই শেয়ার করিনা। আমরা আমাদের ওয়েবসাইটের
-          মাধ্যমে সর্বোচ্চ নিরাপত্তা নিশ্চিত করে থাকি।
-        </Typography>
+				<b>How Will We Use Your Information?</b>
+				<Typography
+					sx={{
+						textAlign: "justify",
+					}}
+				>
+					If a consumer wishes to use the website to make an order for the
+					specified goods, Rayos BD may gather numerous sorts of necessary
+					information. As part of the purchasing process, when a customer makes
+					a purchase from Rayos BD via the website, Rayos BD will gather
+					personal information about the consumer, including name, phone number,
+					address, email address, etc. To prepare orders that consumers have
+					ordered on the eCommerce site, the firm will receive, store, and
+					process this data. It will also retain it in case any allegations are
+					made in the future. The firm may, with the customer's consent, contact
+					him or her with information on specials, promotions, new product
+					categories, and other useful updates.
+				</Typography>
 
-        <b>লেনদেন সংক্রান্ত তথ্যঃ </b>
+				<b>Data Security</b>
 
-        <Typography
-          sx={{
-            textAlign: "justify",
-          }}
-        >
-          যখন আপনারা আমাদের ওয়েবসাইট এ কোন পণ্য ক্রয় করার জন্য তথ্য দিয়ে থাকেন
-          তখন আমরা আমাদের ডাটাবেজে সেগুলো সংরক্ষণ করে রাখি। যাতে করে যখন আপনি
-          আগামীতে অর্ডার করবেন, তখন সহজেই আমাদের ওয়েবসাইট আপনাকে চিনতে পারে।
-          অনলাইন লেনদেনের ক্ষেত্রে আমার ব্যাংক এবং বিকাশের সাহায্য নিয়ে থাকি।
-          এতে করে আপনাদের সবধরনের তথ্য আমাদের কাছে নিরাপদ থাকে। ভবিষ্যতে আরও
-          উন্নত ব্যবস্থার কথা চিন্তা করে, আমরা অনলাইন পেমেন্ট গেটওয়ের মাধ্যমে
-          লেনদেন করবো। যা অত্যান্ত নিরাপদ একটি লেনদেন মাধ্যম।
-        </Typography>
+				<Typography
+					sx={{
+						textAlign: "justify",
+					}}
+				>
+					To avoid accidental loss, deletion, or damage to your information as
+					well as unauthorized or unlawful access to it, we have put in place
+					the necessary technological and security measures. Your personal
+					information is gathered on a secure server when we collect data
+					through the Site. Because of our security measures, we occasionally
+					might need to see identification documentation before we can provide
+					you access to personal data. You are in charge of preventing unwanted
+					access to your computer and password.
+				</Typography>
 
-        <b>তথ্য আদান প্রদানঃ</b>
+				<b>What purpose do we use your data?</b>
 
-        <Typography
-          sx={{
-            textAlign: "justify",
-          }}
-        >
-          আপনাদের নিজস্ব সুবিধার জন্য জানানো হচ্ছে যে, আমরা আমাদের কোন
-          কাস্টমারের কোন তথ্য অন্য কোন প্রতিষ্ঠান বা লোকের সাথে কখনই আদান প্রদান
-          করি না। শুধু প্রডাক্ট ডেলিভারি করার সময় ডেলিভারি কোম্পানি কে নিদিষ্ট
-          কিছু তথ্য প্রদান করা হয়। যদি কখনো ডেলিভারিত কোম্পানি কোন তথ্য অন্য
-          কাউকে প্রদান করে থাকে, এতে করে থাকে, তাহলে pndservicebd.com কোন ভাবেই
-          দায়ী নয়। তবে দেশে আইন প্রয়োগকারী কোন সংস্থা যদি দেশের কাজে তাদের কোন
-          প্রকার তদন্তের প্রয়োজনে তথ্য চায় সেই ক্ষেত্রে আমরা দিতে বাধ্য থাকবো।
-        </Typography>
+				<Typography
+					sx={{
+						textAlign: "justify",
+					}}
+				>
+					<ul>
+						<li>
+							{" "}
+							Knowing your interests and customizing our site to them will
+							strengthen our relationship.{" "}
+						</li>
+						<li> To contact you if when required </li>
+						<li> To fulfill your request for services </li>
+						<li> concentrate our efforts on enhancing the product. </li>
+						<li> contact you to participate in a survey.</li>
+					</ul>
+				</Typography>
 
-        <b>গোপনীয়তা নীতিমালা পরিবর্তনঃ</b>
+				<b>Your Right</b>
 
-        <Typography
-          sx={{
-            textAlign: "justify",
-          }}
-        >
-          এই গোপনীয়তা নীতিমালাটি pndservicebd.com যেকোন সময়ে পরিবর্তন করার
-          অধিকার রাখে। যদি আমাদের নীতিমালায় কোন পরিবর্তন বা সংশোধন করা হয়, আমরা
-          সেটা আমাদের পেজ বা ওয়েবাসাইটের মাধ্যমে আপনাদের কে জানিয়ে দিব।
-        </Typography>
-
-        <b>আপনার সম্মতিঃ</b>
-
-        <Typography
-          sx={{
-            textAlign: "justify",
-          }}
-        >
-          আমাদের ওয়েবসাইট ব্যবহার করার মাধ্যমে আপনি এই গোপনীয়তা নীতিমালায় সম্মতি
-          প্রকাশ করছেন। আমাদের গোপনীয়তা নীতিমালা নিয়ে আপনার যদি কোন প্রশ্ন বা
-          জিজ্ঞসা থেকে থাকে তাহলে আমাদের সাথে যোগাযোগ করার অনুরোধ করা হলো।
-        </Typography>
-      </Box>
-    </Container>
-  );
+				<Typography
+					sx={{
+						textAlign: "justify",
+					}}
+				>
+					You have the right to request that we fix any errors in your data
+					without charging you. Additionally, you have the right to request that
+					we no longer use your personal information for direct marketing at any
+					time.
+				</Typography>
+			</Box>
+		</Container>
+	);
 };
 
 export default Index;
