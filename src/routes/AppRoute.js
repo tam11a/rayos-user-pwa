@@ -27,81 +27,46 @@ const OrderInfo = React.lazy(() => import("../pages/User/OrderInfo"));
 const Search = React.lazy(() => import("../pages/Search"));
 const About = React.lazy(() => import("../pages/About"));
 const User = React.lazy(() => import("../pages/User"));
+const TermsAndConditions = React.lazy(() =>
+  import("../pages/TermsAndConditions")
+);
 
 const AppRoute = () => {
-	const location = useLocation();
-	// React.useEffect(() => {
-	//   // console.log("scroll now");
-	//   document
-	//     .querySelector("html")
-	//     .scrollTo({ top: 0, left: 0, behavior: "smooth" });
-	//   document.querySelector("html").scrollTop = 0;
-	// }, [location]);
-	return (
-		<>
-			<Suspense>
-				<Routes path="/">
-					<Route
-						index
-						element={<Home />}
-					/>
-					<Route
-						path="product/:productId"
-						element={<ProductView />}
-					/>
-					<Route
-						path="search"
-						element={<Search />}
-					/>
-					<Route
-						path="notification"
-						element={<Notification />}
-					/>
-					<Route
-						path="about"
-						element={<About />}
-					/>
-					<Route
-						path="return-policy"
-						element={<ReturnPolicy />}
-					/>
-					<Route
-						path="privacy-policy"
-						element={<PrivacyPolicy />}
-					/>
-					<Route
-						path="delivery-policy"
-						element={<DeliveryPolicy />}
-					/>
-					<Route path="user">
-						<Route
-							index
-							element={<User />}
-						/>
-						<Route path="order">
-							<Route
-								index
-								element={<Order />}
-							/>
-							<Route
-								path=":oid"
-								element={<OrderInfo />}
-							/>
-						</Route>
-						{/* <Route path="wallet" element={<Wallet />} /> */}
-					</Route>
-					<Route
-						path="process-order"
-						element={<ProcessOrder />}
-					/>
-					<Route
-						path="*"
-						element={<>404</>}
-					/>
-				</Routes>
-			</Suspense>
-		</>
-	);
+  const location = useLocation();
+  // React.useEffect(() => {
+  //   // console.log("scroll now");
+  //   document
+  //     .querySelector("html")
+  //     .scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  //   document.querySelector("html").scrollTop = 0;
+  // }, [location]);
+  return (
+    <>
+      <Suspense>
+        <Routes path="/">
+          <Route index element={<Home />} />
+          <Route path="product/:productId" element={<ProductView />} />
+          <Route path="search" element={<Search />} />
+          <Route path="notification" element={<Notification />} />
+          <Route path="about" element={<About />} />
+          <Route path="return-policy" element={<ReturnPolicy />} />
+          <Route path="privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="delivery-policy" element={<DeliveryPolicy />} />
+          <Route path="terms" element={<TermsAndConditions />} />
+          <Route path="user">
+            <Route index element={<User />} />
+            <Route path="order">
+              <Route index element={<Order />} />
+              <Route path=":oid" element={<OrderInfo />} />
+            </Route>
+            {/* <Route path="wallet" element={<Wallet />} /> */}
+          </Route>
+          <Route path="process-order" element={<ProcessOrder />} />
+          <Route path="*" element={<>404</>} />
+        </Routes>
+      </Suspense>
+    </>
+  );
 };
 
 export default AppRoute;

@@ -14,80 +14,88 @@ import AuthProvider from "./context/authProvider";
 import CartProvider from "./context/cartProvider";
 import { QueryClientProvider, QueryClient } from "react-query";
 // import { ReactQueryDevtools } from "react-query/devtools";
-
+import TawkTo from "tawkto-react";
 function App() {
-	const queryClient = new QueryClient();
+  const queryClient = new QueryClient();
 
-	return (
-		<ThemeProvider theme={theme}>
-			<CssBaseline />
-			<GlobalStyles
-				styles={{
-					"*": {
-						// Disable Blue Highlight when Touch/Press object with cursor: 'pointer' in Android
-						WebkitTapHighlightColor: "transparent",
-						// scrollbar
-						scrollbarWidth: "5px",
-						scrollbarHeight: "5px",
-						scrollbarColor: `${theme.palette.primary.main} #00000033`,
-						outline: "none !important",
-					},
-					"*::-webkit-scrollbar": {
-						height: "5px",
-						width: "5px",
-					},
-					"*::-webkit-scrollbar-track": {
-						background: "#00000033",
-					},
-					"*::-webkit-scrollbar-thumb": {
-						background: `${theme.palette.primary.main}aa`,
-					},
-					"*::-webkit-scrollbar-thumb:hover": {
-						background: theme.palette.primary.main,
-					},
-					body: {
-						overflowX: "hidden",
-					},
-					// App Body Scrollbar
-					"&::-webkit-scrollbar": {
-						width: "5px",
-						height: "5px",
-					},
-					"&::-webkit-scrollbar-track": {
-						background: "#00000033",
-					},
-					"&::-webkit-scrollbar-thumb": {
-						background: `${theme.palette.primary.main}aa`,
-					},
-					"&::-webkit-scrollbar-thumb:hover": {
-						background: theme.palette.primary.main,
-					},
-				}}
-			/>
-			<QueryClientProvider client={queryClient}>
-				{/* <ReactQueryDevtools /> */}
-				<OrderProvider>
-					<CategoryProvider>
-						<BrowserRouter basename="">
-							<SnackProvider>
-								<AuthProvider>
-									<NotificationProvider>
-										<CartProvider>
-											<Header />
-											<AppBody>
-												<AppRoute />
-											</AppBody>
-											<Footer />
-										</CartProvider>
-									</NotificationProvider>
-								</AuthProvider>
-							</SnackProvider>
-						</BrowserRouter>
-					</CategoryProvider>
-				</OrderProvider>
-			</QueryClientProvider>
-		</ThemeProvider>
-	);
+  React.useEffect(() => {
+    var tawk = new TawkTo("63e65a3e4742512879129c5d", "1gott11nk");
+
+    tawk.maximize();
+
+    // tawk.hideWidget();
+  }, []);
+
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <GlobalStyles
+        styles={{
+          "*": {
+            // Disable Blue Highlight when Touch/Press object with cursor: 'pointer' in Android
+            WebkitTapHighlightColor: "transparent",
+            // scrollbar
+            scrollbarWidth: "5px",
+            scrollbarHeight: "5px",
+            scrollbarColor: `${theme.palette.primary.main} #00000033`,
+            outline: "none !important",
+          },
+          "*::-webkit-scrollbar": {
+            height: "5px",
+            width: "5px",
+          },
+          "*::-webkit-scrollbar-track": {
+            background: "#00000033",
+          },
+          "*::-webkit-scrollbar-thumb": {
+            background: `${theme.palette.primary.main}aa`,
+          },
+          "*::-webkit-scrollbar-thumb:hover": {
+            background: theme.palette.primary.main,
+          },
+          body: {
+            overflowX: "hidden",
+          },
+          // App Body Scrollbar
+          "&::-webkit-scrollbar": {
+            width: "5px",
+            height: "5px",
+          },
+          "&::-webkit-scrollbar-track": {
+            background: "#00000033",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            background: `${theme.palette.primary.main}aa`,
+          },
+          "&::-webkit-scrollbar-thumb:hover": {
+            background: theme.palette.primary.main,
+          },
+        }}
+      />
+      <QueryClientProvider client={queryClient}>
+        {/* <ReactQueryDevtools /> */}
+        <OrderProvider>
+          <CategoryProvider>
+            <BrowserRouter basename="">
+              <SnackProvider>
+                <AuthProvider>
+                  <NotificationProvider>
+                    <CartProvider>
+                      <Header />
+                      <AppBody>
+                        <AppRoute />
+                      </AppBody>
+                      <Footer />
+                    </CartProvider>
+                  </NotificationProvider>
+                </AuthProvider>
+              </SnackProvider>
+            </BrowserRouter>
+          </CategoryProvider>
+        </OrderProvider>
+      </QueryClientProvider>
+    </ThemeProvider>
+  );
 }
 
 export default App;
