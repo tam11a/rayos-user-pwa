@@ -184,83 +184,6 @@ const Order = ({ uid }) => {
       align: "center",
       sortable: false,
     },
-    // {
-    //   headerName: "Action",
-    //   field: "action",
-    //   width: 150,
-    //   headerAlign: "center",
-    //   // renderCell: (d) => {
-    //   //   return (
-    //   //     <>
-    //   //       <Select
-    //   //         size={"small"}
-    //   //         value={d.row.status}
-    //   //         disabled={
-    //   //           d.row.status === "Delivered" || d.row.status === "Canceled"
-    //   //         }
-    //   //         fullWidth
-    //   //       >
-    //   //         <MenuItem value={"Pending"} disabled>
-    //   //           Pending
-    //   //         </MenuItem>
-    //   //         <MenuItem
-    //   //           value={"Confirmed"}
-    //   //           disabled={d.row.status === "Confirmed"}
-    //   //         >
-    //   //           Confirmed
-    //   //         </MenuItem>
-    //   //         <MenuItem value={"Shipped"} disabled={d.row.status === "Shipped"}>
-    //   //           Shipped
-    //   //         </MenuItem>
-    //   //         <MenuItem
-    //   //           value={"Delivered"}
-    //   //           disabled={d.row.status === "Delivered"}
-    //   //         >
-    //   //           Delivered
-    //   //         </MenuItem>
-    //   //         <MenuItem
-    //   //           value={"Canceled"}
-    //   //           disabled={d.row.status === "Canceled"}
-    //   //         >
-    //   //           Canceled
-    //   //         </MenuItem>
-    //   //         <MenuItem
-    //   //           value={"Returned"}
-    //   //           disabled={d.row.status === "Returned"}
-    //   //         >
-    //   //           Returned
-    //   //         </MenuItem>
-    //   //       </Select>
-    //   //     </>
-    //   //   );
-    //   // },
-    //   sortable: false,
-    // },
-    // {
-    //   headerName: "Invoice",
-    //   field: "invoice_print",
-    //   align: "center",
-    //   headerAlign: "center",
-    //   // renderCell: (d) => {
-    //   //   return (
-    //   //     <>
-    //   //       <IconButton
-    //   //         size={"small"}
-    //   //         onClick={() => {
-    //   //           console.log(d.row);
-    //   //           window.open(
-    //   //             "https://admin.pndservicebd.com/orderdetails.html?id=" +
-    //   //               d.row.id
-    //   //           );
-    //   //         }}
-    //   //       >
-    //   //         <IoMdEye />
-    //   //       </IconButton>
-    //   //     </>
-    //   //   );
-    //   // },
-    //   sortable: false,
-    // },
   ];
 
   return (
@@ -302,18 +225,7 @@ const Order = ({ uid }) => {
                 fullWidth
               />
             </Grid>
-            {/* <Grid item xs={12} sm={5.9} md={3}>
-                <Select
-                  sx={{
-                    ...tableOptionsStyle,
-                  }}
-                  value={"x"}
-                  disabled
-                  fullWidth
-                >
-                  <MenuItem value={"x"}>Filter</MenuItem>
-                </Select>
-              </Grid> */}
+
             <Grid item xs={12} sm={3}>
               <Select
                 sx={{
