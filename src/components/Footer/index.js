@@ -20,6 +20,8 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Menu,
+  MenuItem,
   Paper,
   Stack,
   Toolbar,
@@ -28,8 +30,8 @@ import {
 
 // icons
 import { HiLocationMarker, HiOutlineMail } from "react-icons/hi";
-import { GrFacebookOption, GrLocation } from "react-icons/gr";
-import { MdCall, MdClose, MdLogout } from "react-icons/md";
+import { GrFacebookOption, GrFavorite, GrLocation } from "react-icons/gr";
+import { MdCall, MdClose, MdFavoriteBorder, MdLogout } from "react-icons/md";
 import { ImGooglePlus } from "react-icons/im";
 import {
   RiDashboardLine,
@@ -37,6 +39,7 @@ import {
   RiWhatsappLine,
   RiYoutubeLine,
 } from "react-icons/ri";
+import { Icon as IconifyIcon } from "@iconify/react";
 import { BiMenuAltRight } from "react-icons/bi";
 import { AiFillInstagram, AiOutlineUser } from "react-icons/ai";
 
@@ -569,22 +572,65 @@ const FooterDrawer = ({ open, handleClose }) => {
           </ListItem>
         )}
         {authCntxt.isVerified && (
-          <ListItemButton
-            sx={{
-              mx: 2,
-            }}
-            onClick={() => {
-              authCntxt.logout();
-              handleClose();
-            }}
-          >
-            <ListItemIcon>
-              <Icon color="error">
-                <MdLogout />
-              </Icon>
-            </ListItemIcon>
-            <ListItemText primary={"Logout"} />
-          </ListItemButton>
+          <>
+            {/* <IconButton color={"black"} onClick={handleClick}>
+              <Avatar
+                src={getAttachment(authCntxt.userInfo?.image)}
+                sx={{
+                  bgcolor: "transparent",
+                  color: "primary.main",
+                }}
+              >
+                <AiOutlineUser />
+              </Avatar>
+            </IconButton> */}
+            <ListItemButton
+              sx={{
+                mx: 2,
+              }}
+              onClick={handleClose}
+              component={Link}
+              to={"/user/order"}
+            >
+              <ListItemIcon style={{ fontSize: 24 }}>
+                <IconifyIcon icon="icon-park-outline:transaction-order" />
+              </ListItemIcon>
+              <ListItemText primary={"My Orders"} />
+            </ListItemButton>
+
+            <ListItemButton
+              sx={{
+                mx: 2,
+              }}
+              onClick={handleClose}
+              component={Link}
+              to={"/search?wishlist=1"}
+            >
+              <ListItemIcon>
+                <Icon>
+                  <MdFavoriteBorder />
+                </Icon>
+              </ListItemIcon>
+              <ListItemText primary={"Wishlist"} />
+            </ListItemButton>
+
+            <ListItemButton
+              sx={{
+                mx: 2,
+              }}
+              onClick={() => {
+                authCntxt.logout();
+                handleClose();
+              }}
+            >
+              <ListItemIcon>
+                <Icon color="error">
+                  <MdLogout />
+                </Icon>
+              </ListItemIcon>
+              <ListItemText primary={"Logout"} />
+            </ListItemButton>
+          </>
         )}
       </List>
     </Drawer>

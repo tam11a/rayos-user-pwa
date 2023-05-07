@@ -18,13 +18,13 @@ import TawkTo from "tawkto-react";
 function App() {
   const queryClient = new QueryClient();
 
-  React.useEffect(() => {
-    var tawk = new TawkTo("63e65a3e4742512879129c5d", "1gott11nk");
+  // React.useEffect(() => {
+  //   var tawk = new TawkTo("63e65a3e4742512879129c5d", "1gott11nk");
 
-    tawk.maximize();
+  //   tawk.maximize();
 
-    // tawk.hideWidget();
-  }, []);
+  //   // tawk.hideWidget();
+  // }, []);
 
   return (
     <ThemeProvider theme={theme}>
